@@ -1,0 +1,72 @@
+name: DESC GitHub Actions example 2
+
+# How does the workflow get triggered?
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      -main
+  workflow_dispatch: null
+
+# List of jobs for this workflow.
+jobs:
+  ci-with-pytest:
+
+    # Our strategy lists the OS and Python versions we want to test on.
+    strategy:
+
+      # Don't quit all jobs if only one job fails.
+      fail-fast: false
+      
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+        os: [ubuntu-18.04, ubuntu-20.04, macos-latest]
+        experimental: [false]
+
+        # Test on this, but don't mind if it fails.
+        include:
+          - os: ubuntu-22.04
+            python-version: 3.9
+            experimental: true
+
+    # If True, do not fail the job, just warn me.
+    continue-on-error: ${{ matrix.experimental }}
+
+    # What operating system is this job running on?
+    runs-on: ${{ matrix.os}}
+
+    # Our CI steps for this job.
+    steps:
+      # Print information about his job.
+      - run: echo "Running on ${{ matrix.os }} with Python ${{ matrix.python-version }}"
+     
+      # Check out this repository code.
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      # Install Python.
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Install dependencies.
+      - name: Install pip, pytest, pytest-cov and flake8.
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest pytest-cov flake8
+          
+      # Do some basic code linting using flake8. Check for syntax and indentation errors.
+      - name: flake8 linting.
+        run: flake8 --count --select=E1,E9 --show-source --statistics ./python/my_arithmetic.py
+
+      # Perform the unit tests and output a report.
+      - name: Test with pytest
+        run:
+          pytest --cov --cov-report xml ./python
+          
+      # Upload the code coverage reults to codecov.io.
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
