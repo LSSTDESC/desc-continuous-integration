@@ -1,0 +1,74 @@
+name: imSim CI
+
+on:
+    push:
+        branches:
+            - main
+            - releases/*
+
+    pull_request:
+        branches:
+            - main
+            - releases/*
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+
+        strategy:
+            matrix:
+                # For now, just ubuntu, 3.8.  Can add more later.
+                os: [ ubuntu-latest ]
+                py: [ 3.8 ]
+                CC: [ gcc ]
+                CXX: [ g++ ]
+
+        defaults:
+            run:
+                # cf. https://github.com/conda-incubator/setup-miniconda#important
+                shell: bash -l {0}
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup conda
+              uses: conda-incubator/setup-miniconda@v2
+              with:
+                  activate-environment: stack
+                  python-version: 3.8
+                  condarc-file: etc/.condarc
+
+            - name: Install conda deps
+              run: |
+                conda info
+                conda list
+                conda install -y mamba
+                mamba install -y --file conda_requirements.txt
+                conda info
+                conda list
+
+            - name: Install pip deps
+              run: |
+                # We need to get batoid onto conda, but for now, this is a separate step.
+                pip install batoid
+                pip install git+https://github.com/LSSTDESC/skyCatalogs.git@master
+                conda info
+                conda list
+
+            - name: Install imSim
+              run:
+                pip install .
+
+            - name: Install main branch of GalSim
+              run: |
+                # need to make sure GalSim 2.4.0 is installed before
+                # the next imsim release:
+                pip install git+https://github.com/GalSim-developers/GalSim.git@main
+
+            - name: Install test deps
+              run:
+                conda install -y pytest nose
+
+            - name: Run tests
+              run: |
+                pytest
