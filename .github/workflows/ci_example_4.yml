@@ -34,7 +34,7 @@ jobs:
     # What operating system is this job running on?
     runs-on: ${{ matrix.os}}
 
-    container: lsstdesc/desc-python
+    container: smcalpine/desc-python-test
 
     # Our CI steps for this job.
     steps:
@@ -45,22 +45,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
-      # Checkout python-desc conda environment.
-      - name: Checkout python-desc
-        uses: actions/checkout@v3
-        with:
-          repository: LSSTDESC/desc-python
-          path: './desc-python'
-
-      # Install MiniConda and activate the python-desc environment.
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          activate-environment: desc # Has to be what's in env file.
-          environment-file: desc-python/conda/desc-python-env.yml
-          python-version: ${{ matrix.python-version }}
-          auto-activate-base: false
-          mamba-version: "*"
-          
       # Do some basic code linting using flake8. Check for syntax and indentation errors.
       - name: flake8 linting.
         run: flake8 --count --select=E1,E9 --show-source --statistics ./python/my_arithmetic.py
