@@ -18,28 +18,28 @@ jobs:
       fail-fast: false
       
       matrix:
-        python-version: [3.9]
-        os: [ubuntu-18.04]
+        python-version: [py37, py38, py39]
+        docker-os: [ubuntu-18.04, ubuntu-20.04]
         experimental: [false]
 
         # Test on this, but don't mind if it fails.
         include:
-          - os: ubuntu-22.04
-            python-version: 3.9
+          - docker-os: ubuntu-22.04
+            python-version: py38
             experimental: true
 
     # If True, do not fail the job, just warn me.
     continue-on-error: ${{ matrix.experimental }}
 
     # What operating system is this job running on?
-    runs-on: ${{ matrix.os}}
+    runs-on: ubuntu-20.04
 
-    container: smcalpine/desc-python-test
+    container: lsstdesc/desc-python-${{ matrix.docker-os }}-${{ matrix.python-version }}:ci-dev
 
     # Our CI steps for this job.
     steps:
       # Print information about his job.
-      - run: echo "Running on ${{ matrix.os }} with Python ${{ matrix.python-version }}"
+      - run: echo "Running on ${{ matrix.docker-os }} with Python ${{ matrix.python-version }}"      
      
       # Check out this repository code.
       - name: Check out repository code
@@ -52,7 +52,7 @@ jobs:
       # Perform the unit tests and output a report.
       - name: Test with pytest
         run: |
-          conda install pytest-cov
+          mamba install -c conda-forge -y pytest-cov  
           pytest --cov --cov-report xml ./python
           
       # Upload the code coverage reults to codecov.io.
