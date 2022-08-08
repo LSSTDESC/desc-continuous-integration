@@ -48,7 +48,7 @@ level.
 
 Here are some recommendations to think about when creating a test suite for
 your DESC software, taken directly from the `LSST DESC Coding Guidelines
-<https://confluence.slac.stanford.edu/download/attachments/217813295/LSST%20DESC%20Coding%20Guidelines%20v1.1.pdf?version=1&modificationDate=1550862040000&api=v2>`__.
+<https://lsstdesc.org/assets/pdf/docs/DESC_Coding_Guidelines_latest.pdf>`__.
 It is also worth looking at the `DM team's unit test policy
 <https://developer.lsst.io/coding/unit-test-policy.html>`__.
 
