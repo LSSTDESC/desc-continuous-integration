@@ -1,12 +1,18 @@
-name: DESC GitHub Actions example 4
+# See https://desc-continuous-integration.readthedocs.io/en/latest/index.html for more info.
+# Author - Stuart McAlpine - August 2022
+
+name: DESC Example 4
 
 # How does the workflow get triggered?
-on: [workflow_dispatch]
+on:
+  # Manually trigger workflow.
+  workflow_dispatch: null
 
 # List of jobs for this workflow.
 jobs:
   ci-with-pytest:
-    # Required to activate miniconda environment.
+
+    # Needed to activate miniconda environment.
     defaults:
       run:
         shell: bash -l {0}
@@ -18,33 +24,55 @@ jobs:
       fail-fast: false
       
       matrix:
-        python-version: [py37, py38, py39]
-        docker-os: [ubuntu-18.04, ubuntu-20.04]
+        python-version: [3.7, 3.8, 3.9]
+        os: [ubuntu-18.04, ubuntu-20.04, macos-latest]
         experimental: [false]
 
         # Test on this, but don't mind if it fails.
         include:
-          - docker-os: ubuntu-22.04
-            python-version: py38
+          - os: ubuntu-22.04
+            python-version: 3.9
             experimental: true
 
     # If True, do not fail the job, just warn me.
     continue-on-error: ${{ matrix.experimental }}
 
     # What operating system is this job running on?
-    runs-on: ubuntu-20.04
-
-    container: lsstdesc/desc-python-${{ matrix.docker-os }}-${{ matrix.python-version }}:ci-dev
+    runs-on: ${{ matrix.os }}
 
     # Our CI steps for this job.
     steps:
       # Print information about his job.
-      - run: echo "Running on ${{ matrix.docker-os }} with Python ${{ matrix.python-version }}"      
+      - run: echo "Running on ${{ matrix.os }} with Python ${{ matrix.python-version }}"
      
-      # Check out this repository code.
-      - name: Check out repository code
+      # Check out this repository.
+      - name: Check out repository
         uses: actions/checkout@v3
 
+      # Checkout python-desc conda environment repository.
+      - name: Checkout python-desc
+        uses: actions/checkout@v3
+        with:
+          repository: LSSTDESC/desc-python
+          path: './desc-python'
+
+      # Install MiniConda.
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          auto-activate-base: true
+          
+      # The gsl package does not work on macos.
+      - name: Fix dependencies for MacOS
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: sed -i .bak '/gsl==2.7=he838d99_0/d' ./desc-python/conda/condalist.txt
+      
+      # Install Python packages using python-desc environment files.
+      - run: |
+          conda install -c conda-forge -y mamba
+          mamba install -c conda-forge -y --file ./desc-python/conda/condalist.txt
+          pip install --no-cache-dir -r ./desc-python/conda/piplist.txt
+          
       # Do some basic code linting using flake8. Check for syntax and indentation errors.
       - name: flake8 linting.
         run: flake8 --count --select=E1,E9 --show-source --statistics ./python/my_arithmetic.py
@@ -52,7 +80,7 @@ jobs:
       # Perform the unit tests and output a report.
       - name: Test with pytest
         run: |
-          mamba install -c conda-forge -y pytest-cov  
+          mamba install -y pytest-cov
           pytest --cov --cov-report xml ./python
           
       # Upload the code coverage reults to codecov.io.

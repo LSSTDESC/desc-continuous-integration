@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. _DESC checklist:
+
 The DESC CI checklist
 =====================
 
@@ -32,7 +34,7 @@ This checklist was last updated July 2022.
 
 5. If your software package is a dependency for other DESC software, or it
    builds into a larger DESC pipeline, test your code within the
-   ``desc-python`` environment or DESC docker container.
+   ``desc-python`` environment docker container.
 
 .. note:: We understand that setting up the ``desc-python`` environment can be
    considerably slower than only working with the minimum packages required to
@@ -40,4 +42,4 @@ This checklist was last updated July 2022.
    two workflows: (1) a regularly used workflow operating from push and pull
    requests that only meets the minimum requirements needed to run the code,
    and (2) a periodically triggered workflow, say once a week, that operates
-   within the ``desc-python`` environment or DESC docker container. 
+   within the ``desc-python`` environment docker container. 

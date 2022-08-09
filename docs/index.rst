@@ -19,8 +19,8 @@ This documentation briefly introduces CI as a concept, how we can use GitHub
 Actions to manage our CI workflows, and some working example CI workflows, yet
 note it is not designed as an exhaustive tutorial for each.
 
-Those already familiar with GitHub Actions and CI can skip to the *DESC CI
-Checklist* to see our recommended strategy for CI workflows at DESC.
+Those already familiar with GitHub Actions and CI can skip to the :ref:`DESC
+Checklist` to see our recommended strategy for CI workflows at DESC.
 
 .. toctree::
    :maxdepth: 2
@@ -28,6 +28,7 @@ Checklist* to see our recommended strategy for CI workflows at DESC.
 
    ./desc/what_is_ci
    ./desc/github_actions
+   ./desc/ci_at_nersc
    ./desc/desc_working_examples
    ./desc/desc_checklist
    

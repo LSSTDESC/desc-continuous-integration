@@ -1,14 +1,17 @@
-name: DESC GitHub Actions example 2
+# See https://desc-continuous-integration.readthedocs.io/en/latest/index.html for more info.
+# Author - Stuart McAlpine - August 2022
+
+name: DESC Example 2
 
 # How does the workflow get triggered?
 on:
+  # Triggers when push/pull-request made to the main branch.
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      -main
-  workflow_dispatch: null
 
 # List of jobs for this workflow.
 jobs:
@@ -35,7 +38,7 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
 
     # What operating system is this job running on?
-    runs-on: ${{ matrix.os}}
+    runs-on: ${{ matrix.os }}
 
     # Our CI steps for this job.
     steps:
@@ -64,9 +67,8 @@ jobs:
 
       # Perform the unit tests and output a report.
       - name: Test with pytest
-        run:
-          pytest --cov --cov-report xml ./python
+        run: pytest --cov --cov-report xml ./python
           
-      # Upload the code coverage reults to codecov.io.
+      # Upload the code coverage results to codecov.io.
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2

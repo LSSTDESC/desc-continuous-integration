@@ -1,10 +1,8 @@
 .. DESC CI test documentation master file, created by
    sphinx-quickstart on Mon Jun 20 11:41:18 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
-DESC CI with GitHub Actions
-===========================
+CI at DESC with GitHub Actions
+==============================
 
 For DESC repositories we strongly encourage the use of GitHub's automated CI/CD
 workflow tool, `GitHub Actions <https://github.com/features/actions>`__. With
@@ -19,14 +17,14 @@ repository, triggered manually, or at a defined schedule. Workflows are defined
 in the ``.github/workflows`` directory of your repository. A repository can
 have multiple workflows, each of which can perform a different set of tasks.
 
-This repository has four example workflows, of increasing complexity, which we
+This example repository has four workflows, of differing complexities, which we
 overview in this section. The goal of each example workflow is always the same,
 however, keeping our code stable through any changes to the codebase by
 initiating the test suite and ensuring they pass.  
 
-This is not designed to be a definitive tutorial on GitHub Actions, for that
-see `here <https://docs.github.com/en/actions/quickstart>`__,  but to be a
-starting point for getting you started with CI for your DESC repository.
+This is not designed to be a definitive tutorial on GitHub Actions (for that
+see `here <https://docs.github.com/en/actions/quickstart>`__),  but to be a
+entry point for getting you started with CI for your DESC software.
 
 A simple CI example
 -------------------
@@ -44,8 +42,8 @@ Triggering the workflow
 .. literalinclude:: ../../.github/workflows/ci_example_1.yml
    :language: yaml
    :linenos:
-   :lineno-start: 1
-   :lines: 1-15
+   :lineno-start: 4
+   :lines: 4-14
 
 First, ``name:`` provides a reference tag to this workflow, handy for keeping
 track of your workflows within the GitHub Actions API. 
@@ -68,7 +66,7 @@ periodic intervals. For a complete list of conditions from which you can
 trigger your CI workflow see the documentation `here
 <https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows>`__.
 
-From line 14 onwards we reach the main body of our workflow, marked ``jobs:``.
+From line 17 onwards we reach the main body of our workflow, marked ``jobs:``.
 Workflows are built from one or more jobs, with each job of a workflow defining
 its own working environment and a set of practical instructions to perform,
 e.g., running the unit tests, constructing and deploying containers, statistics
@@ -85,7 +83,7 @@ Testing our code in different environments
    :language: yaml
    :linenos:
    :lineno-start: 17
-   :lines: 17-28
+   :lines: 17-31
 
 A ``job:`` starts with some global preferences (at the scope of only that job).
 At a minimum, we must at least declare the desired host machine architecture
@@ -134,7 +132,7 @@ The steps of a job
    :language: yaml
    :linenos:
    :lineno-start: 30
-   :lines: 30-54
+   :lines: 33-56
 
 Last but not least is the of step-by-step instructions for our
 ``ci-with-pytest`` job, listed as a series of individual ``steps:``. A
@@ -163,8 +161,8 @@ must fix it before the codebase receives any changes
 .. note:: You can run multiple command line inputs within a single ``run:`` by
   preceding the commands with the pipe symbol (``|``).
 
-Example 1 full code
-^^^^^^^^^^^^^^^^^^^
+Example 1 in full
+^^^^^^^^^^^^^^^^^
 
 For reference, here is the example action in full.
 
@@ -191,8 +189,8 @@ Future proofing
 .. literalinclude:: ../../.github/workflows/ci_example_2.yml
    :language: yaml
    :linenos:
-   :lineno-start: 17
-   :lines: 17-35
+   :lineno-start: 16
+   :lines: 16-38
 
 Say we want to consider a version of the operating system, or Python, that we
 are not yet willing to fully support, but we may migrate to it in the future.
@@ -218,8 +216,8 @@ Code formatting/linting
 .. literalinclude:: ../../.github/workflows/ci_example_2.yml
    :language: yaml
    :linenos:
-   :lineno-start: 61
-   :lines: 61-63
+   :lineno-start: 64
+   :lines: 64-66
 
 Tidy and readable code is a healthy practice. When multiple developers are
 working on a single project, or when a codebase is being handed over to another
@@ -254,8 +252,8 @@ Code coverage
 .. literalinclude:: ../../.github/workflows/ci_example_2.yml
    :language: yaml
    :linenos:
-   :lineno-start: 66
-   :lines: 65-72
+   :lineno-start: 68
+   :lines: 68-74
 
 The goal of a test suite is to cover many plausible scenarios that our code may
 encounter during general use. However it can be challenging, particularly if
@@ -276,8 +274,8 @@ to disseminate the report more thoroughly. This also allows us to create a
 visible code coverage badge on the front page of the repository (see the
 ``README.md`` file for the syntax on how to add the badge).
 
-Example 2 full code
-^^^^^^^^^^^^^^^^^^^
+Example 2 in full
+^^^^^^^^^^^^^^^^^
 
 Again, for reference, here is the full code for the slightly more complicated
 example workflow.
@@ -289,37 +287,124 @@ example workflow.
 CI and the DESC Python environment
 ----------------------------------
 
-If your DESC software is (or will go on to be) a dependency for other DESC
-packages, or it builds into a larger DESC pipeline, we can also consider that
-within our CI workflow. As part of the DESC release management strategy, there
-will be independent CI workflows that are specifically designed to perform on
-complete DESC pipelines to ensure they remain stable through any changes to the
-individual repositories that build into that pipeline. However we can already
-assist for this at the individual repository level, by ensuring that our
-software operates as expected within the ``desc-python`` Conda environment.
-This will mitigate any versioning and dependency conflicts, i.e., Python
-versions or specific versions of ``NumPy``, ``SciPy``, etc, between the DESC
-packages when they come together within a pipeline.   
+If your software is a dependency for other DESC packages, or it builds into a
+larger DESC pipeline, this can also be considered within the CI workflow. As
+part of the DESC release management strategy, there exist independent CI
+workflows designed to perform on complete DESC pipelines to ensure they remain
+stable through any changes to the individual dependent repositories. However we
+can already assist for this at the individual repository level, by ensuring
+that our software operates as expected within the ``desc-python`` Conda
+environment. This will mitigate, as much as possible, versioning and dependency
+conflicts between the DESC packages when they come together to form the
+pipeline.   
 
-Setting up our CI workflows to operate within the ``desc-python`` Conda
-environment only requires a few steps, and can be done in two ways: (1)
-utilizing the YAML setup files within the `desc-python
-<https://github.com/LSSTDESC/desc-python>`__ repository to install the
-dependencies, or (2) by operating within the DESC docker container. 
+Setting up a CI workflow to operate within the ``desc-python`` Conda
+environment only requires a few steps, and can be done in two ways: (1) working
+within a DESC docker container which has the ``desc-python`` Conda environment
+pre-installed (recommended), or (2) manually installing the ``desc-python``
+Conda environment on the host machine by utilizing the YAML setup files within
+the `desc-python <https://github.com/LSSTDESC/desc-python>`__ repository.
 
-Installing the DESC Conda environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Working within DESC containers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    "*A container is a standard unit of software that packages up code and all
+    its dependencies so the application runs quickly and reliably from one
+    computing environment to another. A Docker container image is a
+    lightweight, standalone, executable package of software that includes
+    everything needed to run an application: code, runtime, system tools,
+    system libraries and settings.*"
+
+    -- `DockerHub <https://www.docker.com/resources/what-container/>`__
+
+Working within a DESC Docker container is the quickest and simplest way to test
+code within the ``desc-python`` Conda environment. LSST-DESC has a large array
+of container images hosted by DockerHub (`full list here
+<https://hub.docker.com/u/lsstdesc>`__) exactly for this purpose, and linking
+GitHub Actions to these container images is also seamless and straightforward. 
+
+Example 3 performs very similarly to example 2, however we no longer need to
+install Python or any dependencies onto the host machine, but instead include
+the line
+
+.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+   :language: yaml
+   :linenos:
+   :lineno-start: 31
+   :lines: 31-32
+
+to tell GitHub Actions that we wish to download and run the specified container
+from DockerHub, and operate the entirety of the ``ci-with-pytest`` job within
+this container.
+
+The naming convention for CI-based LSST-DESC container images includes both the
+operating system version and Python version, and have a ``:ci-dev`` tag which
+is necessary to include.
+
+Our matrix in the case of this example
+
+.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+   :language: yaml
+   :linenos:
+   :lineno-start: 24
+   :lines: 24-26
+
+specifies which container image to work within, and not the of GitHub actions
+host runner, as was the case for the previous examples. We always select
+``ubuntu-latest`` host machines to operate on (however this choice is largely
+arbitrary as we are operating within a container on the machine anyway).   
+
+.. note:: Only Ubuntu host machines support container images. To operate within
+   the ``desc-python`` Conda environment using a MacOS architecture you will
+   need to install the environment manually (see next example).
+
+The downside of operating within containers is the setup overhead (containers
+can be many gigabytes that have to be downloaded and extracted). To that end,
+we recommend two workflows, one that only installs the dependencies needed to
+get your code working (like the previous two examples), and a second workflow
+that operates within the DESC container, but on a schedule. For example, here
+we trigger our workflow every Friday at midnight, 
+
+.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+   :language: yaml
+   :linenos:
+   :lineno-start: 8
+   :lines: 8-10
+
+(see `here
+<https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule>`__
+for more details on scheduling your workflows).
+
+.. note:: If you have Python dependencies that are not part of the
+   ``desc-python`` environment, you will have to install yourself manually
+   after. For example ``pytest-cov`` is not included, so we manually added it
+   to the Conda environment on line 48. As this is a package needed only for
+   the CI workflow there is no real need to add it to the ``desc-python``
+   environment. However, if your software requires an additional package to
+   operate you can request its inclusion by raising an issue at the
+   ``desc-python`` repository.
+
+Example 3 in full
+^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+   :language: yaml
+   :linenos:
+
+Installing the DESC Conda environment manually
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If for some reason you cannot use the DESC containers, or you need to test your
+code on MacOS architecture, you can install the ``python-desc`` Conda
+environment on the host machine manually. 
 
 The most up-to-date version of the ``python-desc`` Conda environment can be
 found in `this <https://github.com/LSSTDESC/desc-python>`__ DESC repository,
 which we can call upon during our CI workflow.
 
-The code snippets below are taken from ``ci_example_3.yml``, which functionally
-does the same workflow and tests as ``ci_example_2.yml``, but now we are
-performing them in the ``desc-python`` environment, as opposed to setting up
-Python and it's dependencies ourselves as we have done up until now. 
+The code snippets below are taken from ``ci_example_4.yml``.
 
-.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+.. literalinclude:: ../../.github/workflows/ci_example_4.yml
    :language: yaml
    :linenos:
    :lineno-start: 53
@@ -331,48 +416,31 @@ is the default behaviour), but now we are telling the Action to checkout a
 specified GitHub repository (``repository:``) into a specified directory on the
 host machine (``path:``).
 
-.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+.. literalinclude:: ../../.github/workflows/ci_example_4.yml
    :language: yaml
    :linenos:
-   :lineno-start: 16
-   :lines: 16-19
+   :lineno-start: 15
+   :lines: 15-19
 
-.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+.. literalinclude:: ../../.github/workflows/ci_example_4.yml
    :language: yaml
    :linenos:
-   :lineno-start: 60
-   :lines: 60-70
+   :lineno-start: 59
+   :lines: 59-74
 
-Next we use another GitHub Action to install MiniConda onto the host machine.
-We tell it what version of Python we wish to setup and to activate the Conda
-``base`` environment. Then we install the ``desc-python`` environment from the
-YAML configuration files. We use Mamba to resolve the environment, which is
-generally much quicker for resolving complex environments. One extra step is on
-line 19, where we have specified the ``default:`` ``shell: bash -l {0}``, which
-is required to allow MiniConda to activate a custom environment.
+Next we use another GitHub Action to install MiniConda onto the host machine,
+specifying the Python version and that we wish to setup and to activate the
+Conda ``base`` environment. Then we install the ``desc-python`` environment
+packages from the YAML files to the base environment. We use Mamba to resolve
+the environment, which is generally much quicker for resolving complex
+environments. One extra step is on line 18, where we have specified the
+``default:`` ``shell: bash -l {0}``, which is required for MiniConda to
+activate environments.
 
-.. note:: If you have Python dependencies that are not part of the
-   ``desc-python`` environment, you will have to install yourself manually
-   after. For example ``pytest-cov`` is not included, so we manually added it
-   to the Conda environment on line 79. As this is a package needed only for
-   the CI workflow there is no real need to add it to the ``desc-python``
-   environment. However, if your software requires an additional package to
-   operate you can request its inclusion by raising an issue at the
-   ``desc-python`` repository. 
+Example 4 in full
+^^^^^^^^^^^^^^^^^
 
-Example 3 full code
-^^^^^^^^^^^^^^^^^^^
-
-.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+.. literalinclude:: ../../.github/workflows/ci_example_4.yml
    :language: yaml
    :linenos:
 
-Using the DESC docker image
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Need to get this working.
-
-CI at NERSC
------------
-
-Coming soon...

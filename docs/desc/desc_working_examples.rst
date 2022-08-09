@@ -6,11 +6,11 @@
 Example CI workflows from DESC repositories 
 ===========================================
 
-Here we show a brief selection of CI workflows taken from some activate DESC
-repositories, break them down, and discuss their workings. These demonstrate CI
-at DESC in action, whilst also demonstrating some additional capabilities of
-GitHub Actions beyond the basic examples in the previous section, and what
-extra steps we may need to perform to get our CI working.  
+Here is a brief selection of CI workflows taken from activate DESC
+repositories. These demonstrate CI at DESC in action, whilst also demonstrating
+some additional capabilities of GitHub Actions beyond the basic examples in the
+previous section, and what extra steps we may need to perform to get up and
+running.  
 
 The DESC CI workflows were taken from the repositories on July 2022.
 

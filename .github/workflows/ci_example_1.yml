@@ -1,14 +1,17 @@
-name: DESC GitHub Actions example 1
+# See https://desc-continuous-integration.readthedocs.io/en/latest/index.html for more info.
+# Author - Stuart McAlpine - August 2022
+
+name: DESC Example 1
 
 # How does the workflow get triggered?
 on:
+  # Triggers when push/pull-request made to the main branch.
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      -main
-  workflow_dispatch: null
 
 # List of jobs for this workflow.
 jobs:
@@ -25,7 +28,7 @@ jobs:
         os: [ubuntu-18.04, ubuntu-20.04, macos-latest]
   
     # What operating system is this job running on?
-    runs-on: ${{ matrix.os}}
+    runs-on: ${{ matrix.os }}
 
     # Our CI steps for this job.
     steps:
@@ -50,5 +53,4 @@ jobs:
 
       # Perform unit tests.
       - name: Test with pytest
-        run:
-          pytest ./python
+        run: pytest ./python
