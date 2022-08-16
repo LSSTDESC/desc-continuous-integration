@@ -46,7 +46,6 @@ jobs:
                 mamba install -y --file conda_requirements.txt
                 conda info
                 conda list
-
             - name: Install pip deps
               run: |
                 # We need to get batoid onto conda, but for now, this is a separate step.
@@ -54,7 +53,22 @@ jobs:
                 pip install git+https://github.com/LSSTDESC/skyCatalogs.git@master
                 conda info
                 conda list
-
+            - name: Install rubin_sim and rubin_sim_data
+              run: |
+                # Do the minimal installation from source to avoid installing
+                # a bunch of unneeded packages.
+                git clone https://github.com/lsst/rubin_sim.git
+                cd rubin_sim
+                pip install -e .
+                cd ..
+                mkdir rubin_sim_data
+                cd rubin_sim_data
+                # Just get the skybrightness and throughputs data for now.
+                curl -O https://lsst.ncsa.illinois.edu/sim-data/rubin_sim_data/skybrightness_may_2021.tgz
+                tar xzf skybrightness_may_2021.tgz
+                curl -O https://lsst.ncsa.illinois.edu/sim-data/rubin_sim_data/throughputs_aug_2021.tgz
+                tar xzf throughputs_aug_2021.tgz
+                cd ..
             - name: Install imSim
               run:
                 pip install .
@@ -64,11 +78,11 @@ jobs:
                 # need to make sure GalSim 2.4.0 is installed before
                 # the next imsim release:
                 pip install git+https://github.com/GalSim-developers/GalSim.git@main
-
             - name: Install test deps
               run:
                 conda install -y pytest nose
 
             - name: Run tests
               run: |
+                export RUBIN_SIM_DATA_DIR=`pwd`/rubin_sim_data
                 pytest
