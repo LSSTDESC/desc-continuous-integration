@@ -1,0 +1,56 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sudo apt install -y libopenmpi-dev libhdf5-mpi-dev
+        python -m pip install --upgrade pip
+        python -m pip install pylint pytest pytest-cov
+        python -m pip install jupyter
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        CC="mpicc" HDF5_MPI="ON" pip install --upgrade --force-reinstall --no-binary=h5py h5py
+        python setup.py install
+      env:
+        CC: mpicc
+        HDF5_MPI: ON
+    - name: Lint with pylint
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        pylint --reports=no --errors-only tables_io
+        # stp the build if there are a lot of messages
+        pylint --reports=no --fail-under=9.5 tables_io
+        # exit-zero treats all errors as warnings.
+        pylint --exit-zero tables_io
+    - name: Test with pytest
+      run: |
+        python -m pytest --cov=./tables_io --cov-report=xml tests
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        env_vars: OS,PYTHON
+        name: codecov-umbrella
+        fail_ci_if_error: true
