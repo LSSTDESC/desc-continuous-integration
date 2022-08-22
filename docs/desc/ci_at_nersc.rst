@@ -66,7 +66,8 @@ Personal Access tokens
 
 To start, in the ``mirror`` repository you will need to declare personal access
 tokens with sufficient scope to read and write to the ``source`` and ``target``
-repositories.
+repositories (do not share these tokens with anyone, this is the equivalent of
+password sharing).
 
 The mirroring process is eventually done through a Bash script, where we expect
 the Personal Access token of the ``source`` repository to be stored as
@@ -184,3 +185,20 @@ To recap, the steps are:
 
 Building a GitLab CI workflow for your repository
 -------------------------------------------------
+
+Things to think about with CI at NERSC
+--------------------------------------
+
+.. note:: When deploying a CI workflow to *Cori* you are running code in the
+   same environment, with the same permissions, as if you were working on a
+   login node. Therefore things like ``$HOME`` refer to your real home
+   directory, and you need to be careful about what scope your give to your CI
+   workflows at NERSC.  As the developer, you are responsible for the code that
+   is run, and you need to fully understand what is happening in the workflow
+   that you are implementing.
+
+.. note:: It is not recommended that you mirror code that you yourself do not
+   own, unless they are from protected branches.
+
+.. note:: Any code you mirror onto the NERSC GitLab instance must adhere to the
+   broader NERSC user policy.

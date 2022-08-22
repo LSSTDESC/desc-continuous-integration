@@ -1,0 +1,18 @@
+variables:
+  MIRROR_SOURCE_REPO: https://github.com/stuartmcalpine/desc-continuous-integration.git
+  MIRROR_TARGET_REPO: https://software.nersc.gov/mcalpine/desc-continuous-integration.git
+  SCHEDULER_PARAMETERS: "-C haswell -q debug -N1 -t 00:05:00"
+  GITLAB_PROJECT_NUMBER: 445
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "trigger"'
+      when: always
+
+# 1) Mirror the GitHub repository to GitLab (mirror.bash).
+# 2) Trigger the GitLab CI workflow in the target repository on GitLab.
+mirror-repo:
+  tags: [cori]
+  script:
+    - bash mirror.bash
+    - curl -X POST --fail -F token=$TARGET_TRIGGER_CI -F ref=main https://software.nersc.gov/api/v4/projects/$GITLAB_PROJECT_NUMBER/trigger/pipeline

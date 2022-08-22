@@ -1,0 +1,17 @@
+variables:
+  STATUS_SOURCE_REPO: https://software.nersc.gov/mcalpine/desc-continuous-integration.git
+  STATUS_SOURCE_BRANCH: main
+  STATUS_TARGET_REPO: https://github.com/stuartmcalpine/desc-continuous-integration.git
+  STATUS_TARGET_CONTEXT: NERSC
+  SCHEDULER_PARAMETERS: "-C haswell -q debug -N1 -t 00:05:00"
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "schedule"'
+      when: always
+
+mirror-repo:
+  tags: [cori]
+  script:
+    - python3 status-github.py
+
