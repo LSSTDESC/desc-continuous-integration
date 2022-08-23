@@ -1,6 +1,6 @@
 variables:
   SCHEDULER_PARAMETERS: "-C haswell -M escori -q xfer -N1 -t 01:00:00"
-  GITLAB_PROJECT_NUMBER: 449
+  GITLAB_PROJECT_NUMBER: 452
 
 # Triggered from a trigger token (from MIRROR_SOURCE_REPO).
 workflow:
@@ -8,11 +8,13 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "trigger"
       when: always
   
-      
 example:
   tags: [cori]
-  script: 
+  script:
+    # Script loads desc-python Conda environment and runs tests.
     - bash gitlab/example-test.bash 
+
+    # Trigger the status repository CI workflow to report results.
     - curl -X POST --fail -F token=$STATUS_TRIGGER_TOKEN -F ref=main https://software.nersc.gov/api/v4/projects/$GITLAB_PROJECT_NUMBER/trigger/pipeline
 
 

@@ -23,10 +23,6 @@ facilities directly, we require a bit of a workaround:
 
 #. Report the results back to GitHub.
 
-Below is a schematic of the process.
-
-.. image:: ../images/repo-flow.png
-
 Here we go over the steps required to implement a CI workflow at NERSC starting
 from a GitHub repository, for the example of our test repository. The goal is
 the same as before, to trigger the repositories' test suite when changes to the
@@ -240,6 +236,40 @@ Building a GitLab CI workflow for your repository
 Now that we are set up, we can think about how to perform CI at GitLab,
 relating back to what we have learnt from using GitHub actions in the previous
 examples.
+
+As we mentioned above, CI workflows for GitLab are placed in a file called
+``.gitlab-ci.yml``, which is located in your root repository directory. Here we
+will just cover how to build a basic CI workflow with GitLab. The complete
+``.gitlab-ci.yml`` reference guide can be found `here
+<https://docs.gitlab.com/ee/ci/yaml/>`__.
+
+.. literalinclude:: ../../.gitlab-ci.yml
+   :language: yaml
+   :linenos:
+   :caption: .gitlab-ci.yml
+
+This is the GitLab CI workflow that will eventually get run by the ``target``
+repository on the NERSC GitLab instance. There are many similarities with the
+GitHub Actions CI workflow syntax. We must tell the workflow how to be
+triggered, which is under ``workflow:`` ``rules:``. In this case we are saying
+we only want the workflow to run if it was triggered via a trigger token (see
+the reference guide linked above for a full list of workflow options). We can
+set environment variables for the job, under ``variables:``. And then we list
+our jobs.
+
+Again, as with GitHub Actions, we can have multiple jobs, each will run
+independently and in parallel unless you deliberately link them. This workflow
+only has on job, ``example``. Within each job, ``tags`` is the same as
+``runs-on`` from GitHub Actions. Here we want to run on ``cori``. And
+``script`` contains the list of commands to execute for the job, the same as
+``steps:`` from GitHub Actions. 
+
+When running at NERSC you have to set the ``SCHEDULER_PARAMETERS`` environment
+variable, which defines your queue preferences for the machine (which queue to
+submit to, which project to charge, etc). For more details about this, and
+other specifics of running CI at NERSC, see `here
+<https://docs.nersc.gov/services/gitlab/>`__. Example repositories from NERSC
+for CI can also be found `here <https://software.nersc.gov/ci-resources>`__.
 
 Things to think about with CI at NERSC
 --------------------------------------
