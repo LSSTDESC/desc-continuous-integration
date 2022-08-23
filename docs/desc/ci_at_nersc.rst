@@ -169,22 +169,23 @@ repository.
    :linenos:
    :caption: ./gitlab/mirror_repo_files/.gitlab-ci.yml
 
-We will go into some more details of the GitLab CI format in the next section,
-but briefly:
+We will go into detail of the GitLab CI format in the next section, but
+briefly:
 
 * The workflow is triggered automatically from GitHub using the trigger token.
 
 * It runs the ``mirror.bash`` script, which mirrors the files from
   ``MIRROR_SOURCE_REPO`` in to ``MIRROR_TARGET_REPO``.
 
-* It finishes by triggering the CI workflow in ``MIRROR_TARGET_REPO``.
+* It finishes by triggering the CI workflow in ``MIRROR_TARGET_REPO`` to
+  continue the pipeline.
 
-You will have to modify the ``.gitlab-ci.yml`` file to point to your
-``MIRROR_SOURCE_REPO`` (on GitHub) and ``MIRROR_TARGET_REPO`` (on GitLab). You
-will also have modify the value of ``GITLAB_PROJECT_NUMBER``, the integer
-project number of your ``target`` repository on GitLab. The
-``SCHEDULER_PARAMETERS`` is where we define our compute node allocation options
-for submitting to *Cori*, which we detail more later.
+.. note:: You will have to modify the ``.gitlab-ci.yml`` file to point to your
+	``MIRROR_SOURCE_REPO`` (on GitHub) and ``MIRROR_TARGET_REPO`` (on GitLab). You
+	will also have modify the value of ``GITLAB_PROJECT_NUMBER``, the integer
+	project number of your ``target`` repository on GitLab. The
+	``SCHEDULER_PARAMETERS`` is where we define our compute node allocation options
+	for submitting to *Cori*, which we detail more later.
 
 Status repository files
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -208,6 +209,30 @@ The second file is the GitLab CI workflow.
    :linenos:
    :caption: ./gitlab/status_repo_files/.gitlab-ci.yml
 
+.. note:: You will have to modify the ``.gitlab-ci.yml`` file to point to your
+    ``STATUS_SOURCE_REPO`` (on GitLab) and ``STATUS_TARGET_REPO`` (on GitHub).
+
+Triggering the CI workflow pipeline
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The final file to create is a GitHub Actions CI workflow to initiate the pipeline.
+
+The ``ci_nersc.yml`` workflow in the ``.github/workflows/`` gives a good
+example of how to do this. 
+
+.. literalinclude:: ../../.github/workflows/ci_nersc.yml
+   :language: yaml
+   :linenos:
+   :caption: ci_nersc.yml
+
+Essentially, all we are doing is kick-starting the pipeline (in this example
+manually) by initiating the ``mirror`` repositories CI workflow. You can
+trigger the pipeline however you wish, however remember the examples in this
+tutorial only work for the ``main`` branch, and each trigger will run a CI job
+at NERSC.
+
+.. note:: You will have to modify ``GITLAB_PROJECT_NUMBER`` to the GitLab
+	project number of your mirror repository.
 
 Building a GitLab CI workflow for your repository
 -------------------------------------------------
