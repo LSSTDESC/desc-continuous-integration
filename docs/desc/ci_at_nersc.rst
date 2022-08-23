@@ -271,6 +271,15 @@ other specifics of running CI at NERSC, see `here
 <https://docs.nersc.gov/services/gitlab/>`__. Example repositories from NERSC
 for CI can also be found `here <https://software.nersc.gov/ci-resources>`__.
 
+When everything has finished successfully, you should see the NERSC CI status
+beside the commit on the GitHub repository main page. Clicking its "details"
+will take you to the GitLab CI report for the job.
+
+.. figure:: ../images/nersc_success.png
+    :class: with-border
+
+    Figure 3: The NERSC tag is the reported status from the NERSC CI job.
+
 Things to think about with CI at NERSC
 --------------------------------------
 
