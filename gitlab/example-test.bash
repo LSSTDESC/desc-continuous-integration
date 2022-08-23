@@ -4,10 +4,8 @@ set -e
 
 echo "Running at NERSC on" $NERSC_HOST
 
-echo "Contents of /global/cfs/cdirs/lsst"
-runls=$(ls /global/cfs/cdirs/lsst/)
-echo $runls
+# Load desc-python Conda environment.
+source /global/common/software/lsst/common/miniconda/setup_current_python.sh
 
-exit 0
-
-
+# Run tests.
+pytest ./python

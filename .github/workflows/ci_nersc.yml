@@ -1,0 +1,16 @@
+name: Trigger NERSC CI
+
+on: [workflow_dispatch]
+
+# Project number on GitLab of the mirror repository.
+env:
+  GITLAB_PROJECT_NUMBER: 451
+  
+# Trigger mirror repository CI workflow.
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - run: curl -X POST --fail -F token=${{ secrets.MIRROR_TRIGGER_TOKEN }} -F ref=main https://software.nersc.gov/api/v4/projects/$GITLAB_PROJECT_NUMBER/trigger/pipeline
+

@@ -1,8 +1,8 @@
 .. DESC CI test documentation master file, created by
    sphinx-quickstart on Mon Jun 20 11:41:18 2022.
 
-CI at DESC with GitHub Actions
-==============================
+CI using GitHub Actions
+=======================
 
 For DESC repositories we strongly encourage the use of GitHub's automated CI/CD
 workflow tool, `GitHub Actions <https://github.com/features/actions>`__. With
