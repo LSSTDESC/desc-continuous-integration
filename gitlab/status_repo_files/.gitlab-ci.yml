@@ -5,12 +5,13 @@ variables:
   STATUS_TARGET_CONTEXT: NERSC
   SCHEDULER_PARAMETERS: "-C haswell -q debug -N1 -t 00:05:00"
 
+# Triggered from a trigger token (from MIRROR_SOURCE_REPO).
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "schedule"'
+    - if: $CI_PIPELINE_SOURCE == "trigger"
       when: always
 
-mirror-repo:
+status-repo:
   tags: [cori]
   script:
     - python3 status-github.py
