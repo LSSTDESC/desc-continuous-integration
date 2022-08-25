@@ -1,34 +1,43 @@
 CI at NERSC using GitLab
 ========================
 
-For the majority of cases the GitHub-hosted runners available through GitHub
-Actions are more than sufficient to test and maintain code stability for DESC
-repositories.
+For the majority of cases the self-hosted runners provided by GitHub will be
+more than sufficient to test and maintain code stability for DESC repositories.
 
-However, some DESC software repositories would benefit greatly by having the
-ability to deploy CI workflows directly on the *Cori* and *Perlmutter* machines
-at `NERSC <https://www.nersc.gov/>`__. This would allow the software to be
-tested more intensely within an HPC environment, give access to specific
-development tools at NERSC, and give the ability to test the code against the
-large datasets hosted at the facility, for example.
+However, there are some DESC software repositories that would benefit greatly
+from having the ability to deploy a CI workflow directly to the *Cori* and
+*Perlmutter* machines at `NERSC <https://www.nersc.gov/>`__. This would allow
+the software to be tested more intensely within an HPC environment, give access
+to specific development tools at NERSC, and give the ability to test the code
+against the large datasets hosted at the facility, for example.
 
 As there is no way to link CI workflows using GitHub Actions to the NERSC
 facilities directly, we require a bit of a workaround:
 
-#. Mirror the repository to the `NERSC GitLab instance <https://software.nersc.gov/>`__
-   where we have direct access to the *Cori* and *Perlmutter* machines.
+#. Mirror the GitHub repository to the `NERSC GitLab instance
+   <https://software.nersc.gov/>`__ where we have direct access to the *Cori*
+   and *Perlmutter* machines.
 
 #. Implement a CI workflow using GitLab's builtin CI tools (similar to GitHub
    Actions).
 
-#. Report the results back to GitHub.
+#. Report the results of this CI workflow back to GitHub.
 
-Here we go over the steps required to implement a CI workflow at NERSC starting
-from a GitHub repository, for the example of our test repository. The goal is
-the same as before, to trigger the repositories' test suite when changes to the
-repositories' codebase are made.  The difference now being that these tests
-will be performed directly on *Cori*, and not on a GitHub Actions-hosted
-runner.
+.. figure:: ../images/workflow_diagram.png
+
+   Figure 1: Schematic of the three stage process.
+
+In this section we go over the steps required to implement a CI workflow at
+NERSC starting from a GitHub repository. For our repositories' example
+workflow, the goal is the same as before, to trigger the repositories' test
+suite when changes to the repositories' codebase are made.  The difference now
+being that these tests will be performed directly on *Cori*, and not on a
+GitHub Actions-hosted runner.
+
+Much of this tutorial/example is templated from the `CI at NERSC documentation
+<https://docs.nersc.gov/services/gitlab/>`__ and the `CI at NERSC tutorial
+<https://software.nersc.gov/ci-resources>`__, which we also recommend looking
+at.
 
 .. note:: You will need a NERSC account and access to the `NERSC GitLab
    instance <https://software.nersc.gov/>`__ before moving forward. See `here
@@ -49,7 +58,7 @@ Start by creating three **blank** repositories on the NERSC GitLab instance:
 
 #. A ``target`` repository, with the same name as the GitHub ``source``
    repository (e.g, ``desc-continuous-integration``). This can be created in any
-   namespace/group.  The CI eventual workflow is performed here, therefore those
+   namespace/group.  The eventual CI workflow is performed here, therefore those
    needing access to the CI logs should have this repository visible to them.
 
 #. A ``mirror`` repository, whose job is to clone the GitHub ``source``
@@ -65,12 +74,12 @@ Start by creating three **blank** repositories on the NERSC GitLab instance:
 .. figure:: ../images/create_blank_repo.png
 	:class: with-border
 
-	Figure 1: Example of creating a blank repository on GitLab.
+	Figure 2: Example of creating a blank repository on GitLab.
 
 .. figure:: ../images/three_repos.png
 	:class: with-border
 
-	Figure 2: At the end you should have three empty repositories on GitLab.
+	Figure 3: At the end you should have three empty repositories on GitLab.
 
 Personal Access tokens
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -80,21 +89,23 @@ authentication to GitHub or GitLab when using the API or the command line. We
 need to set up PATs between our repositories in order for them to communicate
 through our CI pipeline.
 
-#. In the GitHub ``source`` repository, in your user profile go to Settings ->
-   Developer settings -> Personal Access Tokens -> Generate New Token. Give the
-   token a "Note", say "NERSC CI", and tick "workflow". Then generate the token.
-   Copy the generated PAT, go to the ``mirror`` repository, in Settings -> CI/CD
-   -> Variables, add a variable ``MIRROR_SOURCE_PAT`` with the value of the
-   generated PAT from the ``source`` repo (make sure to tick masked). Now go to
-   the ``status`` repository and add a CI/CD variable ``STATUS_TARGET_PAT`` with
-   again the same PAT as the value. 
+#. In the GitHub ``source`` repository, in your user profile go to *Settings ->
+   Developer settings -> Personal Access Tokens -> Generate New Token*. Give
+   the token a note, say "NERSC CI", and tick "workflow", then generate the
+   token.  Copy the generated PAT, go to the ``mirror`` repository, in
+   *Settings -> CI/CD -> Variables*, add a variable ``MIRROR_SOURCE_PAT`` with
+   the value of the generated PAT from the ``source`` repo (make sure to tick
+   masked). Now go to the ``status`` repository and add a CI/CD variable
+   ``STATUS_TARGET_PAT``, again with the PAT from the ``source`` repository as
+   the value. 
 
-#. In the GitLab ``target`` repository create a PAT by going to Settings ->
-   Access Tokens. Give the token a name, say "mirror-repo", chose an expiration
-   date, keep the role as "Maintainer", and tick "write_repository". Create the
-   token, and add it to the ``mirror`` repository CI/CD variables as
-   ``MIRROR_TARGET_PAT`` (make sure to tick masked). Now go to the ``status``
-   repository and add the PAT as a CI/CD variable ``STATUS_SOURCE_PAT``. 
+#. In the GitLab ``target`` repository create a PAT by going to *Settings ->
+   Access Tokens*. Give the token a name, say "mirror-repo", chose an
+   expiration date, keep the role as "Maintainer", and tick "write_repository".
+   Create the token, and add it to the ``mirror`` repository CI/CD variables as
+   ``MIRROR_TARGET_PAT``. Now go to the ``status`` repository and add the PAT
+   as a CI/CD variable ``STATUS_SOURCE_PAT`` (make sure to tick masked for
+   each). 
 
 .. note:: The ``mirror`` and ``status`` repositories should be created in your
 	private namespace, so only you have access. This is to protect the PATs stored
@@ -111,15 +122,16 @@ Trigger tokens
 ^^^^^^^^^^^^^^
 
 In order for our GitHub -> GitLab -> GitHub pipeline to work seamlessly behind
-the scenes, we will have to trigger the CI workflows of each repository in
-sequence one after the other. This is done through "Trigger tokens", which let
-us remotely trigger CI workflows within our repositories. 
+the scenes, we want the CI workflows of each repository to trigger
+automatically one after the other. This is done through "Trigger tokens", which
+let us remotely trigger CI workflows within our repositories from an external
+source. 
 
-#. In the ``mirror`` repository, go to Settings -> CI/CD -> Pipeline triggers
+#. In the ``mirror`` repository, go to *Settings -> CI/CD -> Pipeline triggers*
    and create a trigger token with the description "trigger-from-github".  Copy
-   the created trigger token, go to the ``source`` repository on GitHub, and add
-   the generate trigger token as a *Secret* under Settings -> Secrets -> Actions
-   with the name ``MIRROR_TRIGGER_TOKEN``.
+   the created trigger token, go to the ``source`` repository on GitHub, and
+   add the generated trigger token as a *Secret* under *Settings -> Secrets ->
+   Actions* with the name ``MIRROR_TRIGGER_TOKEN``.
 
 #. Go to the ``target`` repository and create a trigger token called
    "trigger-from-mirror". Add this one to the ``mirror`` repository as a CI/CD
@@ -165,7 +177,7 @@ repository.
    :linenos:
    :caption: ./gitlab/mirror_repo_files/.gitlab-ci.yml
 
-We will go into detail of the GitLab CI format in the next section, but
+We will go into more detail of the GitLab CI format in the next section, but
 briefly:
 
 * The workflow is triggered automatically from GitHub using the trigger token.
@@ -234,8 +246,8 @@ Building a GitLab CI workflow for your repository
 -------------------------------------------------
 
 Now that we are set up, we can think about how to perform CI at GitLab,
-relating back to what we have learnt from using GitHub actions in the previous
-examples.
+thinking in the context of what we have learnt from using GitHub actions in the
+previous examples.
 
 As we mentioned above, CI workflows for GitLab are placed in a file called
 ``.gitlab-ci.yml``, which is located in your root repository directory. Here we
@@ -251,18 +263,18 @@ will just cover how to build a basic CI workflow with GitLab. The complete
 This is the GitLab CI workflow that will eventually get run by the ``target``
 repository on the NERSC GitLab instance. There are many similarities with the
 GitHub Actions CI workflow syntax. We must tell the workflow how to be
-triggered, which is under ``workflow:`` ``rules:``. In this case we are saying
-we only want the workflow to run if it was triggered via a trigger token (see
-the reference guide linked above for a full list of workflow options). We can
-set environment variables for the job, under ``variables:``. And then we list
-our jobs.
+triggered (same as ``on:`` in GitHub Actions), which is under ``workflow:``
+``rules:``. In this case we are saying we only want the workflow to run if it
+was triggered via a trigger token (see the reference guide linked above for a
+full list of workflow options). We can set environment variables for the job,
+under ``variables:``. And then we list our jobs.
 
-Again, as with GitHub Actions, we can have multiple jobs, each will run
-independently and in parallel unless you deliberately link them. This workflow
-only has on job, ``example``. Within each job, ``tags`` is the same as
-``runs-on`` from GitHub Actions. Here we want to run on ``cori``. And
-``script`` contains the list of commands to execute for the job, the same as
-``steps:`` from GitHub Actions. 
+As with GitHub Actions, we can have multiple jobs, each will run independently
+and in parallel unless you deliberately link them. This workflow only has on
+job, ``example``. Within each job, ``tags`` is the same as ``runs-on`` from
+GitHub Actions. Here we want to run on ``cori``. And ``script`` contains the
+sequence of commands to execute for the job, the same as ``steps:`` from GitHub
+Actions. 
 
 When running at NERSC you have to set the ``SCHEDULER_PARAMETERS`` environment
 variable, which defines your queue preferences for the machine (which queue to
@@ -278,7 +290,7 @@ will take you to the GitLab CI report for the job.
 .. figure:: ../images/nersc_success.png
     :class: with-border
 
-    Figure 3: The NERSC tag is the reported status from the NERSC CI job.
+    Figure 4: The NERSC tag is the reported status from the NERSC CI job.
 
 Things to think about with CI at NERSC
 --------------------------------------

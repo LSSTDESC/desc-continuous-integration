@@ -14,13 +14,6 @@ source_pat     = os.getenv('STATUS_SOURCE_PAT')
 target_pat     = os.getenv('STATUS_TARGET_PAT')
 target_repo_context = os.getenv('STATUS_TARGET_CONTEXT')
 
-source_repo = "https://software.nersc.gov/mcalpine/desc-continuous-integration.git"
-source_branch = "main"
-target_repo = "https://github.com/LSSTDESC/desc-continuous-integration.git"
-source_pat = "glpat-Q-6ssbAy9yH7vbXngDLb"
-target_pat = "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"
-target_repo_context = "nersc"
-
 source_api = "https://software.nersc.gov/api/v4"
 target_api = "https://api.github.com"
 

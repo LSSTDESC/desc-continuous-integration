@@ -4,7 +4,7 @@ on: [workflow_dispatch]
 
 # Project number on GitLab of the mirror repository.
 env:
-  GITLAB_PROJECT_NUMBER: 451
+  GITLAB_PROJECT_NUMBER: <mirror-project-number-on-gitlab>
   
 # Trigger mirror repository CI workflow.
 jobs:

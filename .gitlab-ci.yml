@@ -1,15 +1,20 @@
+# Parameters of workflow.
 variables:
   SCHEDULER_PARAMETERS: "-C haswell -M escori -q xfer -N1 -t 01:00:00"
-  GITLAB_PROJECT_NUMBER: 452
+  GITLAB_PROJECT_NUMBER: <project-number-on-gitlab>
 
-# Triggered from a trigger token (from MIRROR_SOURCE_REPO).
+# Can only be initiated via a trigger token.
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "trigger"
       when: always
-  
+
+# The CI job.
 example:
+
+  # Running on Cori.
   tags: [cori]
+
   script:
     # Script loads desc-python Conda environment and runs tests.
     - bash gitlab/example-test.bash 
