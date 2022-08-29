@@ -4,8 +4,8 @@ import requests
 import json
 import time
 
-# Make sure the target repo has updated it status.
-time.sleep(20)
+# Give a bit of time to make sure the target repo has updated it status.
+time.sleep(60)
 
 source_repo    = os.getenv('STATUS_SOURCE_REPO')
 source_branch  = os.getenv('STATUS_SOURCE_BRANCH')

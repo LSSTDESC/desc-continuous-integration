@@ -13,6 +13,8 @@
 # These are defined in the CI workflow file (.gitlab-ci.yml):                 #
 #   - MIRROR_SOURCE_REPO : URL of the source repository from GitHub.          #
 #   - MIRROR_TARGET_REPO : URL of the target repository on GitLab.            #
+#   - TARGET_PROJECT_NUMBER: Project number for the target repository         #
+#   - MIRROR_SOURCE_BRANCH: branch from source repo to mirror                 #
 #                                                                             #
 # Authors:                                                                    #
 #   Stuart McAlpine (@stuartmcalpine)                                         #
@@ -61,6 +63,6 @@ git fetch origin --prune
 set_askpass ${MIRROR_TARGET_PAT}
 git remote add target ${MIRROR_TARGET_REPO}
 
-# Only pushes the "main" repository (and its tags).
+# Only pushes the MIRROR_SOURCE_BRANCH repository (and its tags).
 # Protected branches do not translate across gitlab, github, bitbucket etc.
-git push target --prune +refs/remotes/origin/main:refs/heads/main +refs/tags/*:refs/tags/*
+git push target --prune +refs/remotes/origin/$MIRROR_SOURCE_BRANCH:refs/heads/$MIRROR_SOURCE_BRANCH +refs/tags/*:refs/tags/*

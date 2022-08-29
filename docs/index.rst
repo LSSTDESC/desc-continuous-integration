@@ -31,7 +31,13 @@ Checklist` to see our recommended strategy for CI workflows at DESC.
    ./desc/ci_at_nersc
    ./desc/desc_working_examples
    ./desc/desc_checklist
-   
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Appendix:
+
+   ./desc/appendix
+
 
 Indices and tables
 ==================
