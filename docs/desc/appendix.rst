@@ -24,7 +24,7 @@ detailed below.
    :caption: ./gitlab/mirror_repo_files/mirror.bash
 
 The ``git push target --prune`` means we are only pushing the
-``$MIRROR_SOURCE_BRANCH`` branch (and tags) of the ``source`` repository (which
+``$GITHUB_SOURCE_BRANCH`` branch (and tags) of the ``source`` repository (which
 will likely be your ``main`` or ``master`` branch).  It is possible to target
 multiple branches through this mechanism, however it not recommended to mirror
 all branches by default.
@@ -45,12 +45,6 @@ repository.
 
 This workflow...
 
-* sets some environment variables. ``MIRROR_SOURCE_REPO`` is the URL to the
-  ``source`` repository on GitHub and ``MIRROR_TARGET_REPO`` is the URL to the
-  ``target`` repository on GitLab.  ``GITLAB_PROJECT_NUMBER`` is the project
-  number of the ``target`` repository on GitLab. You can find this listed under
-  ``Project ID`` under *Settings -> General*.
-
 * can only be triggered via a trigger token (which comes from the GitHub CI
   job).
 
@@ -66,6 +60,10 @@ format is the same as if you were submitting a standard job at NERSC. Our job
 (cloning a repository) is very quick, so we are submitting to the ``debug``
 queue. However if you need a longer job runtime, or want to charge the time to
 a particular project, you will need to modify these parameters accordingly.
+
+.. note:: The repo URLs (``GITLAB_TARGET_REPO`` etc) and project numbers
+   (``GITLAB_TARGET_PROJECT_NUMBER`` etc) have been passed through along with
+   the trigger token, originally defined in the ``source`` CI workflow.
 
 Status repository files
 -----------------------
