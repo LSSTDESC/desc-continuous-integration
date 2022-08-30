@@ -1,13 +1,4 @@
-# Parameters of workflow.
 variables:
-  # Source repository on GitHub and the branch to mirror.
-  MIRROR_SOURCE_REPO: https://github.com/LSSTDESC/<source-repo-name>.git
-  MIRROR_SOURCE_BRANCH: main
-
-  # Target repository on GitLab and its project number.
-  MIRROR_TARGET_REPO: https://software.nersc.gov/<namespace>/<target-repo-name>.git
-  TARGET_PROJECT_NUMBER: <target-repo-gitlab-project-number>
-
   # Cori queue submission options.
   SCHEDULER_PARAMETERS: "-C haswell -q debug -N1 -t 00:05:00"
 
@@ -25,7 +16,21 @@ mirror-repo:
   tags: [cori]
 
   script:
-    # 1) Script to mirror the GitHub repository.
+    # Script to mirror the GitHub repository.
     - bash mirror.bash
-    # 2) Trigger the GitLab CI workflow in the target repository on GitLab.
-    - curl -X POST --fail -F token=$TARGET_TRIGGER_TOKEN -F ref=main https://software.nersc.gov/api/v4/projects/$TARGET_PROJECT_NUMBER/trigger/pipeline
+
+    # Trigger the GitLab CI workflow in the target repository on GitLab.
+    - >
+      curl -X POST --fail
+      --form "variables[GITLAB_STATUS_REPO]=$GITLAB_STATUS_REPO"
+      --form "variables[GITLAB_TARGET_REPO]=$GITLAB_TARGET_REPO"
+      --form "variables[GITLAB_MIRROR_REPO]=$GITLAB_MIRROR_REPO"
+      --form "variables[GITHUB_SOURCE_REPO]=$GITHUB_SOURCE_REPO"
+      --form "variables[GITHUB_SOURCE_BRANCH]=$GITHUB_SOURCE_BRANCH"
+      --form "variables[GITLAB_TARGET_PROJECT_NUMBER]=$GITLAB_TARGET_PROJECT_NUMBER"
+      --form "variables[GITLAB_MIRROR_PROJECT_NUMBER]=$GITLAB_MIRROR_PROJECT_NUMBER"
+      --form "variables[GITLAB_STATUS_PROJECT_NUMBER]=$GITLAB_STATUS_PROJECT_NUMBER"
+      --form "variables[GITLAB_STATUS_CONTEXT]=$GITLAB_STATUS_CONTEXT"
+      --form token=$TARGET_TRIGGER_TOKEN
+      --form ref=main
+      https://software.nersc.gov/api/v4/projects/$GITLAB_TARGET_PROJECT_NUMBER/trigger/pipeline

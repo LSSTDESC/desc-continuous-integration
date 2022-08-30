@@ -1,15 +1,4 @@
-# Parameters of workflow.
 variables:
-  # Source repository on GitLab and the branch we are working with.
-  STATUS_SOURCE_REPO: https://software.nersc.gov/<namespace>/<source-repo-name>.git
-  STATUS_SOURCE_BRANCH: main
-
-  # Target repository on GitHub.
-  STATUS_TARGET_REPO: https://github.com/LSSTDESC/<target-repo-name>.git
-
-  # Tag for CI job reported at GitHub repository.
-  STATUS_TARGET_CONTEXT: NERSC
-
   # Cori queue submission options.
   SCHEDULER_PARAMETERS: "-C haswell -q debug -N1 -t 00:05:00"
 

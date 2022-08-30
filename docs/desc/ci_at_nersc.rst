@@ -143,35 +143,24 @@ external source.
 
 .. note:: Trigger tokens do not expire, but be sure to keep the variables masked.
 
-Mirror repository files
-^^^^^^^^^^^^^^^^^^^^^^^
+Mirror and Status repository files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Copy the ``mirror.bash`` and ``.gitlab-ci.yml`` files from the
-``./gitlab/mirror_repo_files/`` directory into your ``mirror`` repository.
-These put together a simple workflow that clones the ``source`` repository into
-the ``target`` repository (more details in :ref:`nersc-ci-appendix`). 
+* Copy the ``mirror.bash`` and ``.gitlab-ci.yml`` files from the
+  ``./gitlab/mirror_repo_files/`` directory into your ``mirror`` repository.
+  These put together a simple workflow that clones the ``source`` repository
+  into the ``target`` repository (more details in :ref:`nersc-ci-appendix`). 
 
-.. note:: You must modify your ``mirror`` repositories' ``.gitlab-ci.yml``
-   workflow to point to your ``MIRROR_SOURCE_REPO`` (on GitHub) and your
-   ``MIRROR_TARGET_REPO`` (on GitLab).  You will also have modify the value of
-   ``TARGET_PROJECT_NUMBER``, the integer project number of your ``target``
-   repository on GitLab, and select the branch (``MIRROR_SOURCE_BRANCH``) you
-   want to work with. The ``SCHEDULER_PARAMETERS`` define the compute node
-   allocation options for submitting to *Cori*, which must be included.
+* Copy the ``status-github.py`` and ``.gitlab-ci.yml`` files from the
+  ``./gitlab/status_repo_files/`` directory into the ``status`` repository.
+  These put together a simple workflow to discover the status of the CI job
+  that ran in the ``target`` repository and report the result back to the
+  ``source`` repository (more details in :ref:`nersc-ci-appendix`).
 
-Status repository files
-^^^^^^^^^^^^^^^^^^^^^^^
-
-Copy the ``status-github.py`` and ``.gitlab-ci.yml`` files from the
-``./gitlab/status_repo_files/`` directory into the ``status`` repository.
-These put together a simple workflow to discover the status of the CI job that
-ran in the ``target`` repository and report the result back to the ``source``
-repository.
-
-.. note:: You must modify your ``status`` repositories' ``.gitlab-ci.yml``
-   workflow to point to your ``STATUS_SOURCE_REPO`` (on GitHub), your
-   ``STATUS_TARGET_REPO`` (on GitLab), and the branch you are working with
-   (``STATUS_SOURCE_BRANCH``).
+.. note:: The ``SCHEDULER_PARAMETERS`` (in the ``mirror`` and ``status``
+   repositories' `.gitlab-ci.yml` file) define the compute node allocation
+   options for submitting to *Cori*, which must be included. You can change
+   this for your needs, for example to charge against a specific NERSC project.
 
 Triggering the CI workflow pipeline
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -179,8 +168,10 @@ Triggering the CI workflow pipeline
 The final file to create is a GitHub Actions CI workflow to initiate the
 pipeline in the ``source`` repository.
 
-The ``ci_nersc.yml`` workflow in the ``.github/workflows/`` gives a good
-example of how to do this. 
+The ``ci_nersc.yml`` workflow in ``.github/workflows/`` gives a good example of
+how to do this. Note we need to pass all the environment variables we will work
+with in the subsequent CI workflows of the pipeline, which must be defined in
+the initial GitHub Actions workflow file.
 
 .. literalinclude:: ../../.github/workflows/ci_nersc.yml
    :language: yaml
@@ -193,8 +184,8 @@ trigger the pipeline however you wish, however remember the examples in this
 tutorial only work for a single chosen branch of the repository, and that each
 trigger will run a full CI job at NERSC.
 
-.. note:: You will have to modify ``MIRROR_PROJECT_NUMBER`` to the GitLab
-	project number of your mirror repository.
+.. note:: You must modify the URLs and project numbers in ``.gitlab-ci.yml``
+   workflow to your own. 
 
 Building a GitLab CI workflow for your repository
 -------------------------------------------------

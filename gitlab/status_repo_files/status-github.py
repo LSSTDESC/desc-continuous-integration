@@ -1,18 +1,34 @@
+# ----------------------------------------------------------------------------#
+# Script to report the status of the CI workflow of the target repository on  #
+# GitLab to the source repository on GitHub.                                  #
+#                                                                             #
+# This script goes in your "status" repository on GitLab.                     #
+#                                                                             #
+# Script adapted from the CI Resources "Report Status" example                #
+# (https://software.nersc.gov/ci-resources/report-status)                     #
+#                                                                             #
+# You need to set these in Settings->CI/CD->Variables:                        #
+#   - STATUS_SOURCE_PAT : PAT of the target repository from GitLab.           #
+#   - STATUS_TARGET_PAT : PAT of the source repository on GitHub.             #
+#                                                                             #
+# Other variables are passed along with the trigger token from GitHub.        #
+#                                                                             #
+# Authors:                                                                    #
+#   Stuart McAlpine (@stuartmcalpine)                                         #
+#   Heather Kelly (@heather999)                                               #
+# ----------------------------------------------------------------------------#
+
 #!/usr/bin/env python3
 import os
 import requests
 import json
-import time
 
-# Give a bit of time to make sure the target repo has updated it status.
-time.sleep(60)
-
-source_repo    = os.getenv('STATUS_SOURCE_REPO')
-source_branch  = os.getenv('STATUS_SOURCE_BRANCH')
-target_repo    = os.getenv('STATUS_TARGET_REPO')
+source_repo    = os.getenv('GITLAB_TARGET_REPO')
+source_branch  = os.getenv('GITHUB_SOURCE_BRANCH')
+target_repo    = os.getenv('GITHUB_SOURCE_REPO')
 source_pat     = os.getenv('STATUS_SOURCE_PAT')
 target_pat     = os.getenv('STATUS_TARGET_PAT')
-target_repo_context = os.getenv('STATUS_TARGET_CONTEXT')
+target_repo_context = os.getenv('GITLAB_STATUS_CONTEXT')
 
 source_api = "https://software.nersc.gov/api/v4"
 target_api = "https://api.github.com"
@@ -38,6 +54,7 @@ for pipeline in pipelines_all:
             break
 
 ci_status = pipeline['status']
+print(f"Status from GitHub = {ci_status}")
 
 if ci_status == "running":
     ci_status = "pending"
