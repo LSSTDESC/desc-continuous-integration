@@ -1,4 +1,4 @@
-from my_arithmetic import compute_pi
+from mydescpackage.pi import compute_pi
 import math
 
 def test_add():
