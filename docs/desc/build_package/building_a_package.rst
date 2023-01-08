@@ -16,32 +16,32 @@ with and publish with a minimal amount of effort.
 This guide assumes some basic knowledge of putting together a piece of Python
 software, such as creating your own modules, etc. For those unfamiliar with
 creating Python software, check out the `official Python guide
-<https://docs.python.org/3/tutorial/modules.html#packages>`_. Also note this is
+<https://docs.python.org/3/tutorial/modules.html#packages>`__. Also note this is
 by no means an exhaustive tutorial on the subject of Python packaging. A great
 additional resource for that is the `Python Packaging Guide
-<https://packaging.python.org/en/latest/tutorials/packaging-projects/#>`_
+<https://packaging.python.org/en/latest/tutorials/packaging-projects/#>`__
 itself.
 
 Note we write this guide under the assumption that the Python package you are
 creating will being hosted by the `DESC github repository
-<https://github.com/lsstDESC>`_, however the majority of this guide will still
+<https://github.com/lsstDESC>`__, however the majority of this guide will still
 apply even if this is not the case. If you are not yet familiar with `git` or
 `github`, or you need help getting setup on the `DESC github repository
-<https://github.com/lsstDESC>`_, checkout `this guide
-<https://confluence.slac.stanford.edu/display/LSSTDESC/Getting+Started+with+Git+and+GitHub>`_
+<https://github.com/lsstDESC>`__, checkout `this guide
+<https://confluence.slac.stanford.edu/display/LSSTDESC/Getting+Started+with+Git+and+GitHub>`__
 on the DESC Confluence page, or this more general `getting started
-<https://github.com/drphilmarshall/GettingStarted#top>`_ guide.  
+<https://github.com/drphilmarshall/GettingStarted#top>`__ guide.  
 
 The accompanying repository which hosts the demo package we often refer in this
 guide can be found `here
-<https://github.com/LSSTDESC/desc-continuous-integration>`_. The package,
+<https://github.com/LSSTDESC/desc-continuous-integration>`__. The package,
 ``mydescpackage``, is very simple, consisting of a few callable mathematical
 functions. You are welcome to download/fork it and use it as a starting
 template for your project. 
 
 .. note::
 
-   For those wondering what a TOML file is, `TOML <https://toml.io/en/>`_ is a
+   For those wondering what a TOML file is, `TOML <https://toml.io/en/>`__ is a
    file format for configuration files, similar to YAML, it stands for "*Tom's
    Obvious Minimal Language*".
 
@@ -89,13 +89,13 @@ What are these files and directories...
 * ``LICENCE``: Contains the license of the package, outlining any restrictions
   of its use. It is good practice to use a well-known license rather than a
   self-created license, such as; `GNU
-  <https://www.gnu.org/licenses/gpl-3.0.en.html>`_, `Apache licence
-  <https://www.apache.org/licenses/LICENSE-2.0>`_, `MIT license
-  <https://opensource.org/licenses/MIT>`_ or `creative commons license
-  <https://creativecommons.org/choose/>`_.
+  <https://www.gnu.org/licenses/gpl-3.0.en.html>`__, `Apache licence
+  <https://www.apache.org/licenses/LICENSE-2.0>`__, `MIT license
+  <https://opensource.org/licenses/MIT>`__ or `creative commons license
+  <https://creativecommons.org/choose/>`__.
 
 * ``.gitignore``: This file specifies intentionally untracked files that Git
-  should ignore (see `here <https://git-scm.com/docs/gitignore>`_).
+  should ignore (see `here <https://git-scm.com/docs/gitignore>`__).
 
 * ``src/mydescpackage/``: Many people prefer placing their python packages in a
   ``src/`` folder in their project directory. This is a preference, and not a
@@ -121,7 +121,7 @@ The ``pyproject.toml`` file
 ---------------------------
 
 The ``pyproject.toml`` configuration file was introduced in `PEP518
-<https://peps.python.org/pep-0518/>`_ as a way of specifying the minimum build
+<https://peps.python.org/pep-0518/>`__ as a way of specifying the minimum build
 system requirements for Python projects. This allows the system to know what
 packages are required during the building process itself, e.g., ``setuptools``,
 ``wheel``, so that one does not have to pre-install any package dependencies
@@ -149,8 +149,8 @@ we are going to use ``setuptools`` to build the our Python package as our
 
 .. note:: You do not have to use ``setuptools`` as your ``build-backend``, you
    can use alternate Python package managers such as `Poetry
-   <https://python-poetry.org/>`_, or `Flit
-   <https://flit.pypa.io/en/stable/>`_. You even can put your own custom
+   <https://python-poetry.org/>`__, or `Flit
+   <https://flit.pypa.io/en/stable/>`__. You even can put your own custom
    ``build-backend`` here if you have very specific requirements for building
    your package. However if you are unsure, stick with `setuptools`.
 
@@ -169,10 +169,10 @@ backwards compatibility).
 Project metadata
 ^^^^^^^^^^^^^^^^
 
-As of `PEP621 <https://peps.python.org/pep-0621/>`_ there is a standard format
+As of `PEP621 <https://peps.python.org/pep-0621/>`__ there is a standard format
 for storing project metadata in ``pyproject.toml``, which
 ``setuptools>=61.0.0`` conforms to (see their tutorial on metadata `here
-<https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html>`_).
+<https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html>`__).
 Below is the metadata for our demo package:
 
 .. code-block:: toml
@@ -200,7 +200,7 @@ need to include that as a dependency in those cases). Many of the metadata
 fields are optional, but it is useful to be as thorough as possible detailing
 the package, especially if you publish the package to PyPi for example (for a
 list of all metadata options see `here
-<https://packaging.python.org/en/latest/specifications/declaring-project-metadata/>`_). 
+<https://packaging.python.org/en/latest/specifications/declaring-project-metadata/>`__). 
 
 .. code-block:: toml
 
@@ -259,7 +259,7 @@ Automatic versioning
 
 An extremely important attribute of your Python package is its version, which
 you should declare in the ``pyproject.toml`` metadata. It is a good practice to
-use the `Semantic Versioning <https://semver.org/>`_ format for your code. 
+use the `Semantic Versioning <https://semver.org/>`__ format for your code. 
 
 In order to not have multiple manual declarations of the package version, both
 in the ``pyproject.toml`` file and the source code, a useful trick is to use

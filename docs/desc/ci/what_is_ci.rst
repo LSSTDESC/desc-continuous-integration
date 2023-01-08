@@ -33,7 +33,7 @@ up-to-date, by encouraging the developers to push their code changes as
 frequently as possible, whilst ensuring the codebase remains stable and bug
 free through the use of a test suite and a CI workflow. 
 
-CI is a keenly encouraged practice when developing DESC software. Continuous
+CI is a keenly encouraged practice when developing DESC software, as continuous
 testing is a key means of maintaining software quality. Running tests regularly
 can significantly reduce development time, as they can catch bugs as soon as
 they are introduced. In addition, comprehensive tests allow for aggressive
@@ -45,8 +45,7 @@ Starting with a test suite
 
 A good test suite is the cornerstone of a CI workflow. Testing can occur at
 several levels: system testing, integration testing, and unit testing, with
-unit tests being the most granular and operating at the function and class
-level.
+unit tests being the most granular, operating at the function and class level.
 
 Here are some recommendations to think about when creating a test suite for
 your DESC software, taken directly from the `LSST DESC Coding Guidelines
@@ -91,14 +90,14 @@ framework for your software. One popular example is ``pytest``.
     can scale to support complex functional testing for applications and
     libraries.*" -- `pytest website <https://docs.pytest.org/en/7.1.x/>`__
 
-We utilize ``pytest`` to build a simple test framework for the dummy code in
+We utilize ``pytest`` to build a simple test framework for the demo package in
 this example repository, designed to scrutinize the mathematical functions in
-``./python/my_arithmetic.py``, making sure they work as expected. The unit
-tests are located in the ``./python/test_*.py`` files, which can be run by
-simply entering ``pytest ./python`` into the command line. For those not
-familiar with ``pytest``, their `tutorial website
+``./src/mydescpackage/*.py``, making sure they work as expected. The unit tests
+are located in the ``./tests/test_*.py`` files, which can be run by simply
+entering ``pytest ./tests`` into the command line. For those not familiar with
+``pytest``, their `tutorial website
 <https://docs.pytest.org/en/7.1.x/getting-started.html>`__ is a great place to
 get started. 
 
 The goal of CI, then, is to automate our test suite using a workflow, which we
-will demonstrate using GitHub Actions.
+will demonstrate using *GitHub Actions*.

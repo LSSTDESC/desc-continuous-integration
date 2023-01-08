@@ -63,7 +63,7 @@ jobs:
       - name: flake8 linting.
         run: flake8 --count --select=E1,E9 --show-source --statistics ./src/mydescpackage/*.py
 
-      # Perform the unit tests and output a report.
+      # Perform the unit tests and output a coverage report.
       - name: Test with pytest
         run: pytest --cov=mydescpackage --cov-report xml ./tests
           
