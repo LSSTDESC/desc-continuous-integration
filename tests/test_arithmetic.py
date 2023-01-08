@@ -8,7 +8,7 @@ def test_add():
 
     assert add(a, b) == ans
 
-def test_add():
+def test_divide():
     a = 4
     b = 8
 
@@ -16,7 +16,7 @@ def test_add():
 
     assert divide(a, b) == ans
 
-def test_add():
+def test_subtract():
     a = 4
     b = 8
 
@@ -24,7 +24,7 @@ def test_add():
 
     assert subtract(a, b) == ans
 
-def test_add():
+def test_multiply():
     a = 4
     b = 8
 
