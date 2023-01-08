@@ -1,25 +1,26 @@
 [build-system]
-requires = ["setuptools >= 60.0"]
+requires = ["setuptools >= 61.0"] # PEP 621 compliant
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mydescpackage"
-description = "Example DESC Python package."
+description = "Example DESC Python package, some simple mathmatical functions."
 license = {text = "BSD 3-Clause License"}
 classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
     'numpy',
+    'importlib-metadata;python_version<"3.8"'
 ]
-requires-python = ">=3.8"
+requires-python = ">=3"
 version = "0.0.1"
 
 [project.optional-dependencies]
 test = ["pytest"]
 
 [tool.setuptools.packages.find]
-where = ["src"]  # list of folders that contain the packages (["."] by default)
+where = ["src"] # list of folders that contain the packages (["."] by default)
 
 [project.scripts]
 display-pi = "mydescpackage.pi:display_pi"

@@ -18,7 +18,7 @@ The DESC CI workflows were taken from the repositories on August 2022.
 `The Core Cosmology Library <https://github.com/LSSTDESC/CCL>`__
 ----------------------------------------------------------------
 
-.. literalinclude:: ../../desc_ci_workflows/ccl.yml
+.. literalinclude:: ../../../examples/desc_ci_workflows/ccl.yml
    :language: yaml
    :linenos:
 
@@ -91,7 +91,7 @@ in the previous section.
 `imSim <https://github.com/LSSTDESC/imSim>`__
 ---------------------------------------------
 
-.. literalinclude:: ../../desc_ci_workflows/imsim.yml
+.. literalinclude:: ../../../examples/desc_ci_workflows/imsim.yml
    :language: yaml
    :linenos:
 
@@ -128,7 +128,7 @@ in the previous section.
 `tables_io <https://github.com/LSSTDESC/tables_io>`__
 -----------------------------------------------------
 
-.. literalinclude:: ../../desc_ci_workflows/tables_io.yml
+.. literalinclude:: ../../../examples/desc_ci_workflows/tables_io.yml
    :language: yaml
    :linenos:
 

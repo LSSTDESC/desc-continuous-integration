@@ -39,7 +39,7 @@ which we break down step-by-step below...
 Triggering the workflow
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../.github/workflows/ci_example_1.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_1.yml
    :language: yaml
    :linenos:
    :lineno-start: 4
@@ -79,7 +79,7 @@ desired. For our example there is only one job within the workflow, called
 Testing our code in different environments 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../.github/workflows/ci_example_1.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_1.yml
    :language: yaml
    :linenos:
    :lineno-start: 17
@@ -128,7 +128,7 @@ job, three of which will be ``ubuntu-18.04``, the next three of which will be
 The steps of a job
 ^^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../.github/workflows/ci_example_1.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_1.yml
    :language: yaml
    :linenos:
    :lineno-start: 30
@@ -166,7 +166,7 @@ Example 1 in full
 
 For reference, here is the example action in full.
 
-.. literalinclude:: ../../.github/workflows/ci_example_1.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_1.yml
    :language: yaml
    :linenos:
 
@@ -186,7 +186,7 @@ workflow. The example workflow is now ``ci_example_2.yml``.
 Future proofing
 ^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../.github/workflows/ci_example_2.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_2.yml
    :language: yaml
    :linenos:
    :lineno-start: 16
@@ -213,7 +213,7 @@ GitHub Actions via ``continue-on-error: ${{ matrix.experimental }}``).
 Code formatting/linting
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../.github/workflows/ci_example_2.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_2.yml
    :language: yaml
    :linenos:
    :lineno-start: 64
@@ -249,7 +249,7 @@ error codes we wish Flake8 to check.
 Code coverage
 ^^^^^^^^^^^^^
 
-.. literalinclude:: ../../.github/workflows/ci_example_2.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_2.yml
    :language: yaml
    :linenos:
    :lineno-start: 68
@@ -280,7 +280,7 @@ Example 2 in full
 Again, for reference, here is the full code for the slightly more complicated
 example workflow.
 
-.. literalinclude:: ../../.github/workflows/ci_example_2.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_2.yml
    :language: yaml
    :linenos:
 
@@ -327,7 +327,7 @@ Example 3 performs very similarly to example 2, however we no longer need to
 install Python or any dependencies onto the host machine, but instead include
 the line
 
-.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_3.yml
    :language: yaml
    :linenos:
    :lineno-start: 31
@@ -343,7 +343,7 @@ is necessary to include.
 
 Our matrix in the case of this example
 
-.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_3.yml
    :language: yaml
    :linenos:
    :lineno-start: 24
@@ -365,7 +365,7 @@ get your code working (like the previous two examples), and a second workflow
 that operates within the DESC container, but on a schedule. For example, here
 we trigger our workflow every Friday at midnight, 
 
-.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_3.yml
    :language: yaml
    :linenos:
    :lineno-start: 8
@@ -387,7 +387,7 @@ for more details on scheduling your workflows).
 Example 3 in full
 ^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../.github/workflows/ci_example_3.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_3.yml
    :language: yaml
    :linenos:
 
@@ -404,7 +404,7 @@ which we can call upon during our CI workflow.
 
 The code snippets below are taken from ``ci_example_4.yml``.
 
-.. literalinclude:: ../../.github/workflows/ci_example_4.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_4.yml
    :language: yaml
    :linenos:
    :lineno-start: 53
@@ -416,13 +416,13 @@ is the default behaviour), but now we are telling the Action to checkout a
 specified GitHub repository (``repository:``) into a specified directory on the
 host machine (``path:``).
 
-.. literalinclude:: ../../.github/workflows/ci_example_4.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_4.yml
    :language: yaml
    :linenos:
    :lineno-start: 15
    :lines: 15-19
 
-.. literalinclude:: ../../.github/workflows/ci_example_4.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_4.yml
    :language: yaml
    :linenos:
    :lineno-start: 59
@@ -440,7 +440,7 @@ activate environments.
 Example 4 in full
 ^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../.github/workflows/ci_example_4.yml
+.. literalinclude:: ../../../.github/workflows/ci_example_4.yml
    :language: yaml
    :linenos:
 
