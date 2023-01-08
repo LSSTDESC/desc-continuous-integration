@@ -1,4 +1,4 @@
-# Author - Stuart McAlpine - August 2022
+# Author - Stuart McAlpine - stuart.mcalpine@fysik.su.se - Jan 2023
 
 name: DESC Example 3
 
@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       
       matrix:
-        python-version: [py37, py38, py39]
+        python-version: ["py37", "py38", "py39"]
 
     # What operating system is this job running on?
     runs-on: ubuntu-latest
@@ -50,9 +50,8 @@ jobs:
 
       # Perform the unit tests and output a report.
       - name: Test with pytest
-        run: |
-          pytest --cov --cov-report xml ./tests
-                
+        run: pytest --cov=mydescpackage --cov-report xml ./tests
+      
       # Upload the code coverage results to codecov.io.
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2

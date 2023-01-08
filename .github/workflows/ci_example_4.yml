@@ -1,4 +1,4 @@
-# Author - Stuart McAlpine - August 2022
+# Author - Stuart McAlpine - stuart.mcalpine@fysik.su.se - Jan 2023
 
 name: DESC Example 4
 
@@ -25,14 +25,14 @@ jobs:
       fail-fast: false
       
       matrix:
-        python-version: [3.9]
+        python-version: ["3.9", "3.10"]
         os: [ubuntu-latest, macos-latest]
         experimental: [false]
 
         # Test on this, but don't mind if it fails.
         include:
-          - os: ubuntu-22.04
-            python-version: 3.9
+          - os: ubuntu-latest
+            python-version: "3.11"
             experimental: true
 
     # If True, do not fail the job, just warn me.
@@ -43,9 +43,6 @@ jobs:
 
     # Our CI steps for this job.
     steps:
-      # Print information about his job.
-      - run: echo "Running on ${{ matrix.os }} with Python ${{ matrix.python-version }}"
-     
       # Check out this repository.
       - name: Check out repository
         uses: actions/checkout@v3
@@ -86,8 +83,7 @@ jobs:
 
       # Perform the unit tests and output a report.
       - name: Test with pytest
-        run: |
-          pytest --cov --cov-report xml ./tests
+        run: pytest --cov=mydescpackage --cov-report xml ./tests
           
       # Upload the code coverage reults to codecov.io.
       - name: Upload coverage to Codecov
