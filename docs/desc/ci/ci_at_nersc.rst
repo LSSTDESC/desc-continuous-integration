@@ -24,7 +24,7 @@ facilities directly, we require a bit of a workaround:
 #. Report the results of the CI workflow run at the GitLab mirrored repository
    back to the GitHub repository.
 
-.. figure:: ../images/workflow_diagram.png
+.. figure:: ../../images/workflow_diagram.png
 
    Figure 1: Schematic of the three stages of the process described above.
 
@@ -72,12 +72,12 @@ Start by creating three **blank** repositories on the NERSC GitLab instance:
    (e.g., ``status-desc-continuous-integration``). This repository must be created
    in your private namespace.
 
-.. figure:: ../images/create_blank_repo.png
+.. figure:: ../../images/create_blank_repo.png
 	:class: with-border
 
 	Figure 2: Example of creating a blank repository on GitLab.
 
-.. figure:: ../images/three_repos.png
+.. figure:: ../../images/three_repos.png
 	:class: with-border
 
 	Figure 3: At the end you should have three empty repositories on GitLab.
@@ -173,7 +173,7 @@ how to do this. Note we need to pass all the environment variables we will work
 with in the subsequent CI workflows of the pipeline, which must be defined in
 the initial GitHub Actions workflow file.
 
-.. literalinclude:: ../../.github/workflows/ci_nersc.yml
+.. literalinclude:: ../../../.github/workflows/ci_nersc.yml
    :language: yaml
    :linenos:
    :caption: ci_nersc.yml
@@ -198,7 +198,7 @@ relating back to the GitHub Actions syntax we learned previously. A more
 in-depth look at GitLab's CI syntax can be found in `The Complete GitLab CI
 Reference Guide <https://docs.gitlab.com/ee/ci/yaml/>`__.
 
-.. literalinclude:: ../../.gitlab-ci.yml
+.. literalinclude:: ../../../examples/NERSC_gitlab/.gitlab-ci.yml
    :language: yaml
    :linenos:
    :caption: .gitlab-ci.yml
@@ -230,7 +230,7 @@ When everything has finished successfully, you should see the NERSC CI status
 beside the commit on the GitHub repository main page. Clicking its "details"
 will take you to the GitLab CI report for the job.
 
-.. figure:: ../images/nersc_success.png
+.. figure:: ../../images/nersc_success.png
     :class: with-border
 
     Figure 4: The NERSC tag is the reported status from the NERSC CI job.

@@ -24,20 +24,27 @@ Checklist` to see our recommended strategy for CI workflows at DESC.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Building a Python package:
 
-   ./desc/what_is_ci
-   ./desc/github_actions
-   ./desc/ci_at_nersc
-   ./desc/desc_working_examples
-   ./desc/desc_checklist
+   ./desc/build_package/building_a_package
+   ./desc/build_package/publish
+   ./desc/build_package/document
 
 .. toctree::
    :maxdepth: 2
-   :caption: Appendix:
+   :caption: Continuous Integration
 
-   ./desc/appendix
+   ./desc/ci/what_is_ci
+   ./desc/ci/github_actions
+   ./desc/ci/ci_at_nersc
+   ./desc/ci/desc_working_examples
+   ./desc/ci/desc_checklist
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Appendix
+
+   ./desc/ci/appendix
 
 Indices and tables
 ==================
