@@ -27,16 +27,6 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10"]
         os: [ubuntu-latest, macos-latest]
-        experimental: [false]
-
-        # Test on this, but don't mind if it fails.
-        include:
-          - os: ubuntu-latest
-            python-version: "3.11"
-            experimental: true
-
-    # If True, do not fail the job, just warn me.
-    continue-on-error: ${{ matrix.experimental }}
 
     # What operating system is this job running on?
     runs-on: ${{ matrix.os }}
@@ -63,7 +53,7 @@ jobs:
       # The gsl package does not work on macos.
       - name: Fix dependencies for MacOS
         if: ${{ matrix.os == 'macos-latest' }}
-        run: sed -i .bak '/gsl==2.7=he838d99_0/d' ./desc-python/conda/condalist.txt
+        run: sed -i .bak '/gsl==2.7=he838d99_0/d' ./desc-python/conda/conda-pack.txt
       
       # Install Python packages using python-desc environment files.
       - run: |
