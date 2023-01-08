@@ -68,8 +68,8 @@ jobs:
       # Install Python packages using python-desc environment files.
       - run: |
           conda install -c conda-forge -y mamba
-          mamba install -c conda-forge -y --file ./desc-python/conda/condalist.txt
-          pip install --no-cache-dir -r ./desc-python/conda/piplist.txt
+          mamba install -c conda-forge -y --file ./desc-python/conda/conda-pack.txt
+          pip install --no-cache-dir -r ./desc-python/conda/pip-pack.txt
       
     # Install dependencies.
       - name: Install mydescpackage.
