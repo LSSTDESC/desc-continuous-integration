@@ -1,3 +1,24 @@
+An example ``pyproject.toml`` file
+==================================
+
+An example ``pyprojet.toml`` configuration file, used for the demo code in the
+``desc-continuous-integraion`` repository.
+
+.. literalinclude:: ../../../pyproject.toml
+   :language: toml
+   :linenos:
+
+An example ``ci.yaml`` file
+===========================
+
+An example Continuous Integration YAML workflow
+(``.github/workflows/ci_example_2.yml`` in the ``desc-continuous-integraion``
+repository). More details in :ref:`ci_using_github_actions`.
+
+.. literalinclude:: ../../../.github/workflows/ci_example_2.yml
+   :language: yaml
+   :linenos:
+
 .. _nersc-ci-appendix:
 
 NERSC CI files

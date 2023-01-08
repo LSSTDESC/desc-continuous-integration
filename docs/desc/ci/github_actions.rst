@@ -1,6 +1,8 @@
 .. DESC CI test documentation master file, created by
    sphinx-quickstart on Mon Jun 20 11:41:18 2022.
 
+.. _ci_using_github_actions:
+
 CI using GitHub Actions
 =======================
 
