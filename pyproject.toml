@@ -18,6 +18,7 @@ version = "0.0.1"
 
 [project.optional-dependencies]
 test = ["pytest"]
+ci = ["pytest", "pytest-cov", "flake8"]
 
 [tool.setuptools.packages.find]
 where = ["src"] # list of folders that contain the packages (["."] by default)
