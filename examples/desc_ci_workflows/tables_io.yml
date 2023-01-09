@@ -5,9 +5,9 @@ name: Python package
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.8, 3.9, "3.10"]
 
     steps:
     - uses: actions/checkout@v2
@@ -31,21 +31,24 @@ jobs:
         python -m pip install jupyter
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         CC="mpicc" HDF5_MPI="ON" pip install --upgrade --force-reinstall --no-binary=h5py h5py
-        python setup.py install
+        pip install .
+        pip install .[dev]
       env:
         CC: mpicc
         HDF5_MPI: ON
     - name: Lint with pylint
       run: |
+        # stop the build if there are Pylint errors
+        pylint --disable=all --extension-pkg-whitelist=numpy --init-hook='import sys; sys.setrecursionlimit(8 * sys.getrecursionlimit())' src/tables_io
+    - name: Lint with flake8
+      run: |
         # stop the build if there are Python syntax errors or undefined names
-        pylint --reports=no --errors-only tables_io
-        # stp the build if there are a lot of messages
-        pylint --reports=no --fail-under=9.5 tables_io
-        # exit-zero treats all errors as warnings.
-        pylint --exit-zero tables_io
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        python -m pytest --cov=./tables_io --cov-report=xml tests
+        python -m pytest --cov-report=xml tests
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:

@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+*.swp
+build/
+docs/_build
+src/mydescpackage.egg-info/

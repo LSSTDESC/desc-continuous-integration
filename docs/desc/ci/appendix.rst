@@ -39,7 +39,7 @@ triggered from the CI workflow at the GitHub ``source`` repository.
 The two files that make up the CI workflow for the ``mirror`` repository are
 detailed below.
 
-.. literalinclude:: ../../../examples/NERSC_gitlab/mirror_repo_files/mirror.bash
+.. literalinclude:: ../../../examples/nersc_gitlab/mirror_repo_files/mirror.bash
    :language: bash
    :linenos:
    :caption: ./gitlab/mirror_repo_files/mirror.bash
@@ -55,7 +55,7 @@ authentication tokens to git.  This ensures that the tokens are not visible in
 the CLI which is an important requirement in multi-tenant hosts e.g. *Cori*
 nodes.
 
-.. literalinclude:: ../../../examples/NERSC_gitlab/mirror_repo_files/.gitlab-ci.yml
+.. literalinclude:: ../../../examples/nersc_gitlab/mirror_repo_files/.gitlab-ci.yml
    :language: yaml
    :linenos:
    :caption: ./gitlab/mirror_repo_files/.gitlab-ci.yml
@@ -93,14 +93,14 @@ The ``status-github.py`` file, shown below, is a Python script that
 automatically appends the CI workflow result from the ``target`` repository on
 GitLab to the ``source`` repository on GitHub.
 
-.. literalinclude:: ../../../examples/NERSC_gitlab/status_repo_files/status-github.py
+.. literalinclude:: ../../../examples/nersc_gitlab/status_repo_files/status-github.py
    :language: python
    :linenos:
    :caption: ./gitlab/status_repo_files/status-github.py
 
 The second file is the GitLab CI workflow.
 
-.. literalinclude:: ../../../examples/NERSC_gitlab/status_repo_files/.gitlab-ci.yml
+.. literalinclude:: ../../../examples/nersc_gitlab/status_repo_files/.gitlab-ci.yml
    :language: yaml
    :linenos:
    :caption: ./gitlab/status_repo_files/.gitlab-ci.yml
