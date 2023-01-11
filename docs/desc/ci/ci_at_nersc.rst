@@ -54,6 +54,12 @@ at.
    <https://confluence.slac.stanford.edu/display/LSSTDESC/Getting+a+NERSC+Computing+Account>`__
    for details on how DESC members get an account at *NERSC*.
 
+.. note:: The ``SCHEDULER_PARAMETERS`` (in the ``mirror`` and ``status``
+   repositories' `.gitlab-ci.yml` files) define the compute node allocation
+   options for submitting to *Cori*, which must be included. You can change
+   this for your needs, for example to charge against a specific *NERSC*
+   project, or change the resouces requested.
+
 Getting set up
 --------------
 
@@ -90,6 +96,9 @@ instance:
 	:class: with-border
 
 	Figure 3: At the end you should have three repositories on GitLab.
+
+For those interested in the inner workings of the ``mirror`` and ``status``
+repositories, have a look at :ref:`nersc-ci-appendix` in the Appendix.
 
 Personal Access tokens
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -152,27 +161,8 @@ external source.
 
 .. note:: Trigger tokens do not expire, but be sure to keep the variables masked.
 
-Mirror and Status repository files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Copy the ``mirror.bash`` and ``.gitlab-ci.yml`` files from the
-  ``./gitlab/mirror_repo_files/`` directory into your ``mirror`` repository.
-  These put together a simple workflow that clones the ``source`` repository
-  into the ``target`` repository (more details in :ref:`nersc-ci-appendix`). 
-
-* Copy the ``status-github.py`` and ``.gitlab-ci.yml`` files from the
-  ``./gitlab/status_repo_files/`` directory into the ``status`` repository.
-  These put together a simple workflow to discover the status of the CI job
-  that ran in the ``target`` repository and report the result back to the
-  ``source`` repository (more details in :ref:`nersc-ci-appendix`).
-
-.. note:: The ``SCHEDULER_PARAMETERS`` (in the ``mirror`` and ``status``
-   repositories' `.gitlab-ci.yml` file) define the compute node allocation
-   options for submitting to *Cori*, which must be included. You can change
-   this for your needs, for example to charge against a specific *NERSC* project.
-
-Triggering the CI workflow pipeline
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Triggering the CI workflow pipeline from GitHub
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The final file to create is a *GitHub Actions* CI workflow to initiate the
 pipeline in the ``source`` repository.
@@ -189,8 +179,8 @@ trigger the pipeline however you wish, however remember the examples in this
 tutorial only work for a single chosen branch of the repository, and that each
 trigger will run a full CI job at *NERSC*.
 
-.. note:: You must modify the URLs and project numbers in ``.gitlab-ci.yml``
-   workflow to your own. 
+You must modify the repository URLs and *GitLab* project numbers (found under
+*Settings -> General* in *GitLab*) in the template workflow to your own. 
 
 .. literalinclude:: ../../../.github/workflows/ci_nersc_template.yml
    :language: yaml

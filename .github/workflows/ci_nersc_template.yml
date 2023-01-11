@@ -1,4 +1,4 @@
-name: Trigger NERSC CI
+name: NERSC template
 
 on: [workflow_dispatch]
 
