@@ -1,5 +1,5 @@
-Developing a Python package at DESC
-===================================
+Building a Python package
+=========================
 
 The *"standard"* way of building packages in Python has gone through many
 changes in recent years, and if you have not been keeping track, it can be

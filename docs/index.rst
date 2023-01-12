@@ -24,7 +24,7 @@ Checklist` to see our recommended strategy for CI workflows at DESC.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Building a Python package:
+   :caption: Python packaging at DESC
 
    ./desc/build_package/building_a_package
    ./desc/build_package/publish
@@ -32,7 +32,7 @@ Checklist` to see our recommended strategy for CI workflows at DESC.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Continuous Integration
+   :caption: Continuous Integration at DESC
 
    ./desc/ci/what_is_ci
    ./desc/ci/github_actions
