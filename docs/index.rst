@@ -1,26 +1,16 @@
-.. DESC CI test documentation master file, created by
-   sphinx-quickstart on Mon Jun 20 11:41:18 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Welcome to DESC's Python packaging and Continuous Integration guide!
+====================================================================
 
-Welcome to DESC CI test's documentation!
-========================================
+This documentation is designed as a quickstart guide for writing Python
+packages and deploying Continuous Integration (CI) workflows at DESC. 
 
-This repository contains a set of Continuous Integration (CI) example
-workflows, designed to get you started with CI for your DESC software.  
+The accompanying demo Python package code and example CI workflows that are
+referenced in this guide can be found in the `desc-continuous-integration
+<https://github.com/LSSTDESC/desc-continuous-integration>`__ repository.
 
-The repository contains some dummy code to go with the CI examples, written in
-Python, yet the CI principles described in the documentation remain the same
-regardless of the coding language adopted. Because we are demonstrating CI with
-Python, we use ``pytest`` to build our test framework, however again this is up
-to you, and what works best for your software. 
-
-This documentation briefly introduces CI as a concept, how we can use GitHub
-Actions to manage our CI workflows, and some working example CI workflows, yet
-note it is not designed as an exhaustive tutorial for each.
-
-Those already familiar with GitHub Actions and CI can skip to the :ref:`DESC
-Checklist` to see our recommended strategy for CI workflows at DESC.
+Those already familiar with *GitHub Actions* and CI and want to see our
+recommended strategy for CI workflows at DESC can skip to the :ref:`DESC
+Checklist`.
 
 .. toctree::
    :maxdepth: 2
@@ -38,6 +28,7 @@ Checklist` to see our recommended strategy for CI workflows at DESC.
    ./desc/ci/github_actions
    ./desc/ci/ci_at_nersc
    ./desc/ci/desc_working_examples
+   ./desc/ci/desc_working_examples_pipelines
    ./desc/ci/desc_checklist
 
 .. toctree::

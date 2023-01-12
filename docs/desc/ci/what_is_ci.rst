@@ -67,6 +67,11 @@ It is also worth looking at the `DM team's unit test policy
 
 * **Functional tests** check that the code produces correct outputs for a variety of inputs.
 
+* **Integration tests** check that your class/function/etc. works correctly with
+  other parts of the overall code base.
+
+Other things to think about:
+
 * If you can test some fancy, efficient algorithm against a more obviously
   correct (but slower) algorithm, that’s a great test to include.
 
@@ -76,9 +81,6 @@ It is also worth looking at the `DM team's unit test policy
 
 * Think about edge cases. What might cause your code to fail? You should add
   tests that these edge cases work correctly.
-
-* Integration tests check that your class/function/etc. works correctly with
-  other parts of the overall code base.
 
 pytest
 ^^^^^^
@@ -91,11 +93,13 @@ framework for your software. One popular example is ``pytest``.
     libraries.*" -- `pytest website <https://docs.pytest.org/en/7.1.x/>`__
 
 We utilize ``pytest`` to build a simple test framework for the demo package in
-this example repository, designed to scrutinize the mathematical functions in
+our `example repository
+<https://github.com/LSSTDESC/desc-continuous-integration>`__, which we have
+designed to scrutinize the mathematical functions in
 ``./src/mydescpackage/*.py``, making sure they work as expected. The unit tests
-are located in the ``./tests/test_*.py`` files, which can be run by simply
-entering ``pytest ./tests`` into the command line. For those not familiar with
-``pytest``, their `tutorial website
+are located in the ``./tests/test_*.py`` files, which can be executed using
+``pytest`` simply by running entering ``pytest ./tests`` into the command line.
+For those not familiar with ``pytest``, their `tutorial website
 <https://docs.pytest.org/en/7.1.x/getting-started.html>`__ is a great place to
 get started. 
 

@@ -6,7 +6,7 @@ DESC repositories. These demonstrate CI at DESC in action.
 
 We go through each example step-by-step, highlighting any additional
 capabilities of *GitHub Actions* CI workflows that were not covered by the
-examples in the previous section.
+examples in the previous section along-the-way.
 
 The DESC CI workflows were taken from the repositories on January 2023.
 
@@ -162,4 +162,4 @@ previous sections of this guide.
    version of Python you are using.  This can be done in the
    ``requirements.txt`` file used for installing dependencies. For example,
    ``numpy>=1.21.0;python_version>="3.8"`` says only install ``numpy`` versions
-   1.21.0 or higher if the Python version is 3.8.   
+   1.21.0 or higher if the Python version is 3.8.

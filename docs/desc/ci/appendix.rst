@@ -1,3 +1,5 @@
+.. _quick_example_pyproject:
+
 Quick-example ``pyproject.toml``
 ================================
 
