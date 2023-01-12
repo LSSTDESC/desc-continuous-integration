@@ -250,4 +250,4 @@ Things to think about with CI at *NERSC*
    own, unless they are from protected branches.
 
 .. note:: Any code you mirror onto the *NERSC* GitLab instance must adhere to the
-   broader *NERSC* user policy.
+   broader `NERSC user policies <https://www.nersc.gov/users/policies/>`__.
