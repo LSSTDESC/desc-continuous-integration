@@ -3,8 +3,8 @@
 
 .. _ci_using_github_actions:
 
-CI using GitHub Actions
-=======================
+GitHub Actions
+==============
 
 For DESC repositories we strongly encourage the use of *GitHub*'s automated
 CI/CD workflow tool, `GitHub Actions <https://github.com/features/actions>`__.
@@ -15,15 +15,17 @@ simple and efficient as possible.
 
 CI with *GitHub Actions* is configured via "workflows", YAML configuration
 files checked in to your repository which will automatically run when triggered
-by an event in your repository, triggered manually, or at a defined schedule.
-Workflows are defined in the ``.github/workflows`` directory of your
+by an event in your repository, when triggered manually, or at a defined
+schedule.  Workflows are defined in the ``.github/workflows`` directory of your
 repository. A repository can have multiple workflows, triggered independently,
 each of which can perform a different set of tasks.
 
-This example repository has four workflows, of differing complexities, which we
-overview in this section. The goal of each example workflow is always the same,
-however, keeping our software stable through any changes to the codebase by
-initiating the test suite and ensuring they pass.  
+Our `demo repository
+<https://github.com/LSSTDESC/desc-continuous-integration>`__ has four
+workflows, of differing complexities, which we overview in this section. The
+goal of each example workflow is always the same, however, keeping our software
+stable through any changes to the codebase by initiating the test suite and
+ensuring they pass.  
 
 This is not designed to be a definitive tutorial on *GitHub Actions* (for that
 see `here <https://docs.github.com/en/actions/quickstart>`__),  but to be a
@@ -102,7 +104,7 @@ reasonable range of operating systems and Python versions to accommodate the
 eventualities of the widest possible userbase. In our example we want to test
 our code using four versions of Python3 on the two most recent releases of
 Ubuntu (denoted ``ubuntu-20.04``, and ``ubuntu-latest``) and the latest MacOS
-release (``macos-latest``) [1]_. Whist we could do this through multiple
+release (``macos-latest``) [1]_. Whilst we could do this by declaring multiple
 (almost identical) ``jobs:``, differing only in a few values (like
 ``runs-on:``), it is much cleaner and simpler to use a ``strategy:`` matrix. A
 strategy matrix lets you use variables in a single job definition to
@@ -153,7 +155,7 @@ Our example job has four steps:
    Python on the host machine. Note some actions accept arguments (``with:``),
    this action accepts the Python version you wish to install, for example,
    which we take from our strategy matrix.
-3. Install our Python demo package (``mydescpackage``) using ``pip``.
+3. Install ``mydescpackage`` using ``pip``.
 4. Finally, run our test suite using ``pytest``.
 
 We can monitor the output from each of these steps individually through the
@@ -168,9 +170,13 @@ Example 1 in full
 
 For reference, here is the example action in full.
 
-.. literalinclude:: ../../../.github/workflows/ci_example_1.yml
-   :language: yaml
-   :linenos:
+.. collapse:: Click to expand ci_example_1.yml
+
+    .. literalinclude:: ../../../.github/workflows/ci_example_1.yml
+      :language: yaml
+      :linenos:
+
+|
 
 .. [1] See `here <https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners>`__ for a complete list of GitHub hosted runners.
 .. [2] Check out the `GitHub marketplace <https://github.com/marketplace?type=actions>`__ for a list of community actions.
@@ -206,7 +212,7 @@ fail our entire workflow.
 
 To do this, first we manually add a job of a particular setup to our strategy
 matrix using the ``include:`` parameter. Here we are experimenting on
-``ubuntu-latest`` and only on Python==3.11. To tell *GitHub Actions* not to
+``ubuntu-latest`` and only on ``python==3.11``. To tell *GitHub Actions* not to
 worry if this particular job fails, but to remain worried if the other jobs in
 our matrix fail, we add an ``experimental`` value to our matrix, which, if
 true, means that the CI workflow will complete even if this job fails (which we
@@ -233,7 +239,7 @@ We can keep on top of coding style practices within our CI through code
 report any violations of the selected coding style. For our example we are
 using the ``flake8`` Python linting tool. You can enforce up to an arbitrary
 level of strictness depending on your needs, here we only demonstrate checking
-for indentation and syntax errors in our demo code files.  However you could be
+for indentation and syntax errors in the code files.  However you could be
 stricter, ensuring no trailing/leading whitespaces, line length limits, etc
 (see the Flake8 documentation for a full list of error and warning codes). In
 addition, ``--count`` prints the total number of errors found,
@@ -283,9 +289,13 @@ Example 2 in full
 Again, for reference, here is the full code for the slightly more complicated
 example workflow.
 
-.. literalinclude:: ../../../.github/workflows/ci_example_2.yml
-   :language: yaml
-   :linenos:
+.. collapse:: Click to expand ci_example_2.yml
+   
+   .. literalinclude:: ../../../.github/workflows/ci_example_2.yml
+      :language: yaml
+      :linenos:
+
+|
 
 CI and the DESC Python environment
 ----------------------------------
@@ -294,12 +304,12 @@ If your software is a dependency for other DESC packages, or it builds into a
 larger DESC pipeline, this can also be considered within the CI workflow. As
 part of the DESC release management strategy, there exist independent CI
 workflows designed to perform on complete DESC pipelines to ensure they remain
-stable through any changes to the individual dependent repositories. However we
-can already assist for this at the individual repository level, by ensuring
-that our software operates as expected within the ``desc-python`` *Conda*
-environment. This will mitigate, as much as possible, versioning and dependency
-conflicts between the DESC packages when they come together to form the
-pipeline.   
+stable through any changes to the individual dependent repositories (see
+:ref:`ci_desc_pipelines`). However we can already assist for this at the
+individual repository level, by ensuring that our software operates as expected
+within the ``desc-python`` *Conda* environment. This will mitigate, as much as
+possible, versioning and dependency conflicts between the DESC packages when
+they come together to form the pipeline.   
 
 Setting up a CI workflow to operate within the ``desc-python`` *Conda*
 environment only requires a few steps, and can be done in two ways: (1) working
@@ -364,10 +374,10 @@ arbitrary as we are operating within a container on the machine anyway).
 
 The downside of operating within containers is the setup overhead (containers
 can be many gigabytes that have to be downloaded and extracted). To that end,
-we recommend two workflows, one that only installs the dependencies needed to
-get your code working (like the examples 1 & 2), and a second workflow that
-operates within the DESC container, but on a schedule. For example, here we
-trigger our workflow every Friday at midnight, 
+we recommend two workflows for your Python packages, one that only installs the
+dependencies needed to get your code working (like the examples 1 & 2), and a
+second workflow that operates within the DESC container, but on a schedule. For
+example, here we trigger our workflow every Friday at midnight, 
 
 .. literalinclude:: ../../../.github/workflows/ci_example_3.yml
    :language: yaml
@@ -390,9 +400,13 @@ for more details on scheduling your workflows).
 Example 3 in full
 ^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../../.github/workflows/ci_example_3.yml
-   :language: yaml
-   :linenos:
+.. collapse:: Click to expand ci_example_3.yml
+
+   .. literalinclude:: ../../../.github/workflows/ci_example_3.yml
+      :language: yaml
+      :linenos:
+
+|
 
 Installing the DESC *Conda* environment manually
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -445,7 +459,10 @@ activate environments.
 Example 4 in full
 ^^^^^^^^^^^^^^^^^
 
-.. literalinclude:: ../../../.github/workflows/ci_example_4.yml
-   :language: yaml
-   :linenos:
+.. collapse:: Click to expand ci_example_3.yml
 
+   .. literalinclude:: ../../../.github/workflows/ci_example_4.yml
+      :language: yaml
+      :linenos:
+
+|

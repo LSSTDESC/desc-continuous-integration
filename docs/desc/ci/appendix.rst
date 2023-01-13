@@ -1,5 +1,7 @@
-An example ``pyproject.toml`` file
-==================================
+.. _quick_example_pyproject:
+
+Quick-example ``pyproject.toml``
+================================
 
 An example ``pyprojet.toml`` configuration file, used for the demo code in the
 ``desc-continuous-integraion`` repository.
@@ -8,8 +10,8 @@ An example ``pyprojet.toml`` configuration file, used for the demo code in the
    :language: toml
    :linenos:
 
-An example ``ci.yaml`` file
-===========================
+Quick-example ``ci_workflow.yml``
+=================================
 
 An example Continuous Integration YAML workflow
 (``.github/workflows/ci_example_2.yml`` in the ``desc-continuous-integraion``

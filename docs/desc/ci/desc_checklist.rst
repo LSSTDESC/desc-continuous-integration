@@ -7,7 +7,7 @@ Below is our recommended CI checklist for DESC repositories written in Python.
 Note that ``ci_example_2.yml`` includes the first four points of the checklist
 and ``ci_example_3.yml`` and ``ci_example_4.yml`` cover all five points.
 
-This checklist was last updated July 2022.
+This checklist was last updated January 2023.
 
 1. Test your code using ``ubuntu-20.04``, ``ubuntu-22.04`` and
    ``macos-latest``.

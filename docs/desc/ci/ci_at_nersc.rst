@@ -6,10 +6,10 @@ more than sufficient to test and maintain code stability for DESC repositories.
 
 However, there are some pieces of DESC software that would benefit greatly from
 having the ability to deploy a CI workflow directly to the *Cori* and
-*Perlmutter* machines at `NERSC <https://www.nersc.gov/>`__. This would allow
-the software to be tested more intensely within an HPC environment, give access
-to specific development tools at *NERSC*, and give the ability to test the code
-against the large datasets hosted at the facility, for example.
+*Perlmutter* machines at `NERSC <https://www.nersc.gov/>`__. This allows the
+software to be tested more intensely within an HPC environment, gives access to
+specific development tools at *NERSC*, and gives the ability to test the code
+against the large datasets hosted at the facility.
 
 As there is no way to link CI workflows using *GitHub Actions* to the *NERSC*
 facilities directly, we require a bit of a workaround. Starting with our
@@ -64,7 +64,8 @@ Getting set up
 --------------
 
 To start, you'll need to create three repositories at your *NERSC* *GitLab*
-instance:
+instance (replace ``desc-continuous-integration`` with the name of your
+repository):
 
 #. A blank (*"New Project -> Create Blank Project"*) ``target`` repository
    with the same name as the *GitHub* ``source`` repository (e.g,
@@ -74,28 +75,28 @@ instance:
    them.
 
 #. An imported (*"New Project -> Import Project -> GitLab Export*") ``mirror``
-   repository with a name like ``mirror-desc-continuous-integration``. This
+   repository with the name ``mirror-desc-continuous-integration``. This
    repository must be created in your private namespace. The *GitLab* export
-   file to use is in the `demo repository
+   file to upload is in the `demo repository
    <https://github.com/LSSTDESC/desc-continuous-integration>`__ under
    ``./examples/nersc_gitlab/repo_templates/``.
 
 #. An imported (*"New Project -> Import Project -> GitLab Export*") ``status``
-   repository with a name like ``status-desc-continuous-integration``. This
+   repository with the name ``status-desc-continuous-integration``. This
    repository must be created in your private namespace. The *GitLab* export
-   file to use is in the `demo repository
+   file to upload is in the `demo repository
    <https://github.com/LSSTDESC/desc-continuous-integration>`__ under
    ``./examples/nersc_gitlab/repo_templates/``.
 
 .. figure:: ../../images/create_blank_repo.png
 	:class: with-border
 
-	Figure 2: Example of creating a blank repository on GitLab.
+	Figure 2: Example of creating a blank repository on *GitLab*.
 
 .. figure:: ../../images/three_repos.png
 	:class: with-border
 
-	Figure 3: At the end you should have three repositories on GitLab.
+	Figure 3: At the end you should have three repositories on *GitLab*.
 
 For those interested in the inner workings of the ``mirror`` and ``status``
 repositories, have a look at :ref:`nersc-ci-appendix` in the Appendix.
@@ -191,11 +192,11 @@ Building a GitLab CI workflow for your repository
 -------------------------------------------------
 
 Now that we are set up, we can think about how to implement a CI workflow at
-GitLab. As mentioned previously, the CI workflows for GitLab are placed in a
+*GitLab*. As mentioned previously, the CI workflows for GitLab are placed in a
 file called ``.gitlab-ci.yml``, which is located in the root directory of your
 repository.  Here we will cover how to build a basic CI workflow with GitLab,
 relating back to the GitHub Actions syntax we learned previously. A more
-in-depth look at GitLab's CI syntax can be found in `The Complete GitLab CI
+in-depth look at *GitLab*'s CI syntax can be found in `The Complete GitLab CI
 Reference Guide <https://docs.gitlab.com/ee/ci/yaml/>`__.
 
 .. literalinclude:: ../../../.gitlab-ci.yml
@@ -203,21 +204,22 @@ Reference Guide <https://docs.gitlab.com/ee/ci/yaml/>`__.
    :linenos:
    :caption: .gitlab-ci.yml
 
-This is the GitLab CI workflow for our example repository that will eventually
-get run by the ``target`` repository on the *NERSC* GitLab instance. There are
-many similarities with the GitHub Actions CI workflow syntax. We must tell the
-workflow how to be triggered (same as ``on:`` in GitHub Actions), which is
-under ``workflow:`` ``rules:``. In this case we are saying we only want the
-workflow to run if it was triggered via a trigger token (see the reference
-guide linked above for a full list of workflow options). We can set environment
-variables for the job, under ``variables:``. And then we list our jobs.
+This is the *GitLab* CI workflow for our example repository that will
+eventually get run by the ``target`` repository on the *NERSC* *GitLab*
+instance. There are many similarities with the *GitHub Actions* CI workflow
+syntax. We must tell the workflow how to be triggered (same as ``on:`` in
+*GitHub Actions*), which is under ``workflow:`` ``rules:``. In this case we are
+saying we only want the workflow to run if it was triggered via a trigger token
+(see the reference guide linked above for a full list of workflow options). We
+can set environment variables for the job, under ``variables:``. And then we
+list our jobs.
 
-As with GitHub Actions, we can have multiple jobs, each will run independently
-and in parallel unless you deliberately link them. This workflow only has one
-job, ``example``. Within each job, ``tagsi:`` is the same as ``runs-on:`` from
-GitHub Actions. Here we want to run on *Cori*. And ``script:`` contains the
-sequence of commands to execute for the job, the same as ``steps:`` from GitHub
-Actions. 
+As with *GitHub Actions*, we can have multiple jobs, each will run
+independently and in parallel unless you deliberately link them. This workflow
+only has one job, ``example``. Within each job, ``tags:`` is the same as
+``runs-on:`` from *GitHub Actions*. Here we want to run on *Cori*. And
+``script:`` contains the sequence of commands to execute for the job, the same
+as ``steps:`` from *GitHub Actions*. 
 
 When running at *NERSC* you have to set the ``SCHEDULER_PARAMETERS`` environment
 variable, which defines your queue preferences for the machine (which queue to
@@ -227,8 +229,8 @@ other specifics of running CI at *NERSC*, see `here
 for CI can also be found `here <https://software.nersc.gov/ci-resources>`__.
 
 When everything has finished successfully, you should see the *NERSC* CI status
-beside the commit on the GitHub repository main page. Clicking its "details"
-will take you to the GitLab CI report for the job.
+beside the commit on the *GitHub* repository main page. Clicking its "details"
+will take you to the *GitLab* CI report for the job.
 
 .. figure:: ../../images/nersc_success.png
     :class: with-border
