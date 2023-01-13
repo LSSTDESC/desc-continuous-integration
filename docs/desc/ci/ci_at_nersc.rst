@@ -54,12 +54,6 @@ at.
    <https://confluence.slac.stanford.edu/display/LSSTDESC/Getting+a+NERSC+Computing+Account>`__
    for details on how DESC members get an account at *NERSC*.
 
-.. note:: The ``SCHEDULER_PARAMETERS`` (in the ``mirror`` and ``status``
-   repositories' `.gitlab-ci.yml` files) define the compute node allocation
-   options for submitting to *Cori*, which must be included. You can change
-   this for your needs, for example to charge against a specific *NERSC*
-   project, or change the resouces requested.
-
 Getting set up
 --------------
 
@@ -177,8 +171,8 @@ pipeline, which must be defined in the initial *GitHub Actions* workflow file.
 Essentially, all we are doing is kick-starting the pipeline (in this example
 manually) by initiating the ``mirror`` repositories CI workflow. You can
 trigger the pipeline however you wish, however remember the examples in this
-tutorial only work for a single chosen branch of the repository, and that each
-trigger will run a full CI job at *NERSC*.
+tutorial only work for a single chosen branch of the repository ``main`` by
+default, and that each trigger will run a full CI job at *NERSC*.
 
 You must modify the repository URLs and *GitLab* project numbers (found under
 *Settings -> General* in *GitLab*) in the template workflow to your own. 
@@ -221,7 +215,7 @@ only has one job, ``example``. Within each job, ``tags:`` is the same as
 ``script:`` contains the sequence of commands to execute for the job, the same
 as ``steps:`` from *GitHub Actions*. 
 
-When running at *NERSC* you have to set the ``SCHEDULER_PARAMETERS`` environment
+When running at *NERSC* you have to set the ``SCHEDULER_PARAMETERS`` environment    
 variable, which defines your queue preferences for the machine (which queue to
 submit to, which project to charge, etc). For more details about this, and
 other specifics of running CI at *NERSC*, see `here
@@ -236,6 +230,17 @@ will take you to the *GitLab* CI report for the job.
     :class: with-border
 
     Figure 4: The *NERSC* tag is the reported status from the *NERSC* CI job.
+
+.. note:: The ``SCHEDULER_PARAMETERS`` in the ``mirror`` and ``status``
+   repositories' `.gitlab-ci.yml` files are set to ``SCHEDULER_PARAMETERS: "-C
+   haswell -q debug -N1 -t 00:05:00"``. These jobs are extremely lightweight,
+   which is why they goto the ``debug`` queue, however you may have to change
+   this for your needs, for example to charge against a specific *NERSC*
+   project.
+
+.. note:: If your package uses submodules for some of its dependencies, you
+   will have to add ``GIT_SUBMODULE_STRATEGY: recursive`` to the variables in
+   the ``target`` repositories ``.gitlab-ci.yml``.
 
 Things to think about with CI at *NERSC*
 ----------------------------------------

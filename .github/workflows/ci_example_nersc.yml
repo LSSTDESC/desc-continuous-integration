@@ -41,5 +41,5 @@ jobs:
            --form "variables[GITLAB_STATUS_CONTEXT]=$GITLAB_STATUS_CONTEXT"
            --form "variables[GITHUB_SHA]=${{ github.sha }}"
            --form token=${{ secrets.MIRROR_TRIGGER_TOKEN }}
-           --form ref=main
+           --form ref=$GITHUB_SOURCE_BRANCH
            https://software.nersc.gov/api/v4/projects/$GITLAB_MIRROR_PROJECT_NUMBER/trigger/pipeline
