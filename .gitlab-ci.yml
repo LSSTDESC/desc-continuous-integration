@@ -17,7 +17,7 @@ example:
 
   script:
     # Script loads desc-python Conda environment and runs tests.
-    - bash gitlab/example-test.bash 
+    - bash examples/nersc_gitlab/example-test.bash 
 
     # Trigger the status repository CI workflow to report results.
     - >

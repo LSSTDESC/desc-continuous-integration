@@ -8,4 +8,4 @@ echo "Running at NERSC on" $NERSC_HOST
 source /global/common/software/lsst/common/miniconda/setup_current_python.sh
 
 # Run tests.
-pytest ./python
+pytest ./tests
