@@ -9,15 +9,15 @@ env:
   GITHUB_SOURCE_BRANCH: main
   
   # URL to target repository on GitLab and its project number.
-  GITLAB_TARGET_REPO: https://software.nersc.gov/mcalpine/desc-continuous-integration.git
+  GITLAB_TARGET_REPO: https://software.nersc.gov/${{ secrets.GITLAB_CI_NAMESPACE }}/desc-continuous-integration.git
   GITLAB_TARGET_PROJECT_NUMBER: ${{ secrets.GITLAB_TARGET_PROJECT_NUMBER }}
   
   # URL to mirror repository on GitLab and its project number.
-  GITLAB_MIRROR_REPO: https://software.nersc.gov/<namespace>/mirror-desc-continuous-integration.git
+  GITLAB_MIRROR_REPO: https://software.nersc.gov/${{ secrets.GITLAB_CI_NAMESPACE }}/mirror-desc-continuous-integration.git
   GITLAB_MIRROR_PROJECT_NUMBER: ${{ secrets.GITLAB_MIRROR_PROJECT_NUMBER }}
   
   # URL to status repository on GitLab, its project number, and tag.
-  GITLAB_STATUS_REPO: https://software.nersc.gov/<namespace>/status-desc-continuous-integration.git
+  GITLAB_STATUS_REPO: https://software.nersc.gov/${{ secrets.GITLAB_CI_NAMESPACE }}/status-desc-continuous-integration.git
   GITLAB_STATUS_PROJECT_NUMBER: ${{ secrets.GITLAB_STATUS_PROJECT_NUMBER }}
   GITLAB_STATUS_CONTEXT: NERSC
   
