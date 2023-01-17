@@ -15,10 +15,5 @@ python3 -m pip install .[ci]
 # Run tests.
 pytest ./tests
 
-# Get out of venv
-deactivate
-
-echo $GITLAB_STATUS_PROJECT_NUMBER
-echo $STATUS_TRIGGER_TOKEN
 
 
