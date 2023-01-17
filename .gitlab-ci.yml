@@ -33,5 +33,5 @@ example:
       --form "variables[GITLAB_STATUS_CONTEXT]=$GITLAB_STATUS_CONTEXT"
       --form "variables[GITHUB_SHA]=$GITHUB_SHA"
       --form token=$STATUS_TRIGGER_TOKEN
-      --form ref=$GITHUB_SOURCE_BRANCH
+      --form ref=main
       https://software.nersc.gov/api/v4/projects/$GITLAB_STATUS_PROJECT_NUMBER/trigger/pipeline
