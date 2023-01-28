@@ -4,23 +4,25 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mydescpackage"
+version = "0.0.1"
 description = "Example DESC Python package, some simple mathmatical functions."
-license = {text = "BSD 3-Clause License"}
+readme = "README.md"
+authors = [{ name = "Stuart McAlpine", email = "stuart.mcalpine@fysik.su.se" }]
+license = { file = "LICENCE" }
 classifiers = [
     "Programming Language :: Python :: 3",
 ]
+keywords = ["desc", "python"]
 dependencies = [
     'numpy',
     'importlib-metadata;python_version<"3.8"'
 ]
 requires-python = ">=3.7" # For setuptools >= 61.0 support
-version = "0.0.1"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [project.optional-dependencies]
-test = ["pytest"]
 ci = ["pytest", "pytest-cov", "flake8"]
 
 [project.scripts]

@@ -30,7 +30,7 @@ This checklist was last updated January 2023.
 
 5. If your software package is a dependency for other DESC software, or it
    builds into a larger DESC pipeline, test your code within the
-   ``desc-python`` environment docker container.
+   ``desc-python`` *Conda* environment using the *DESC* docker image.
 
 .. note:: We understand that setting up the ``desc-python`` environment can be
    considerably slower than only working with the minimum packages required to

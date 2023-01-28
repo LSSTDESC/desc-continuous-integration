@@ -22,6 +22,11 @@ the developers post release.
 
 Types of documentation come in many forms, some of the most common are:
 
+* **README**: Usually a simple markdown file, called ``README.md``, placed in
+  the root directory of the Python package. It should contain a high-level
+  overview of the software, and often also includes dependency requirements,
+  and installation instructions.
+
 * **How-to guides / tutorials**: These guide the user to complete a task or a
   predetermined goal, demonstrating how one would use the software in typical
   scenarios. `Jupyter Notebooks <https://jupyter.org/>`__ are a great
@@ -36,11 +41,6 @@ Types of documentation come in many forms, some of the most common are:
 * **Release notes**: Describes the latest version of the software, feature
   releases, and what bugs have been fixed from previous versions.
 
-* **README**: Usually a simple markdown file, called ``README.md``, placed in
-  the root directory of the Python package. It should contain a high-level
-  overview of the software, and often also includes dependency requirements,
-  and installation instructions.
-
 As for the implementation, there are many documentation language formats and
 helper tools to choose from.
 
@@ -48,7 +48,7 @@ Writing documentation
 ---------------------
 
 The simplest approach is to put all the documentation in the ``README.md`` file
-in the packages' root directory, which is written in the markdown language
+in the package's root directory, which is written in the markdown language
 (here's a `getting started <https://www.markdownguide.org/getting-started/>`__
 guide for the markdown syntax).
 
@@ -116,9 +116,9 @@ Publishing documentation
 Once we have written our documentation, where do we put it?  
 
 If everything is in ``README.md``, then we don't have to worry, it will be
-displayed automatically on your *GitHub* repositories' landing page. If you
-have more extensive documentation, in ``docs/``, you'll need to chose where and
-how this documentation will get displayed. One popular option is `Read the Docs
+displayed automatically on the *GitHub* repositories' landing page. If you have
+more extensive documentation, in ``docs/``, you'll need to chose where and how
+this documentation will get displayed. One popular option is `Read the Docs
 <https://readthedocs.org/>`__, a vast repository for technical documentation.
 Read the Docs is free, it automatically builds your documentation, and
 automatically versions your documentation. It is also compatible with the
@@ -129,7 +129,7 @@ know its location.
 *GitHub* pages
 ^^^^^^^^^^^^^^
 
-Another option, similar to *Read the Docs*, and one we would recommend is
+Another option, similar to *Read the Docs*, and one we would recommend, is
 `GitHub Pages <https://pages.github.com/>`__. 
 
 How to set up *GitHub Pages* depends on the format of your documentation. If

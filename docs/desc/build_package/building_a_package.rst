@@ -2,35 +2,36 @@ Building a Python package
 =========================
 
 The "*standard*" way of building a Python package has gone through many changes
-in recent years, and if you have not been keeping track, it can be difficult to
+in recent years, and if you have not been keeping track it can be difficult to
 know the best approach for creating a package that is easy to install, easy to
-maintain and easy to publish. 
+maintain, and easy to publish. 
 
 Here we go over the (relatively) new standard for Python packaging, the
 all-encompassing ``pyproject.toml`` file. We strongly recommend developers at
 DESC consider migrating to this new packaging standard, if you haven't already,
 particularly when starting a new software project from scratch. The intuitive,
-clean and maintainable format of ``pyproject.toml`` packages make them both
+clean and maintainable format of ``pyproject.toml`` packages makes them both
 easy to develop and publish with a minimal amount of effort. 
 
 This guide assumes some basic knowledge of putting together a piece of Python
 software, such as creating your own modules, etc. For those new to Python
 software, check out the `official Python guide
-<https://docs.python.org/3/tutorial/modules.html#packages>`__. Also note this
-is by no means an exhaustive tutorial on the subject of Python packaging. A
-great additional resource for that is the `Python Packaging Guide
+<https://docs.python.org/3/tutorial/modules.html#packages>`__ to get started.
+Also note this is by no means an exhaustive tutorial on the subject of Python
+packaging. A great additional resource for that is the `Python Packaging Guide
 <https://packaging.python.org/en/latest/tutorials/packaging-projects/#>`__
-itself.
+itself, or the guide from `RealPython
+<https://realpython.com/pypi-publish-python-package/>`__.
 
 Much of this guide is written under the assumption that the Python package you
-are creating will being hosted by the `DESC GitHub repository
+are creating will be hosted by the `DESC GitHub repository
 <https://github.com/lsstDESC>`__, however the majority of the information will
 still apply even if this is not the case. If you are not yet familiar with
 `Git` or `GitHub`, or you need help getting setup on the `DESC GitHub
 repository <https://github.com/lsstDESC>`__, checkout `this guide
 <https://confluence.slac.stanford.edu/display/LSSTDESC/Getting+Started+with+Git+and+GitHub>`__
 on the DESC Confluence page, or this more general `getting started
-<https://github.com/drphilmarshall/GettingStarted#top>`__ guide for *git*.  
+<https://github.com/drphilmarshall/GettingStarted#top>`__ guide for *Git*.  
 
 The accompanying repository which hosts the demo Python package we will often
 refer to in this guide can be found `here
@@ -48,9 +49,8 @@ as a starting template for your Python project.
 The directory structure
 -----------------------
 
-Let's get started, first we go over the directory structure your Python package
-should adhere to (replacing package names and code content with your own where
-applicable):
+Let's get started, first we go over the general directory structure your Python
+package should adhere to:
 
 ::
 
@@ -73,10 +73,11 @@ applicable):
     └── docs/               
 
 
-Note that not all of these files and directories are strictly required, however
-as a minimum you should have a ``README.md`` and ``pyproject.toml`` file in
-your base project directory, and the code for your software should populate the
-``src/mydescpackage/`` directory.
+Note that not all of these files and directories are strictly required. As a
+minimum you should have a ``README.md`` and ``pyproject.toml`` file in your
+base project directory, and the code for your software should populate the
+``src/mydescpackage/`` directory (replacing "mydescpackage" with the name of
+your package).
 
 What are these files and directories...
 
@@ -85,7 +86,7 @@ What are these files and directories...
   file will also be displayed on your *GitHub* projects' landing page. 
 
 * ``pyproject.toml``: Where the build information, project dependencies,
-  metadata, etc, of the Python package is stored. More in the next section.
+  metadata, etc, of the Python package are stored (more in the next section).
 
 * ``LICENCE``: Contains the license of the package, outlining any restrictions
   of its use. It is good practice to use a well-known license rather than a
@@ -95,27 +96,27 @@ What are these files and directories...
   <https://opensource.org/licenses/MIT>`__ or `creative commons license
   <https://creativecommons.org/choose/>`__.
 
-* ``.gitignore``: This file specifies intentionally untracked files that Git
+* ``.gitignore``: This file specifies intentionally untracked files that *Git*
   should ignore (see `here <https://git-scm.com/docs/gitignore>`__ for more
   details).
 
 * ``src/mydescpackage/``: The code for your Python software goes here. 
 
-* ``tests/``: Your tests go in here (see also our guide on :ref:`Continuous
-  Integration <desc_ci_intro>`).
+* ``tests/``: Any unit tests of your Package go in here (see also our guide on
+  :ref:`Continuous Integration <desc_ci_intro>`).
 
 * ``.github/workflows/``: Your *GitHub Actions* Continuous Integration
   workflows go in here (see our guide on :ref:`Continuous Integration
   <desc_ci_intro>` for more details on CI workflows).
 
-* ``docs/``: For extensive documentation beyond ``README.md``, *Read the Docs*
-  files for example.
+* ``docs/``: For any extensive documentation beyond the scope of ``README.md``,
+  *Read the Docs* files for example.
 
-Once the directory structure is setup, we can move onto telling ``pip`` how to
-build and install our package.
+Once the directory structure is setup, and it is populated with our software,
+we can move onto telling ``pip`` how to build and install our package.
 
 .. note:: Many people prefer placing the source code in a ``src/`` directory,
-   and not in the projects' root directory.  This is a preference, and not a
+   and not in the project's root directory.  This is a preference, and not a
    requirement, you can have a "flat" directory structure where
    ``mydescpackage/`` resides in the root project folder.  However, having a
    ``src/`` directory requires the user to first install the software before it
@@ -128,13 +129,12 @@ The ``pyproject.toml`` file
 
 The ``pyproject.toml`` configuration file was introduced in `PEP518
 <https://peps.python.org/pep-0518/>`__ as a way of specifying the minimum build
-requirements when installing Python packages. This allows the system to know
-what packages are required during the building process itself, e.g.,
-``setuptools``, ``wheel``, so that one does not have to pre-install any package
-dependencies before hand in order to install your package. The build
-requirements specified in ``pyproject.toml`` are installed in an isolated
-environment, used to build the package, and later discarded, keeping your base
-environment clean and tidy.
+requirements when installing a Python package. This tells the system what
+packages are required during the building process itself (e.g., ``setuptools``,
+``wheel``), removing the onus of pre-installing any dependencies required to
+build your package away form the user. The build requirements specified in
+``pyproject.toml`` are installed in an isolated environment, used to build the
+package, and later discarded, keeping your base environment clean and tidy.
 
 Below we go over the ``pyproject.toml`` file from our `demo package
 <https://github.com/LSSTDESC/desc-continuous-integration>`__.
@@ -162,9 +162,10 @@ the top of your ``pyproject.toml`` file.
 
 Here we are saying we require the ``setuptools`` package during the build, and
 we are going to use ``setuptools`` to build the our Python package as our
-``build-backend``. Other common requirements during he build process are
-``wheel`` and ``cython``. Note we select ``setuptools>=61.0`` as that is when
-``setuptools`` became PEP 621 compliant.
+``build-backend``. Other common requirements during the build process are
+``wheel`` and ``cython``. Note we select a specific version of ``setuptools``
+to install, ``setuptools>=61.0``, as that is when ``setuptools`` became PEP 621
+compliant (see project metadata later).
 
 .. note:: You do not have to use ``setuptools`` as your ``build-backend``, you
    can use alternate Python package managers such as `Poetry
@@ -173,17 +174,18 @@ we are going to use ``setuptools`` to build the our Python package as our
    ``build-backend`` here if you have very specific requirements for building
    your package. However if you are unsure, stick with ``setuptools``.
 
-In theory this is the minimum needed, if you were to install your package via
-*pip* at this stage, ``pip install .``, it would use the specified information
-from ``pyproject.toml`` for the build system, and continue to install your
-package with some generic default values (or by looking for more information in
-the legacy ``setup.py`` and ``setup.cfg`` files).
+In theory this is the minimum we need. If you were to install your package via
+*pip* at this stage (i.e., ``pip install .``) it would use the specified
+information from ``pyproject.toml`` for the build system, then continue to
+install your package with some generic default values (or by looking for more
+information in the legacy ``setup.py`` and ``setup.cfg`` files).
 
-But we want to provide a bit more information about our package, most crucially
-our package dependencies and general metadata. Whereas traditionally this
-information was divided between the ``setup.py`` and ``setup.cfg`` files, all
-the information can now also be hosted by ``pyproject.toml``, making it the
-only configuration file you need (note you can still keep the traditional
+But there is so much more information we can provide in ``pyproject.toml``
+about our package, such as any dependencies, and general metadata. If you have
+built Python packages in the past you may be more familiar with putting this
+kind of information in the traditional ``setup.py`` and ``setup.cfg`` files.
+However now everything can go in ``pyproject.toml``, making it the only
+configuration file you need (note you can still keep the traditional
 ``setup.*`` files for legacy purposes, and backwards compatibility).
 
 Project metadata
@@ -200,7 +202,7 @@ Below is the metadata for our `demo package
    :language: toml
    :linenos:
    :lineno-start: 5
-   :lines: 5-17
+   :lines: 5-20
 
 All metadata goes under the ``[project]`` section, including for example the
 name of your package, the minimum required Python version, and the package
@@ -218,46 +220,43 @@ package to PyPi for example (for a list of all metadata options see `here
 .. literalinclude:: ../../../pyproject.toml
    :language: toml
    :linenos:
-   :lineno-start: 19
-   :lines: 19-20
+   :lineno-start: 22
+   :lines: 22-23
 
-Because we are using the ``src/`` directory to host our package's code, we can
-aid ``setuptools`` by pointing to this directory in its search for our
-Package's source code (the default is ``.``). Any [sub/]directories of ``src/``
-with an ``__init__.py`` file will automatically be discovered by
-``setuptools``. 
+Because we are using the ``src/`` directory layout for our package, we need to
+tell ``setuptools`` this is where our Package's source code is (the default is
+``.``). Any sub-directories of ``src/`` with an ``__init__.py`` file will
+automatically be discovered by ``setuptools``. 
 
 Optional dependencies
 ^^^^^^^^^^^^^^^^^^^^^
 
 The packages you list under ``[project] dependencies`` should be the minimum
-required for the Python software to operate. Yet optional dependencies, for
-alternate use scenarios, can also be included. 
+required for the Python software to operate under general use. Yet optional
+dependencies, for alternate use scenarios, can also be included. 
 
 For example, in our `demo package
-<https://github.com/LSSTDESC/desc-continuous-integration>`__ we have a test
-suite which is designed to be invoked using the ``pytest`` package. Or, when
-performing the Continuous Integration for this package, we additionally require
-the ``pytest-cov`` and ``flake8`` packages. As we only need these packages for
-during testing and Continuous Integration workflows we do not add them to the
-base package requirement, instead we create two optional dependency lists,
-labelled `test` and `ci`. 
+<https://github.com/LSSTDESC/desc-continuous-integration>`__ we need the
+``pytest``, ``pytest-cov`` and ``flake8`` package's when invoking the
+Continuous Integration workflows. As these package's are only needed when
+performing CI, and not for the general running of the package, we include them
+as optional dependencies, which can be installed alongside the main
+dependencies by running ``pip install .[ci]``.  
 
 .. literalinclude:: ../../../pyproject.toml
    :language: toml
    :linenos:
-   :lineno-start: 22
-   :lines: 22-24
+   :lineno-start: 25
+   :lines: 25-26
 
 
-Therefore when we install our package running ``pip install .[test]``, it will
-install ``pytest`` along with the default dependencies.
+Optional dependencies are also useful if you want to separate out serial and
+parallel (i.e., MPI) implementations of your package, packages required only
+during development, or installations where you wish to also compile package's
+documentation, for example.
 
-Optional dependencies are also useful if you want MPI-specific installs, or
-installs to compile documentation, for example.
-
-Package entrypoints/scripts
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Script entrypoints
+^^^^^^^^^^^^^^^^^^
 
 Another extremely useful thing to be aware of with Python packages is script
 entrypoints. Here you can declare commands to be run from the terminal which
@@ -271,10 +270,10 @@ to help us, which directly calls the ``mydescpackage.pi.display_pi`` function
 .. literalinclude:: ../../../pyproject.toml
    :language: toml
    :linenos:
-   :lineno-start: 26
-   :lines: 26-27
+   :lineno-start: 28
+   :lines: 28-29
 
-Entrypoints are great for creating front-ends to your packages. 
+Script entrypoints are great for creating front-ends to your package. 
 
 Automatic versioning
 --------------------
@@ -283,12 +282,13 @@ An extremely important attribute of your Python package is its version, which
 you should declare in the ``pyproject.toml`` metadata. It is a good practice to
 use the `Semantic Versioning <https://semver.org/>`__ format for your code. 
 
-In order to not have multiple manual declarations of the package version, both
-in the ``pyproject.toml`` file and the source code, a useful trick is to use
-the ``importlib.metadata`` method to access the version tag dynamically within
-the code. 
+It is best to avoid multiple manual declarations of the package version between
+the ``pyproject.toml`` file and within the source code. A useful trick is to
+use the ``importlib.metadata`` method to access the version tag dynamically
+from the ``pyproject.toml`` file from within the code. 
 
-To do this, go to your ``__init__.py`` file in your ``mydescpackage`` directory and insert:
+To do this, go to your ``__init__.py`` file in your ``mydescpackage`` directory
+and insert:
 
 .. code-block:: python
 
@@ -301,7 +301,7 @@ To do this, go to your ``__init__.py`` file in your ``mydescpackage`` directory 
    
    __version__ = metadata.version("mydescpackage")
 
-then any calls to ``mydescpackage.__version__`` will be automatically up to
+Then any calls to ``mydescpackage.__version__`` will be automatically up to
 date and correct.
 
 Installing your package (from source)
@@ -324,7 +324,7 @@ your project folder using a special link. This means that any changes in the
 Python source code can immediately take place without requiring a new
 installation.
 
-Currently, to share our package, users will have to clone the *Git* repository
-and install from source as shown above (which is fine). A slightly easier way
-for people to install your packages is via public repositories, such a ``PyPy``
-and ``Conda``, which we cover next. 
+As it stands, users wishing to install our package first have to clone the
+*GitHub* repository and install from source as shown above (which is fine). To
+make the installation slightly for users, we can place our package on a public
+software repository, such a ``PyPy`` or ``Conda``, which we cover next. 

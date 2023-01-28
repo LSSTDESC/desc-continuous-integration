@@ -1,12 +1,12 @@
 Example CI workflows from DESC repositories 
 ===========================================
 
-Here we quickly overview a brief selection of CI workflows taken from activate
-DESC repositories. These demonstrate CI at DESC in action.
+Here we describe a selection of CI workflows taken from activate DESC
+repositories. These demonstrate CI at DESC in action.
 
 We go through each example step-by-step, highlighting any additional
-capabilities of *GitHub Actions* CI workflows that were not covered by the
-examples in the previous section along-the-way.
+capabilities of *GitHub Actions* that was not covered by the examples in the
+previous sections.
 
 The DESC CI workflows were taken from the repositories on January 2023.
 
@@ -62,7 +62,7 @@ The DESC CI workflows were taken from the repositories on January 2023.
 This example has quite a bit more setup to get the host machine ready for the
 unit tests compared to the simple examples in our demo code, particularly to
 accommodate for testing on the *MacOS* operating system. Below is a few more
-details about the GitHub Actions syntax not covered by the examples in the
+details about the *GitHub Actions* syntax not covered by the examples in the
 previous sections of this guide.
 
 .. tip:: You can download resources onto the host machine using terminal
@@ -153,13 +153,11 @@ previous sections of this guide.
     #. Upload code coverage results.
 
 .. note:: Testing your code on many different Python versions is a great way to
-   keep your code stable for a wide userbase. However, a mixture of many
-   packages to be used on many version of Python can create conflicts when
-   installing dependencies open endedly (i.e., when not specifying the package
-   versions when installing). In some cases, like for the dependency list in
-   this repository, you will have to manually guide towards the correct
-   versions (or version ranges) for your package dependencies, depending on the
-   version of Python you are using.  This can be done in the
-   ``requirements.txt`` file used for installing dependencies. For example,
+   keep your code stable for a wide userbase. However in some cases, like for
+   the dependency list in this repository, you will have to manually guide
+   towards the correct versions (or version ranges) for your package
+   dependencies, depending on the version of Python being installed. The format
+   for this is the same if you are listing the dependencies in the
+   ``requirements.txt`` file or the ``pyproject.toml`` file.  For example,
    ``numpy>=1.21.0;python_version>="3.8"`` says only install ``numpy`` versions
-   1.21.0 or higher if the Python version is 3.8.
+   1.21.0 or higher if the Python version is 3.8 or higher.

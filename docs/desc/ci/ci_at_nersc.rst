@@ -29,7 +29,7 @@ supporting repositories at the `NERSC GitLab instance
    repository.
 
 This means there is a bit of manual setup required in order to perform CI at
-*NERSC* when starting from a *GitHub* repository, however once setup, the
+*NERSC* when starting from a *GitHub* repository, however once set up, the
 process is fully automated.
 
 .. figure:: ../../images/workflow_diagram.png
@@ -59,7 +59,7 @@ Getting set up
 
 To start, you'll need to create three repositories at your *NERSC* *GitLab*
 instance (replace ``desc-continuous-integration`` with the name of your
-repository):
+repository below):
 
 #. A blank (*"New Project -> Create Blank Project"*) ``target`` repository
    with the same name as the *GitHub* ``source`` repository (e.g,
@@ -171,11 +171,12 @@ pipeline, which must be defined in the initial *GitHub Actions* workflow file.
 Essentially, all we are doing is kick-starting the pipeline (in this example
 manually) by initiating the ``mirror`` repositories CI workflow. You can
 trigger the pipeline however you wish, however remember the examples in this
-tutorial only work for a single chosen branch of the repository ``main`` by
+tutorial only work for a single chosen branch of the repository, ``main`` by
 default, and that each trigger will run a full CI job at *NERSC*.
 
 You must modify the repository URLs and *GitLab* project numbers (found under
-*Settings -> General* in *GitLab*) in the template workflow to your own. 
+*Settings -> General* in *GitLab*) in the template workflow to your own. You
+don't have to modify anything below ``jobs:``. 
 
 .. literalinclude:: ../../../.github/workflows/ci_nersc_template.yml
    :language: yaml
@@ -188,10 +189,10 @@ Building a GitLab CI workflow for your repository
 Now that we are set up, we can think about how to implement a CI workflow at
 *GitLab*. As mentioned previously, the CI workflows for GitLab are placed in a
 file called ``.gitlab-ci.yml``, which is located in the root directory of your
-repository.  Here we will cover how to build a basic CI workflow with GitLab,
-relating back to the GitHub Actions syntax we learned previously. A more
-in-depth look at *GitLab*'s CI syntax can be found in `The Complete GitLab CI
-Reference Guide <https://docs.gitlab.com/ee/ci/yaml/>`__.
+``source`` repository.  Here we will cover how to build a basic CI workflow
+with GitLab, relating back to the GitHub Actions syntax we learned previously.
+A more in-depth look at *GitLab*'s CI syntax can be found in `The Complete
+GitLab CI Reference Guide <https://docs.gitlab.com/ee/ci/yaml/>`__.
 
 .. literalinclude:: ../../../.gitlab-ci.yml
    :language: yaml
@@ -253,8 +254,8 @@ Things to think about with CI at *NERSC*
    is run, and you need to fully understand what is happening in the workflow
    that you are implementing.
 
-.. note:: It is not recommended that you mirror code that you yourself do not
-   own, unless they are from protected branches.
+.. note:: You should not automate the mirroring of code you do not own. If you
+   must, only clone protected branches of repositories you do not own.
 
 .. note:: Any code you mirror onto the *NERSC* GitLab instance must adhere to the
    broader `NERSC user policies <https://www.nersc.gov/users/policies/>`__.

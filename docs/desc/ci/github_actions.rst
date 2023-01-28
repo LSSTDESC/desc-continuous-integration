@@ -14,32 +14,77 @@ thousands of community created pre-built "Actions" to make the process of CI as
 simple and efficient as possible.
 
 CI with *GitHub Actions* is configured via "workflows", YAML configuration
-files checked in to your repository which will automatically run when triggered
-by an event in your repository, when triggered manually, or at a defined
-schedule.  Workflows are defined in the ``.github/workflows`` directory of your
-repository. A repository can have multiple workflows, triggered independently,
-each of which can perform a different set of tasks.
+files checked into the ``.github/workflows`` directory of your repository,
+which will automatically run when triggered by an event in your repository,
+when triggered manually, or at a defined schedule. A repository can have
+multiple workflows, triggered independently, each of which can perform a
+different set of tasks.
+
+This guide is not designed to be a definitive tutorial on *GitHub Actions* (for
+that see `here <https://docs.github.com/en/actions/quickstart>`__),  but to be
+an entry point for getting you started with CI for your DESC software.
 
 Our `demo repository
 <https://github.com/LSSTDESC/desc-continuous-integration>`__ has four
-workflows, of differing complexities, which we overview in this section. The
-goal of each example workflow is always the same, however, keeping our software
-stable through any changes to the codebase by initiating the test suite and
-ensuring they pass.  
+workflows, of differing complexities, which we describe in detail in this
+section. The goal of each example workflow is always the same, however, keeping
+our software stable through any changes to the codebase by initiating the test
+suite and ensuring they pass.  
 
-This is not designed to be a definitive tutorial on *GitHub Actions* (for that
-see `here <https://docs.github.com/en/actions/quickstart>`__),  but to be a
-entry point for getting you started with CI for your DESC software.
+.. list-table::
+   :widths: 20 15 65
+   :header-rows: 1
 
-A simple CI example
--------------------
+   * -
+     - YAML
+     - What is does
+   * - Example 1
+     - ``ci_example_1.yml``
+     - Install ``mydescpackage`` and run the test suite
+   * - Example 2
+     - ``ci_example_2.yml``
+     - Future proof, lint and perform code-coverage to ``mydescpackage`` 
+   * - Example 3
+     - ``ci_example_3.yml``
+     - Test ``mydescpackage`` within the *DESC* *Conda* environment using the *DESC* Docker image
+   * - Example 4
+     - ``ci_example_4.yml``
+     - Test ``mydescpackage`` within the *DESC* *Conda* enviromnent (manual install)
+
+For reference, the full workflows can be expanded below:
+
+.. collapse:: Click to see Example 1 in full
+
+    .. literalinclude:: ../../../.github/workflows/ci_example_1.yml
+      :language: yaml
+      :linenos:
+
+.. collapse:: Click to see Example 2 in full
+
+    .. literalinclude:: ../../../.github/workflows/ci_example_2.yml
+      :language: yaml
+      :linenos:
+
+.. collapse:: Click to see Example 3 in full
+
+    .. literalinclude:: ../../../.github/workflows/ci_example_3.yml
+      :language: yaml
+      :linenos:
+
+.. collapse:: Click to see Example 4 in full
+
+    .. literalinclude:: ../../../.github/workflows/ci_example_4.yml
+      :language: yaml
+      :linenos:
+
+|
+
+Example 1: A simple CI workflow
+-------------------------------
 
 Let's start simple, with an example CI workflow that automatically initiates
 the repositories test suite when there is a push or pull request opened on the
 ``main`` branch. 
-
-The YAML configuration file for the example workflow is ``ci_example_1.yml``,
-which we break down step-by-step below...
 
 Triggering the workflow
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -71,24 +116,24 @@ periodic intervals. For a complete list of conditions from which you can
 trigger your CI workflow see the documentation `here
 <https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows>`__.
 
-From line 17 onwards we reach the main body of our workflow, marked ``jobs:``.
-Workflows are built from one or more jobs, with each job of a workflow defining
-its own working environment and a set of practical instructions to perform,
-e.g., running the unit tests, constructing and deploying containers, statistics
-reporting, etc. Note that by default each job in the workflow will operate
-independently, allowing them to be run in parallel on different host machines.
-However you can link your jobs to be sequentially dependent to one another if
-desired. For our example there is only one job within the workflow, called
-``ci-with-pytest``. 
-
 Testing our code in different environments 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../../../.github/workflows/ci_example_1.yml
    :language: yaml
    :linenos:
-   :lineno-start: 18
-   :lines: 18-32
+   :lineno-start: 15
+   :lines: 15-32
+
+Now we reach the main body of our workflow, marked ``jobs:``.  Workflows are
+built from one or more jobs, with each job of a workflow defining its own
+working environment and a set of practical instructions to perform, e.g.,
+running the unit tests, constructing and deploying containers, statistics
+reporting, etc. Note that by default each job in the workflow will operate
+independently, allowing them to be run in parallel on different host machines.
+However you can link your jobs to be sequentially dependent to one another if
+desired. For our example there is only one job within the workflow, called
+``ci-with-pytest``.
 
 A ``job:`` starts with some global preferences (at the scope of only that job).
 At a minimum, we must at least declare the desired host machine architecture
@@ -106,8 +151,9 @@ our code using four versions of Python3 on the two most recent releases of
 Ubuntu (denoted ``ubuntu-20.04``, and ``ubuntu-latest``) and the latest MacOS
 release (``macos-latest``) [1]_. Whilst we could do this by declaring multiple
 (almost identical) ``jobs:``, differing only in a few values (like
-``runs-on:``), it is much cleaner and simpler to use a ``strategy:`` matrix. A
-strategy matrix lets you use variables in a single job definition to
+``runs-on:``), it is much cleaner and simpler to use a ``strategy:`` matrix.
+
+A strategy matrix lets you use variables in a single job definition to
 automatically create multiple job runs based on the combinations of the
 variables. For example, our ``matrix:``, which can be thought of like a Python
 dictionary, has two entries; ``python-version`` and ``os``, which both contain
@@ -127,8 +173,8 @@ spawned jobs of a workflow immediately if one job within the matrix fails
 (which is the default behaviour).
 
 Then, ``runs-on: ${{ matrix.os }}`` selects the *GitHub* hosted runner for this
-job, three of which will be ``ubuntu-20.04``, the next three of which will be
-``ubuntu-latest`` and the final three of which will be ``macos-latest``.
+job: four on ``ubuntu-20.04``, four on ``ubuntu-latest`` and four on
+``macos-latest`` (for the four versions of Python we are testing).
 
 The steps of a job
 ^^^^^^^^^^^^^^^^^^
@@ -165,31 +211,15 @@ we must fix it before the codebase receives any changes
 .. note:: You can run multiple command line inputs within a single ``run:`` by
   preceding the commands with the pipe symbol (``|``).
 
-Example 1 in full
-^^^^^^^^^^^^^^^^^
-
-For reference, here is the example action in full.
-
-.. collapse:: Click to expand ci_example_1.yml
-
-    .. literalinclude:: ../../../.github/workflows/ci_example_1.yml
-      :language: yaml
-      :linenos:
-
-|
-
 .. [1] See `here <https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners>`__ for a complete list of GitHub hosted runners.
 .. [2] Check out the `GitHub marketplace <https://github.com/marketplace?type=actions>`__ for a list of community actions.
 
-Adding some complexity to our example
--------------------------------------
-
-Naturally the above example was very simplistic, with very little setup for us
-to get the host runner ready to use.
+Example 2: Going beyond just testing
+------------------------------------
 
 Here we show a second example, very similar to the first, but it demonstrates
 some additional features you may wish to take advantage of within your CI
-workflow. The example workflow is now ``ci_example_2.yml``.
+workflow.
 
 Future proofing
 ^^^^^^^^^^^^^^^
@@ -283,20 +313,6 @@ thoroughly.  This also allows us to create a visible code coverage badge on the
 front page of the repository (see the ``README.md`` file for the syntax on how
 to add the badge).
 
-Example 2 in full
-^^^^^^^^^^^^^^^^^
-
-Again, for reference, here is the full code for the slightly more complicated
-example workflow.
-
-.. collapse:: Click to expand ci_example_2.yml
-   
-   .. literalinclude:: ../../../.github/workflows/ci_example_2.yml
-      :language: yaml
-      :linenos:
-
-|
-
 CI and the DESC Python environment
 ----------------------------------
 
@@ -319,8 +335,8 @@ environment pre-installed (recommended), or (2) manually installing the
 setup files within the `desc-python
 <https://github.com/LSSTDESC/desc-python>`__ repository.
 
-Working within DESC containers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example 3: Testing within the DESC *Conda* environment (docker image)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "*A container is a standard unit of software that packages up code and all
     its dependencies so the application runs quickly and reliably from one
@@ -352,7 +368,7 @@ to tell *GitHub Actions* that we wish to download and operate the entirety of
 the ``ci-with-pytest`` job within this container.
 
 The naming convention for CI-based LSST-DESC container images includes both the
-operating system version and Python version, and have a ``:ci-dev`` tag which
+operating system version and Python version, and has a ``:ci-dev`` tag which
 is necessary to include.
 
 Our matrix in the case of this example
@@ -363,10 +379,11 @@ Our matrix in the case of this example
    :lineno-start: 25
    :lines: 25-27
 
-specifies which container image to work within, and not the of *GitHub actions*
-host runner, as was the case for the previous examples. We always select
-``ubuntu-latest`` host machines to operate on (however this choice is largely
-arbitrary as we are operating within a container on the machine anyway).   
+is used to specify which container image to work within, and not the of *GitHub
+actions* host runner, as was the case for the previous examples. We always
+select ``ubuntu-latest`` host machines to operate on (however this choice is
+largely arbitrary as we are operating within a container on the machine
+anyway).   
 
 .. note:: Only Ubuntu host machines support container images. To operate within
    the ``desc-python`` *Conda* environment using a MacOS architecture you will
@@ -390,26 +407,15 @@ example, here we trigger our workflow every Friday at midnight,
 for more details on scheduling your workflows).
 
 .. note:: If you have Python dependencies that are not part of the
-   ``desc-python`` environment, you will have to install yourself manually
+   ``desc-python`` environment, you will have to install them yourself manually
    after. For example ``pytest-cov`` will be installed when we install
    ``mydescpackage``. As this is a package needed only for the CI workflow
    there is no real need to add it to the ``desc-python`` environment. However,
    if your software requires an additional package to operate you can request
    its inclusion by raising an issue at the ``desc-python`` repository.
 
-Example 3 in full
-^^^^^^^^^^^^^^^^^
-
-.. collapse:: Click to expand ci_example_3.yml
-
-   .. literalinclude:: ../../../.github/workflows/ci_example_3.yml
-      :language: yaml
-      :linenos:
-
-|
-
-Installing the DESC *Conda* environment manually
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example 4: Testing within the DESC *Conda* environment (manual install)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If for some reason you cannot use the DESC containers, or you need to test your
 code on MacOS architecture, you can install the ``python-desc`` *Conda*
@@ -418,8 +424,6 @@ environment on the host machine manually.
 The most up-to-date version of the ``python-desc`` *Conda* environment can be
 found in `this <https://github.com/LSSTDESC/desc-python>`__ DESC repository,
 which we can call upon during our CI workflow.
-
-The code snippets below are taken from ``ci_example_4.yml``.
 
 .. literalinclude:: ../../../.github/workflows/ci_example_4.yml
    :language: yaml
@@ -455,14 +459,3 @@ resolving complex environments.
 One extra step is on line 18, where we have specified the
 ``default:`` ``shell: bash -l {0}``, which is required for *MiniConda* to
 activate environments.
-
-Example 4 in full
-^^^^^^^^^^^^^^^^^
-
-.. collapse:: Click to expand ci_example_3.yml
-
-   .. literalinclude:: ../../../.github/workflows/ci_example_4.yml
-      :language: yaml
-      :linenos:
-
-|
