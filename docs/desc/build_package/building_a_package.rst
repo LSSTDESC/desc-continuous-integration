@@ -62,6 +62,7 @@ package should adhere to:
     ├── src/                
     │   └── mydescpackage/      
     │       ├── __init__.py
+    │       ├── _version.py
     │       ├── file1.py
     │       └── file2.py
     ├── tests/              
@@ -101,6 +102,9 @@ What are these files and directories...
   details).
 
 * ``src/mydescpackage/``: The code for your Python software goes here. 
+
+* ``src/mydescpackage/_version.py``: Stores the version number of our Python
+  package (see :ref:`automatic_versioning` for more details) 
 
 * ``tests/``: Any unit tests of your Package go in here (see also our guide on
   :ref:`Continuous Integration <desc_ci_intro>`).
@@ -208,11 +212,9 @@ All metadata goes under the ``[project]`` section, including for example the
 name of your package, the minimum required Python version, and the package
 dependencies.
 
-For our configuration, the package will be installed as ``mypackage==0.0.1``,
+For our configuration, the package will be installed as ``mypackage``,
 it requires Python versions ``>=3.7`` to run, and depends on the ``numpy``
-package (``importlib-metadata`` was not built-in to Python releases prior to
-``<3.8``, so we need to additionally include that as a dependency in those
-cases). Many of the metadata fields are optional, but it is useful to be as
+package. Many of the metadata fields are optional, but it is useful to be as
 thorough as possible in detailing the package, especially if you publish the
 package to PyPi for example (for a list of all metadata options see `here
 <https://packaging.python.org/en/latest/specifications/declaring-project-metadata/>`__). 
@@ -220,8 +222,8 @@ package to PyPi for example (for a list of all metadata options see `here
 .. literalinclude:: ../../../pyproject.toml
    :language: toml
    :linenos:
-   :lineno-start: 22
-   :lines: 22-23
+   :lineno-start: 24
+   :lines: 24-25
 
 Because we are using the ``src/`` directory layout for our package, we need to
 tell ``setuptools`` this is where our Package's source code is (the default is
@@ -246,8 +248,8 @@ dependencies by running ``pip install .[ci]``.
 .. literalinclude:: ../../../pyproject.toml
    :language: toml
    :linenos:
-   :lineno-start: 25
-   :lines: 25-26
+   :lineno-start: 27
+   :lines: 27-28
 
 
 Optional dependencies are also useful if you want to separate out serial and
@@ -270,39 +272,69 @@ to help us, which directly calls the ``mydescpackage.pi.display_pi`` function
 .. literalinclude:: ../../../pyproject.toml
    :language: toml
    :linenos:
-   :lineno-start: 28
-   :lines: 28-29
+   :lineno-start: 30
+   :lines: 30-31
 
 Script entrypoints are great for creating front-ends to your package. 
+
+.. _Automatic_versioning:
 
 Automatic versioning
 --------------------
 
-An extremely important attribute of your Python package is its version, which
-you should declare in the ``pyproject.toml`` metadata. It is a good practice to
-use the `Semantic Versioning <https://semver.org/>`__ format for your code. 
+An extremely important attribute of your Python package is its version number,
+for which it is good practice to use the `Semantic Versioning
+<https://semver.org/>`__ format (i.e., MAJOR.MINOR.PATCH). The pseudo-standard
+for Python packages is to store the version number as a string variable called
+``__version__`` in the root of the package, e.g.,
+``mydescpackage.__version__``.
 
-It is best to avoid multiple manual declarations of the package version between
-the ``pyproject.toml`` file and within the source code. A useful trick is to
-use the ``importlib.metadata`` method to access the version tag dynamically
-from the ``pyproject.toml`` file from within the code. 
+We are going to have to manually declare our chosen version number somewhere
+within our project, however we certainly want to avoid manual declarations in
+multiple places, some of which we may forget to update (e.g., between the
+``pyproject.toml`` file and within the source code). There are `many
+options
+<https://packaging.python.org/en/latest/guides/single-sourcing-package-version/>`__
+that allow you to only declare the version number once, yet there is no current
+standard for which practice is best.
 
-To do this, go to your ``__init__.py`` file in your ``mydescpackage`` directory
-and insert:
+We would recommend declaring the package version number in a ``_version.py``
+file in the package source code directory (i.e., ``src/mydescpackage/``). This
+option has the advantage that ``mydescpackage.__version__`` can be called both
+in the scenario where the package has been installed via `pip`, or if the
+source code is being called upon manually straight from the cloned repository.  
+
+To do this, create a file called ``_version.py`` in the ``src/mydescpackage/``
+directory with the following:
 
 .. code-block:: python
 
-   try:
-       # For Python >= 3.8
-       from importlib import metadata
-   except ImportError:
-       # For Python < 3.8
-       import importlib_metadata as metadata
-   
-   __version__ = metadata.version("mydescpackage")
+   __version__ = "1.0.0"
 
-Then any calls to ``mydescpackage.__version__`` will be automatically up to
-date and correct.
+.. note::
+
+   We put the ``__version__`` variable in a file called ``_version.py`` instead
+   of ``version.py`` so that ``pip`` does not install ``mydescpackage.version``
+   as a callable method. 
+
+Then, include this line in the ``__init__.py`` file in the ``src/mydescpackage/``
+directory:
+
+.. code-block:: python
+
+   from ._version import __version__
+
+Finally, we can tell `pip` to use this as the package version number by
+updating our ``pyproject.toml`` file with the following:
+
+.. code-block:: toml
+
+   [project]
+   ...
+   dynamic = ["version"]
+
+   [tool.setuptools.dynamic]
+   version = {attr = "mydescpackage.__version__"}
 
 Installing your package (from source)
 -------------------------------------

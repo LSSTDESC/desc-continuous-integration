@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mydescpackage"
-version = "0.0.1"
 description = "Example DESC Python package, some simple mathmatical functions."
 readme = "README.md"
 authors = [{ name = "Stuart McAlpine", email = "stuart.mcalpine@fysik.su.se" }]
@@ -15,9 +14,12 @@ classifiers = [
 keywords = ["desc", "python"]
 dependencies = [
     'numpy',
-    'importlib-metadata;python_version<"3.8"'
 ]
 requires-python = ">=3.7" # For setuptools >= 61.0 support
+dynamic = ["version"] # Scrape the version dynamically from the package
+
+[tool.setuptools.dynamic]
+version = {attr = "mydescpackage.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
