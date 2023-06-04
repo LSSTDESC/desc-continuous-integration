@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publishing a Python package &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Documenting a Python package" href="document.html" />
+    <link rel="prev" title="Building a Python package" href="building_a_package.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Publishing a Python package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#publishing-to-pypi">Publishing to PyPi</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-your-package">Build your package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uploading-your-package">Uploading your package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#publishing-to-conda">Publishing to Conda</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ci/what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Publishing a Python package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/build_package/publish.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="publishing-a-python-package">
+<h1>Publishing a Python package<a class="headerlink" href="#publishing-a-python-package" title="Permalink to this heading"></a></h1>
+<p>Publishing your package to a public repository makes the installation process
+for the end user even simpler, and increases the visibility of your work.</p>
+<section id="publishing-to-pypi">
+<h2>Publishing to PyPi<a class="headerlink" href="#publishing-to-pypi" title="Permalink to this heading"></a></h2>
+<p>The Python Package Index (PyPI) is a repository of software for the Python
+programming language. It helps you find software developed and shared by the
+Python community.</p>
+<p>First, you will need to <a class="reference external" href="https://pypi.org/account/register/">register a PyPi account</a>. Whilst you’re at it, you should also
+register an account on <a class="reference external" href="https://test.pypi.org/manage/projects/">TestPyPI</a>.
+TestPyPI is very useful. It allows you to try out all the steps of publishing a
+package to PyPi without any consequences, which is particularly useful during
+development, or if you have no previous experience.</p>
+<section id="build-your-package">
+<h3>Build your package<a class="headerlink" href="#build-your-package" title="Permalink to this heading"></a></h3>
+<p>Before uploading your package to PyPi, first you have to build it. You’ll do
+this using two tools, <code class="docutils literal notranslate"><span class="pre">build</span></code> and <code class="docutils literal notranslate"><span class="pre">twine</span></code>, which you can install via pip in
+the usual way.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>build<span class="w"> </span>twine
+</pre></div>
+</div>
+<p>We need to build our package because the software on PyPI isn’t distributed as
+plain source code. Instead, they’re wrapped into distribution packages,
+commonly as source archives and Python wheels. These are essentially compressed
+archives of your source code. Wheels are usually faster and more convenient for
+your end users, while source archives provide a flexible backup alternative.
+You should provide both.</p>
+<p>To create a source archive and a wheel for your package, you use <code class="docutils literal notranslate"><span class="pre">build</span></code> in
+your the root of your Python package directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>build
+</pre></div>
+</div>
+<p>which will create a source archive and a wheel in the <code class="docutils literal notranslate"><span class="pre">./dist/</span></code> directory.
+These are the files you’ll upload to PyPi.</p>
+<p>As a quick check, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>twine<span class="w"> </span>check<span class="w"> </span>dist/*
+</pre></div>
+</div>
+<p>to make sure there were no problems during the build.</p>
+</section>
+<section id="uploading-your-package">
+<h3>Uploading your package<a class="headerlink" href="#uploading-your-package" title="Permalink to this heading"></a></h3>
+<p>Initially, we want to upload our package to TestPyPi to make sure everything
+looks as it should.</p>
+<p>To do this, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>twine<span class="w"> </span>upload<span class="w"> </span>-r<span class="w"> </span>testpypi<span class="w"> </span>dist/*
+</pre></div>
+</div>
+<p>Twine will ask you for your username and password.</p>
+<p>Head over to your TestPyPi page and make sure all the information looks
+correct. Then, try installing your package from TestPyPi, e.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span>https://test.pypi.org/simple/<span class="w"> </span>mydescpackage
+</pre></div>
+</div>
+<p>If everything works, then you can go ahead and upload your package to PyPi using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>twine<span class="w"> </span>upload<span class="w"> </span>dist/*
+</pre></div>
+</div>
+<p>Then users can install your package through <code class="docutils literal notranslate"><span class="pre">pip</span></code>, e.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mydescpackage
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All of the information PyPi receives about your package comes from the
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file. At a minimum, you will need <code class="docutils literal notranslate"><span class="pre">name</span></code> and
+<code class="docutils literal notranslate"><span class="pre">version</span></code> included under the project metadata.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">name</span></code> value in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file will be the
+distributed name on PyPi, and has to be unique. Ideally, the installed
+package name (i.e., the name of the folder in <code class="docutils literal notranslate"><span class="pre">./src/</span></code>) should be the same
+as the PyPi distribution name, however they can be different if the package
+name has already been taken on PyPi.</p>
+<p>If you are installing your pacakge under a different name as the PyPi
+distributed name, be careful not to name your package with too generic a
+name.</p>
+</div>
+</section>
+</section>
+<section id="publishing-to-conda">
+<h2>Publishing to Conda<a class="headerlink" href="#publishing-to-conda" title="Permalink to this heading"></a></h2>
+<p>Coming soon…</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="building_a_package.html" class="btn btn-neutral float-left" title="Building a Python package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="document.html" class="btn btn-neutral float-right" title="Documenting a Python package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
