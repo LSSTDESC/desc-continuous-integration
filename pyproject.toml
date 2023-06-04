@@ -19,7 +19,7 @@ requires-python = ">=3.7" # For setuptools >= 61.0 support
 dynamic = ["version"] # Scrape the version dynamically from the package
 
 [tool.setuptools.dynamic]
-version = {attr = "mydescpackage.__version__"}
+version = {attr = "mydescpackage._version.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
