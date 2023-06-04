@@ -334,7 +334,7 @@ updating our ``pyproject.toml`` file with the following:
    dynamic = ["version"]
 
    [tool.setuptools.dynamic]
-   version = {attr = "mydescpackage.__version__"}
+   version = {attr = "mydescpackage._version.__version__"}
 
 Installing your package (from source)
 -------------------------------------
