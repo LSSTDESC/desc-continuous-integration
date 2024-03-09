@@ -5,3 +5,4 @@ build/
 docs/_build
 src/mydescpackage.egg-info/
 dist/
+docs/_static/
