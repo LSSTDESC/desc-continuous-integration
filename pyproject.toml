@@ -15,7 +15,7 @@ keywords = ["desc", "python"]
 dependencies = [
     'numpy',
 ]
-requires-python = ">=3.7" # For setuptools >= 61.0 support
+requires-python = ">=3.8"
 dynamic = ["version"] # Scrape the version dynamically from the package
 
 [tool.setuptools.dynamic]

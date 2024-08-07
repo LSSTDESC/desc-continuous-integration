@@ -24,7 +24,7 @@ jobs:
       
       matrix:
         os: ["ubuntu-20.04", "ubuntu-22.04"]
-        python-version: ["py37", "py38", "py39"]
+        python-version: ["py38", "py39"]
 
     # What operating system is this job running on?
     runs-on: ubuntu-latest
