@@ -1,0 +1,44 @@
+{% set name = "desc-continuous-integration" %}
+{% set version = "0.0.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/LSSTDESC/desc-continuous-integration/archive/v{{ version }}.tar.gz
+  sha256: 05f65ea46fa3da6e37a64a7943f1d0950cac1115df3944944d953dcbba00365a
+
+build:
+  entry_points:
+    - display-pi = mydescpackage.pi:display_pi
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+
+requirements:
+  host:
+    - python >=3.7
+    - setuptools >=61.0
+    - pip
+  run:
+    - python >=3.7
+    - numpy
+    - importlib-metadata  # [py<38]
+
+test:
+  imports:
+    - mydescpackage
+  commands:
+    - pip check
+    - display-pi --help
+  requires:
+    - pip
+
+about:
+  summary: Example DESC Python package, some simple mathmatical functions.
+  license: ''
+  license_file: PLEASE_ADD_LICENSE_FILE
+
+extra:
+  recipe-maintainers:
+    - galbus
