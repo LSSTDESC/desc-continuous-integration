@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example CI workflows from DESC repositories &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Example CI workflows from DESC pipelines" href="desc_working_examples_pipelines.html" />
+    <link rel="prev" title="CI at NERSC using GitLab" href="ci_at_nersc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/publish.html">Publishing a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example CI workflows from DESC repositories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-core-cosmology-library">The Core Cosmology Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#imsim">imSim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tables-io">tables_io</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example CI workflows from DESC repositories</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/ci/desc_working_examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="example-ci-workflows-from-desc-repositories">
+<h1>Example CI workflows from DESC repositories<a class="headerlink" href="#example-ci-workflows-from-desc-repositories" title="Link to this heading"></a></h1>
+<p>Here we describe a selection of CI workflows taken from activate DESC
+repositories. These demonstrate CI at DESC in action.</p>
+<p>We go through each example step-by-step, highlighting any additional
+capabilities of <em>GitHub Actions</em> that was not covered by the examples in the
+previous sections.</p>
+<p>The DESC CI workflows were taken from the repositories on January 2023.</p>
+<section id="the-core-cosmology-library">
+<h2><a class="reference external" href="https://github.com/LSSTDESC/CCL">The Core Cosmology Library</a><a class="headerlink" href="#the-core-cosmology-library" title="Link to this heading"></a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">continuous-integration</span>
+<span class="linenos">  2</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos">  3</span><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="linenos">  4</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">  5</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">  6</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
+<span class="linenos">  7</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">releases/*</span>
+<span class="linenos">  8</span><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="linenos">  9</span>
+<span class="linenos"> 10</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos"> 11</span><span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="linenos"> 12</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+<span class="linenos"> 13</span><span class="w">    </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="linenos"> 14</span><span class="w">      </span><span class="nt">run</span><span class="p">:</span>
+<span class="linenos"> 15</span><span class="w">        </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash -l {0}</span>
+<span class="linenos"> 16</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos"> 17</span><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="linenos"> 18</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos"> 19</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span>
+<span class="linenos"> 20</span><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">macos-11</span>
+<span class="linenos"> 21</span><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="linenos"> 22</span><span class="w">        </span><span class="nt">py</span><span class="p">:</span>
+<span class="linenos"> 23</span><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.8</span>
+<span class="linenos"> 24</span>
+<span class="linenos"> 25</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos"> 26</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cancel previous runs</span>
+<span class="linenos"> 27</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">styfle/cancel-workflow-action@0.6.0</span>
+<span class="linenos"> 28</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos"> 29</span><span class="w">          </span><span class="nt">access_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="linenos"> 30</span>
+<span class="linenos"> 31</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+<span class="linenos"> 32</span>
+<span class="linenos"> 33</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-incubator/setup-miniconda@v2</span>
+<span class="linenos"> 34</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos"> 35</span><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.py }}</span>
+<span class="linenos"> 36</span><span class="w">          </span><span class="nt">channels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge,defaults</span>
+<span class="linenos"> 37</span><span class="w">          </span><span class="nt">channel-priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">strict</span>
+<span class="linenos"> 38</span><span class="w">          </span><span class="nt">show-channel-urls</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="linenos"> 39</span><span class="w">          </span><span class="nt">miniforge-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span>
+<span class="linenos"> 40</span><span class="w">          </span><span class="nt">miniforge-variant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Mambaforge</span>
+<span class="linenos"> 41</span>
+<span class="linenos"> 42</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remove homebrew</span>
+<span class="linenos"> 43</span><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">matrix.os == &#39;macos-11&#39;</span>
+<span class="linenos"> 44</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos"> 45</span><span class="w">          </span><span class="no">curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh -o uninstall_homebrew.sh</span>
+<span class="linenos"> 46</span><span class="w">          </span><span class="no">chmod u+x ./uninstall_homebrew.sh</span>
+<span class="linenos"> 47</span><span class="w">          </span><span class="no">./uninstall_homebrew.sh -f -q &gt;&amp; /dev/null</span>
+<span class="linenos"> 48</span><span class="w">          </span><span class="no">rm -f uninstall_homebrew.sh</span>
+<span class="linenos"> 49</span>
+<span class="linenos"> 50</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lint</span>
+<span class="linenos"> 51</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos"> 52</span><span class="w">          </span><span class="no">export MAMBA_NO_BANNER=1</span>
+<span class="linenos"> 53</span><span class="w">          </span><span class="no">mamba install flake8</span>
+<span class="linenos"> 54</span><span class="w">          </span><span class="no">flake8 pyccl</span>
+<span class="linenos"> 55</span><span class="w">          </span><span class="no">flake8 --exclude=data benchmarks</span>
+<span class="linenos"> 56</span><span class="w">          </span><span class="no">if [[ `grep &quot;$(printf &#39;\t&#39;)&quot; pyccl/*.py` != &quot;&quot; ]]; then</span>
+<span class="linenos"> 57</span><span class="w">            </span><span class="no">exit 1</span>
+<span class="linenos"> 58</span><span class="w">          </span><span class="no">fi</span>
+<span class="linenos"> 59</span>
+<span class="linenos"> 60</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">install deps</span>
+<span class="linenos"> 61</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos"> 62</span><span class="w">          </span><span class="no">mamba install \</span>
+<span class="linenos"> 63</span><span class="w">            </span><span class="no">pip \</span>
+<span class="linenos"> 64</span><span class="w">            </span><span class="no">numpy nose coveralls pyyaml gsl fftw cmake swig scipy \</span>
+<span class="linenos"> 65</span><span class="w">            </span><span class="no">compilers pkg-config setuptools_scm pytest pandas pytest-cov \</span>
+<span class="linenos"> 66</span><span class="w">            </span><span class="no">cython &quot;camb&gt;=1.3&quot; isitgr traitlets fast-pt</span>
+<span class="linenos"> 67</span>
+<span class="linenos"> 68</span><span class="w">          </span><span class="no">if [[ ${MATRIX_OS} == &quot;macos-11&quot; ]]; then</span>
+<span class="linenos"> 69</span><span class="w">            </span><span class="no">mamba install llvm-openmp</span>
+<span class="linenos"> 70</span><span class="w">            </span><span class="no">echo &quot;DYLD_FALLBACK_LIBRARY_PATH=${CONDA_PREFIX}/lib&quot; &gt;&gt; $GITHUB_ENV</span>
+<span class="linenos"> 71</span><span class="w">            </span><span class="no">SDKROOT=$(xcrun --sdk macosx --show-sdk-path)</span>
+<span class="linenos"> 72</span><span class="w">            </span><span class="no">echo &quot;SDKROOT: ${SDKROOT}&quot;</span>
+<span class="linenos"> 73</span><span class="w">            </span><span class="no">echo &quot;SDKROOT=${SDKROOT}&quot; &gt;&gt; $GITHUB_ENV</span>
+<span class="linenos"> 74</span><span class="w">            </span><span class="no">echo &quot;CONDA_BUILD_SYSROOT=${SDKROOT}&quot; &gt;&gt; $GITHUB_ENV</span>
+<span class="linenos"> 75</span><span class="w">          </span><span class="no">fi</span>
+<span class="linenos"> 76</span><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="linenos"> 77</span><span class="w">          </span><span class="nt">MATRIX_OS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+<span class="linenos"> 78</span>
+<span class="linenos"> 79</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">install class</span>
+<span class="linenos"> 80</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos"> 81</span><span class="w">          </span><span class="no">if [[ ${MATRIX_OS} == &quot;macos-11&quot; ]]; then</span>
+<span class="linenos"> 82</span><span class="w">            </span><span class="no">export LDFLAGS=&quot;-L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib&quot;</span>
+<span class="linenos"> 83</span><span class="w">            </span><span class="no">export LDFLAGS=&quot;$LDFLAGS -L/Users/runner/miniconda3/envs/test/lib&quot;</span>
+<span class="linenos"> 84</span><span class="w">            </span><span class="no">. ci_scripts/install_class_osx.sh</span>
+<span class="linenos"> 85</span><span class="w">          </span><span class="no">else</span>
+<span class="linenos"> 86</span><span class="w">            </span><span class="no">. ci_scripts/install_class_linux.sh</span>
+<span class="linenos"> 87</span><span class="w">          </span><span class="no">fi</span>
+<span class="linenos"> 88</span><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="linenos"> 89</span><span class="w">          </span><span class="nt">MATRIX_OS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+<span class="linenos"> 90</span>
+<span class="linenos"> 91</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build CCL</span>
+<span class="linenos"> 92</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos"> 93</span><span class="w">          </span><span class="no">python setup.py build</span>
+<span class="linenos"> 94</span><span class="w">          </span><span class="no">python setup.py develop</span>
+<span class="linenos"> 95</span>
+<span class="linenos"> 96</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c unit tests</span>
+<span class="linenos"> 97</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos"> 98</span><span class="w">          </span><span class="no">cd build</span>
+<span class="linenos"> 99</span><span class="w">          </span><span class="no">make -j4</span>
+<span class="linenos">100</span><span class="w">          </span><span class="no">CLASS_PARAM_DIR=./extern/share/class/ OMP_NUM_THREADS=2 ./check_ccl</span>
+<span class="linenos">101</span>
+<span class="linenos">102</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python unit tests</span>
+<span class="linenos">103</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">104</span><span class="w">          </span><span class="no">OMP_NUM_THREADS=2 pytest -vv pyccl --cov=pyccl</span>
+<span class="linenos">105</span>
+<span class="linenos">106</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">benchmarks</span>
+<span class="linenos">107</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">108</span><span class="w">          </span><span class="no">OMP_NUM_THREADS=2 pytest -vv benchmarks --cov=pyccl --cov-append</span>
+<span class="linenos">109</span>
+<span class="linenos">110</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">coveralls</span>
+<span class="linenos">111</span><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="linenos">112</span><span class="w">          </span><span class="nt">GITHUB_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+<span class="linenos">113</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">114</span><span class="w">          </span><span class="no">coveralls --service=github</span>
+<span class="linenos">115</span>
+<span class="linenos">116</span><span class="c1">#  build-doc-only-ubuntu:</span>
+<span class="linenos">117</span><span class="c1">#    runs-on: ubuntu-latest</span>
+<span class="linenos">118</span><span class="c1">#</span>
+<span class="linenos">119</span><span class="c1">#    steps:</span>
+<span class="linenos">120</span><span class="c1">#      - uses: actions/checkout@v2</span>
+<span class="linenos">121</span><span class="c1">#      - name: install latex</span>
+<span class="linenos">122</span><span class="c1">#        run: |</span>
+<span class="linenos">123</span><span class="c1">#</span>
+<span class="linenos">124</span><span class="c1">#          sudo apt install \</span>
+<span class="linenos">125</span><span class="c1">#            texlive texlive-bibtex-extra texlive-science texlive-publishers \</span>
+<span class="linenos">126</span><span class="c1">#            latexmk python3-sphinx python3-sphinx-rtd-theme python3-nbconvert \</span>
+<span class="linenos">127</span><span class="c1">#            python3-jupyter-client jupyter-client jupyter-nbconvert sphinx-common \</span>
+<span class="linenos">128</span><span class="c1">#            pandoc python3-setuptools \</span>
+<span class="linenos">129</span><span class="c1">#            -y</span>
+<span class="linenos">130</span><span class="c1">#          sudo pip3 install mkauthlist</span>
+<span class="linenos">131</span><span class="c1">#</span>
+<span class="linenos">132</span><span class="c1">#      - name: build docs</span>
+<span class="linenos">133</span><span class="c1">#        run: |</span>
+<span class="linenos">134</span><span class="c1">#          cd doc/0000-ccl_note</span>
+<span class="linenos">135</span><span class="c1">#          make</span>
+</pre></div>
+</div>
+<ul>
+<li><p>The workflow is trigged by push requests to the <code class="docutils literal notranslate"><span class="pre">main</span></code>, <code class="docutils literal notranslate"><span class="pre">master</span></code> or any
+<code class="docutils literal notranslate"><span class="pre">release</span></code> branch. It is also triggered by a pull request to any branch.</p></li>
+<li><p>There is one job in the workflow, called <code class="docutils literal notranslate"><span class="pre">build</span></code>, which uses a
+<code class="docutils literal notranslate"><span class="pre">strategy:</span></code> <code class="docutils literal notranslate"><span class="pre">matrix:</span></code> to spawn two jobs, testing the code on
+<code class="docutils literal notranslate"><span class="pre">ubuntu-latest</span></code> and <code class="docutils literal notranslate"><span class="pre">macos-11</span></code>, both using Python version 3.8.</p></li>
+<li><p>Now the steps of the <code class="docutils literal notranslate"><span class="pre">build</span></code> job.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">styfle/cancel-workflow-action&#64;0.6.0</span></code> <em>GitHub Action</em> is called to
+cancel any previous CI workflows that are still currently running. The
+<code class="docutils literal notranslate"><span class="pre">github.token</span></code> variable is an automatically created and unique
+<code class="docutils literal notranslate"><span class="pre">GITHUB_TOKEN</span></code> secret that can be used to authenticate in a workflow
+run (more <a class="reference external" href="https://docs.github.com/en/actions/security-guides/automatic-token-authentication">here</a>).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">actions/checkout&#64;v2</span></code> <em>GitHub Action</em> is called to checkout the
+repository onto the host machine.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">conda-incubator/setup-miniconda&#64;v2</span></code> <em>GitHub Action</em> is called to
+install <em>MiniConda</em> onto the host machine with the specified version
+of Python from the strategy matrix.</p></li>
+<li><p>If this is the <code class="docutils literal notranslate"><span class="pre">macos-11</span></code> runner, uninstall the HomeBrew package
+manager.</p></li>
+<li><p>Lint the code in the <code class="docutils literal notranslate"><span class="pre">pyccl</span></code> and <code class="docutils literal notranslate"><span class="pre">benchmarks</span></code> folders using
+<code class="docutils literal notranslate"><span class="pre">Flake8</span></code>.</p></li>
+<li><p>Install the Python dependencies using <code class="docutils literal notranslate"><span class="pre">Mamba</span></code> (see note below about
+setting the environment variables in this step).</p></li>
+<li><p>Install CLASS (Cosmic Linear Anisotropy Solving System) using the
+correct script (depending on the runner) within the <code class="docutils literal notranslate"><span class="pre">ci_scripts</span></code>
+directory.</p></li>
+<li><p>Build CCL using <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.</p></li>
+<li><p>Run the unit tests using <code class="docutils literal notranslate"><span class="pre">pytest</span></code>.</p></li>
+<li><p>Upload code coverage results output by <code class="docutils literal notranslate"><span class="pre">pytest</span></code>.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<p>This example has quite a bit more setup to get the host machine ready for the
+unit tests compared to the simple examples in our demo code, particularly to
+accommodate for testing on the <em>MacOS</em> operating system. Below is a few more
+details about the <em>GitHub Actions</em> syntax not covered by the examples in the
+previous sections of this guide.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can download resources onto the host machine using terminal
+commands just like you would on your own machine (using <code class="docutils literal notranslate"><span class="pre">wget</span></code>, <code class="docutils literal notranslate"><span class="pre">curl</span></code>,
+etc).</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can evaluate expressions in workflows to give you more control on
+what part of your workflows run under certain conditions. For example the
+<code class="docutils literal notranslate"><span class="pre">if:</span></code> expression on line 43. See the documentation <a class="reference external" href="https://docs.github.com/en/actions/learn-github-actions/expressions">here</a> for
+more details.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can set environment variables on the host machine using <code class="docutils literal notranslate"><span class="pre">env:</span></code>.
+The scope of these variables depends on where they are set. For example
+<code class="docutils literal notranslate"><span class="pre">MATRIX_OS</span></code> set on line 76 is only visible for the commands within the
+<code class="docutils literal notranslate"><span class="pre">install</span> <span class="pre">deps</span></code> job.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can also set environment variables within a step that are
+available to any subsequent steps in a workflow job by defining or updating
+the environment variable and writing this to the <code class="docutils literal notranslate"><span class="pre">GITHUB_ENV</span></code> environment
+file (see lines 68-75). The step that creates or updates the environment
+variable does not have access to the new value, but all subsequent steps in
+a job will have access.</p>
+</div>
+</section>
+<section id="imsim">
+<h2><a class="reference external" href="https://github.com/LSSTDESC/imSim">imSim</a><a class="headerlink" href="#imsim" title="Link to this heading"></a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">imSim CI</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="nt">push</span><span class="p">:</span>
+<span class="linenos"> 5</span><span class="w">        </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos"> 6</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos"> 7</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">releases/*</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="linenos">10</span><span class="w">        </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">11</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">12</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">releases/*</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">15</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+<span class="linenos">16</span><span class="w">        </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">        </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">19</span><span class="w">            </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">20</span><span class="w">                </span><span class="c1"># For now, just ubuntu, 3.8.  Can add more later.</span>
+<span class="linenos">21</span><span class="w">                </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">ubuntu-latest</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="linenos">22</span><span class="w">                </span><span class="nt">py</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">3.8</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="linenos">23</span><span class="w">                </span><span class="nt">CC</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">gcc</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="linenos">24</span><span class="w">                </span><span class="nt">CXX</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">g++</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="w">        </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="linenos">27</span><span class="w">            </span><span class="nt">run</span><span class="p">:</span>
+<span class="linenos">28</span><span class="w">                </span><span class="c1"># cf. https://github.com/conda-incubator/setup-miniconda#important</span>
+<span class="linenos">29</span><span class="w">                </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash -l {0}</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="w">        </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">32</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup conda</span>
+<span class="linenos">35</span><span class="w">              </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-incubator/setup-miniconda@v2</span>
+<span class="linenos">36</span><span class="w">              </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">37</span><span class="w">                  </span><span class="nt">activate-environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stack</span>
+<span class="linenos">38</span><span class="w">                  </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.8</span>
+<span class="linenos">39</span><span class="w">                  </span><span class="nt">condarc-file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">etc/.condarc</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install conda deps</span>
+<span class="linenos">42</span><span class="w">              </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">43</span><span class="w">                </span><span class="no">conda info</span>
+<span class="linenos">44</span><span class="w">                </span><span class="no">conda list</span>
+<span class="linenos">45</span><span class="w">                </span><span class="no">conda install -y mamba</span>
+<span class="linenos">46</span><span class="w">                </span><span class="no">mamba install -y --file etc/standalone_conda_requirements.txt</span>
+<span class="linenos">47</span><span class="w">                </span><span class="no">conda info</span>
+<span class="linenos">48</span><span class="w">                </span><span class="no">conda list</span>
+<span class="linenos">49</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install pip deps</span>
+<span class="linenos">50</span><span class="w">              </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">51</span><span class="w">                </span><span class="no"># We need to get batoid onto conda, but for now, this is a separate step.</span>
+<span class="linenos">52</span><span class="w">                </span><span class="no">pip install batoid</span>
+<span class="linenos">53</span><span class="w">                </span><span class="no">pip install skyCatalogs==1.2.0</span>
+<span class="linenos">54</span><span class="w">                </span><span class="no">conda info</span>
+<span class="linenos">55</span><span class="w">                </span><span class="no">conda list</span>
+<span class="linenos">56</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install rubin_sim and rubin_sim_data</span>
+<span class="linenos">57</span><span class="w">              </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">58</span><span class="w">                </span><span class="no"># Do the minimal installation from source to avoid installing</span>
+<span class="linenos">59</span><span class="w">                </span><span class="no"># a bunch of unneeded packages.</span>
+<span class="linenos">60</span><span class="w">                </span><span class="no">git clone https://github.com/lsst/rubin_sim.git</span>
+<span class="linenos">61</span><span class="w">                </span><span class="no">cd rubin_sim</span>
+<span class="linenos">62</span><span class="w">                </span><span class="no">pip install -e .</span>
+<span class="linenos">63</span><span class="w">                </span><span class="no">cd ..</span>
+<span class="linenos">64</span><span class="w">                </span><span class="no">mkdir rubin_sim_data</span>
+<span class="linenos">65</span><span class="w">                </span><span class="no"># Just get the skybrightness and throughputs data for now.</span>
+<span class="linenos">66</span><span class="w">                </span><span class="no">curl https://s3df.slac.stanford.edu/groups/rubin/static/sim-data/rubin_sim_data/skybrightness_may_2021.tgz | tar -C rubin_sim_data -xz</span>
+<span class="linenos">67</span><span class="w">                </span><span class="no">curl https://s3df.slac.stanford.edu/groups/rubin/static/sim-data/rubin_sim_data/throughputs_aug_2021.tgz | tar -C rubin_sim_data -xz</span>
+<span class="linenos">68</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install imSim</span>
+<span class="linenos">69</span><span class="w">              </span><span class="nt">run</span><span class="p">:</span>
+<span class="linenos">70</span><span class="w">                </span><span class="l l-Scalar l-Scalar-Plain">pip install .</span>
+<span class="linenos">71</span>
+<span class="linenos">72</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install test deps</span>
+<span class="linenos">73</span><span class="w">              </span><span class="nt">run</span><span class="p">:</span>
+<span class="linenos">74</span><span class="w">                </span><span class="l l-Scalar l-Scalar-Plain">conda install -y pytest nose</span>
+<span class="linenos">75</span>
+<span class="linenos">76</span><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run tests</span>
+<span class="linenos">77</span><span class="w">              </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">78</span><span class="w">                </span><span class="no">export RUBIN_SIM_DATA_DIR=`pwd`/rubin_sim_data</span>
+<span class="linenos">79</span><span class="w">                </span><span class="no">eups list lsst_distrib</span>
+<span class="linenos">80</span><span class="w">                </span><span class="no">pytest</span>
+</pre></div>
+</div>
+<ul>
+<li><p>The workflow is trigged by push and pull requests to the <code class="docutils literal notranslate"><span class="pre">main</span></code> and
+<code class="docutils literal notranslate"><span class="pre">release</span></code> branches.</p></li>
+<li><p>There is one job in the workflow, called <code class="docutils literal notranslate"><span class="pre">build</span></code>, which uses a
+<code class="docutils literal notranslate"><span class="pre">strategy:</span></code> <code class="docutils literal notranslate"><span class="pre">matrix:</span></code> to spawn one job, testing the code on
+<code class="docutils literal notranslate"><span class="pre">ubuntu-latest</span></code> using Python version 3.8.</p></li>
+<li><p>Now the steps of the <code class="docutils literal notranslate"><span class="pre">build</span></code> job.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">actions/checkout&#64;v2</span></code> Action is called to checkout the repository
+onto the host machine.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">conda-incubator/setup-miniconda&#64;v2</span></code> Action is called to install
+<em>MiniConda</em> onto the host machine with a specified condarc file.</p></li>
+<li><p>Install <em>Mamba</em> and use it to install dependencies from the
+<code class="docutils literal notranslate"><span class="pre">standalone_conda_requirements.txt</span></code> file.</p></li>
+<li><p>Install any dependencies not on Conda using <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p></li>
+<li><p>Manually install <code class="docutils literal notranslate"><span class="pre">rubin_sim</span></code> and download skybrightness and throughputs catalogs.</p></li>
+<li><p>Install imSim onto the host machine using <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p></li>
+<li><p>Install dependencies needed for testing.</p></li>
+<li><p>Run unit tests.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="tables-io">
+<h2><a class="reference external" href="https://github.com/LSSTDESC/tables_io">tables_io</a><a class="headerlink" href="#tables-io" title="Link to this heading"></a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># This workflow will install Python dependencies, run tests and lint with a variety of Python versions</span>
+<span class="linenos"> 2</span><span class="c1"># For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Python package</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="linenos">10</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">13</span><span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="linenos">16</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">17</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">18</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3.8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">21</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+<span class="linenos">22</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python ${{ matrix.python-version }}</span>
+<span class="linenos">23</span><span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v2</span>
+<span class="linenos">24</span><span class="w">      </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">25</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.python-version }}</span>
+<span class="linenos">26</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="linenos">27</span><span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">28</span><span class="w">        </span><span class="no">sudo apt install -y libopenmpi-dev libhdf5-mpi-dev</span>
+<span class="linenos">29</span><span class="w">        </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="linenos">30</span><span class="w">        </span><span class="no">python -m pip install pylint pytest pytest-cov</span>
+<span class="linenos">31</span><span class="w">        </span><span class="no">python -m pip install jupyter</span>
+<span class="linenos">32</span><span class="w">        </span><span class="no">if [ -f requirements.txt ]; then pip install -r requirements.txt; fi</span>
+<span class="linenos">33</span><span class="w">        </span><span class="no">CC=&quot;mpicc&quot; HDF5_MPI=&quot;ON&quot; pip install --upgrade --force-reinstall --no-binary=h5py h5py</span>
+<span class="linenos">34</span><span class="w">        </span><span class="no">pip install .</span>
+<span class="linenos">35</span><span class="w">        </span><span class="no">pip install .[dev]</span>
+<span class="linenos">36</span><span class="w">      </span><span class="nt">env</span><span class="p">:</span>
+<span class="linenos">37</span><span class="w">        </span><span class="nt">CC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mpicc</span>
+<span class="linenos">38</span><span class="w">        </span><span class="nt">HDF5_MPI</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ON</span>
+<span class="linenos">39</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lint with pylint</span>
+<span class="linenos">40</span><span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">41</span><span class="w">        </span><span class="no"># stop the build if there are Pylint errors</span>
+<span class="linenos">42</span><span class="w">        </span><span class="no">pylint --disable=all --extension-pkg-whitelist=numpy --init-hook=&#39;import sys; sys.setrecursionlimit(8 * sys.getrecursionlimit())&#39; src/tables_io</span>
+<span class="linenos">43</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lint with flake8</span>
+<span class="linenos">44</span><span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">45</span><span class="w">        </span><span class="no"># stop the build if there are Python syntax errors or undefined names</span>
+<span class="linenos">46</span><span class="w">        </span><span class="no">flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics</span>
+<span class="linenos">47</span><span class="w">        </span><span class="no"># exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide</span>
+<span class="linenos">48</span><span class="w">        </span><span class="no">flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics</span>
+<span class="linenos">49</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test with pytest</span>
+<span class="linenos">50</span><span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">51</span><span class="w">        </span><span class="no">python -m pytest --cov-report=xml tests</span>
+<span class="linenos">52</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload coverage to Codecov</span>
+<span class="linenos">53</span><span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">codecov/codecov-action@v1</span>
+<span class="linenos">54</span><span class="w">      </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">55</span><span class="w">        </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./coverage.xml</span>
+<span class="linenos">56</span><span class="w">        </span><span class="nt">flags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unittests</span>
+<span class="linenos">57</span><span class="w">        </span><span class="nt">env_vars</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OS,PYTHON</span>
+<span class="linenos">58</span><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">codecov-umbrella</span>
+<span class="linenos">59</span><span class="w">        </span><span class="nt">fail_ci_if_error</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<ul>
+<li><p>The workflow is trigged by push and pull requests to the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch.</p></li>
+<li><p>There is one job in the workflow, called <code class="docutils literal notranslate"><span class="pre">build</span></code>, which uses a
+<code class="docutils literal notranslate"><span class="pre">strategy:</span></code> <code class="docutils literal notranslate"><span class="pre">matrix:</span></code> to spawn three jobs, testing the code on Ubuntu using
+Python versions 3.8, 3.9 and 3.10.</p></li>
+<li><p>Now the steps of the <code class="docutils literal notranslate"><span class="pre">build</span></code> job.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">actions/checkout&#64;v2</span></code> Action is called to checkout the repository
+onto the host machine.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">actions/setup-python&#64;v2</span></code> Action is called to install the
+specified version of Python onto the host machine.</p></li>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">OpenMPI</span></code>, <code class="docutils literal notranslate"><span class="pre">pip</span></code> and Python dependencies, then reinstall
+<code class="docutils literal notranslate"><span class="pre">h5py</span></code> with parallel support.</p></li>
+<li><p>Lint the code using <code class="docutils literal notranslate"><span class="pre">pylint</span></code>.</p></li>
+<li><p>Run unit tests.</p></li>
+<li><p>Upload code coverage results.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Testing your code on many different Python versions is a great way to
+keep your code stable for a wide userbase. However in some cases, like for
+the dependency list in this repository, you will have to manually guide
+towards the correct versions (or version ranges) for your package
+dependencies, depending on the version of Python being installed. The format
+for this is the same if you are listing the dependencies in the
+<code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file or the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.  For example,
+<code class="docutils literal notranslate"><span class="pre">numpy&gt;=1.21.0;python_version&gt;=&quot;3.8&quot;</span></code> says only install <code class="docutils literal notranslate"><span class="pre">numpy</span></code> versions
+1.21.0 or higher if the Python version is 3.8 or higher.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ci_at_nersc.html" class="btn btn-neutral float-left" title="CI at NERSC using GitLab" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="desc_working_examples_pipelines.html" class="btn btn-neutral float-right" title="Example CI workflows from DESC pipelines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

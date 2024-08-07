@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Actions &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CI at NERSC using GitLab" href="ci_at_nersc.html" />
+    <link rel="prev" title="What is Continuous Integration (CI)?" href="what_is_ci.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/publish.html">Publishing a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GitHub Actions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-1-a-simple-ci-workflow">Example 1: A simple CI workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#triggering-the-workflow">Triggering the workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-our-code-in-different-environments">Testing our code in different environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-steps-of-a-job">The steps of a job</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-2-going-beyond-just-testing">Example 2: Going beyond just testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#future-proofing">Future proofing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-formatting-linting">Code formatting/linting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-coverage">Code coverage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ci-and-the-desc-python-environment">CI and the DESC Python environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-3-testing-within-the-desc-conda-environment-docker-image">Example 3: Testing within the DESC <em>Conda</em> environment (docker image)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-4-testing-within-the-desc-conda-environment-manual-install">Example 4: Testing within the DESC <em>Conda</em> environment (manual install)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">GitHub Actions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/ci/github_actions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="github-actions">
+<span id="ci-using-github-actions"></span><h1>GitHub Actions<a class="headerlink" href="#github-actions" title="Link to this heading"></a></h1>
+<p>For DESC repositories we strongly encourage the use of <em>GitHub</em>’s automated
+CI/CD workflow tool, <a class="reference external" href="https://github.com/features/actions">GitHub Actions</a>.
+With <em>GitHub Actions</em> you can automate, customize, and execute your software
+development workflows right in your repository. In addition, you have access to
+thousands of community created pre-built “Actions” to make the process of CI as
+simple and efficient as possible.</p>
+<p>CI with <em>GitHub Actions</em> is configured via “workflows”, YAML configuration
+files checked into the <code class="docutils literal notranslate"><span class="pre">.github/workflows</span></code> directory of your repository,
+which will automatically run when triggered by an event in your repository,
+when triggered manually, or at a defined schedule. A repository can have
+multiple workflows, triggered independently, each of which can perform a
+different set of tasks.</p>
+<p>This guide is not designed to be a definitive tutorial on <em>GitHub Actions</em> (for
+that see <a class="reference external" href="https://docs.github.com/en/actions/quickstart">here</a>),  but to be
+an entry point for getting you started with CI for your DESC software.</p>
+<p>Our <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo repository</a> has four
+workflows, of differing complexities, which we describe in detail in this
+section. The goal of each example workflow is always the same, however, keeping
+our software stable through any changes to the codebase by initiating the test
+suite and ensuring they pass.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 65.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>YAML</p></th>
+<th class="head"><p>What is does</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Example 1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ci_example_1.yml</span></code></p></td>
+<td><p>Install <code class="docutils literal notranslate"><span class="pre">mydescpackage</span></code> and run the test suite</p></td>
+</tr>
+<tr class="row-odd"><td><p>Example 2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ci_example_2.yml</span></code></p></td>
+<td><p>Future proof, lint and perform code-coverage to <code class="docutils literal notranslate"><span class="pre">mydescpackage</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Example 3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ci_example_3.yml</span></code></p></td>
+<td><p>Test <code class="docutils literal notranslate"><span class="pre">mydescpackage</span></code> within the <em>DESC</em> <em>Conda</em> environment using the <em>DESC</em> Docker image</p></td>
+</tr>
+<tr class="row-odd"><td><p>Example 4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ci_example_4.yml</span></code></p></td>
+<td><p>Test <code class="docutils literal notranslate"><span class="pre">mydescpackage</span></code> within the <em>DESC</em> <em>Conda</em> enviromnent (manual install)</p></td>
+</tr>
+</tbody>
+</table>
+<p>For reference, the full workflows can be expanded below:</p>
+<details class="summary-click-to-see-example-1-in-full">
+<summary>Click to see Example 1 in full</summary><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Author - Stuart McAlpine - stuart.mcalpine@fysik.su.se - Jan 2023</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DESC Example 1</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How does the workflow get triggered?</span>
+<span class="linenos"> 6</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="c1"># Triggers when push/pull-request made to the main branch.</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">10</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">11</span><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="linenos">12</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">13</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="c1"># List of jobs for this workflow.</span>
+<span class="linenos">16</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="c1"># Our pytest job.</span>
+<span class="linenos">19</span><span class="w">  </span><span class="nt">ci-with-pytest</span><span class="p">:</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1"># Our strategy lists the OS and Python versions we want to test on.</span>
+<span class="linenos">22</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">      </span><span class="c1"># Don&#39;t quit all jobs if only one job fails.</span>
+<span class="linenos">25</span><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="linenos">26</span><span class="w">      </span>
+<span class="linenos">27</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">28</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.8&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.9&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.11&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.12&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">29</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ubuntu-20.04</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ubuntu-latest</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">macos-latest</span><span class="p p-Indicator">]</span>
+<span class="linenos">30</span><span class="w">  </span>
+<span class="linenos">31</span><span class="w">    </span><span class="c1"># What operating system is this job running on?</span>
+<span class="linenos">32</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">    </span><span class="c1"># Our CI steps for this job.</span>
+<span class="linenos">35</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">36</span><span class="w">      </span><span class="c1"># Check out this repository code.</span>
+<span class="linenos">37</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check out repository code</span>
+<span class="linenos">38</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="w">      </span><span class="c1"># Install Python.</span>
+<span class="linenos">41</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python ${{ matrix.python-version }}</span>
+<span class="linenos">42</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v4</span>
+<span class="linenos">43</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">44</span><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.python-version }}</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span><span class="w">      </span><span class="c1"># Install our package.</span>
+<span class="linenos">47</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install mydescpackage</span>
+<span class="linenos">48</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">49</span><span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="linenos">50</span><span class="w">          </span><span class="no">python -m pip install .[ci]</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="w">      </span><span class="c1"># Perform unit tests.</span>
+<span class="linenos">53</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test with pytest</span>
+<span class="linenos">54</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest ./tests</span>
+</pre></div>
+</div>
+</details><details class="summary-click-to-see-example-2-in-full">
+<summary>Click to see Example 2 in full</summary><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Author - Stuart McAlpine - stuart.mcalpine@fysik.su.se - Jan 2023</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DESC Example 2</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How does the workflow get triggered?</span>
+<span class="linenos"> 6</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="c1"># Triggers when push/pull-request made to the main branch.</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">10</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">11</span><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="linenos">12</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">13</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="c1"># List of jobs for this workflow.</span>
+<span class="linenos">16</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="c1"># Our pytest job.</span>
+<span class="linenos">19</span><span class="w">  </span><span class="nt">ci-with-pytest</span><span class="p">:</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1"># Our strategy lists the OS and Python versions we want to test on.</span>
+<span class="linenos">22</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">      </span><span class="c1"># Don&#39;t quit all jobs if only one job fails.</span>
+<span class="linenos">25</span><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="linenos">26</span><span class="w">      </span>
+<span class="linenos">27</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">28</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.8&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.9&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.11&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.12&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">29</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ubuntu-20.04</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ubuntu-latest</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">macos-latest</span><span class="p p-Indicator">]</span>
+<span class="linenos">30</span><span class="w">        </span><span class="nt">experimental</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">false</span><span class="p p-Indicator">]</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span><span class="w">        </span><span class="c1"># Test on this, but don&#39;t mind if it fails.</span>
+<span class="linenos">33</span><span class="w">        </span><span class="nt">include</span><span class="p">:</span>
+<span class="linenos">34</span><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="linenos">35</span><span class="w">            </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.11&quot;</span>
+<span class="linenos">36</span><span class="w">            </span><span class="nt">experimental</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="w">    </span><span class="c1"># If True, do not fail the job, just warn me.</span>
+<span class="linenos">39</span><span class="w">    </span><span class="nt">continue-on-error</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.experimental }}</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">    </span><span class="c1"># What operating system is this job running on?</span>
+<span class="linenos">42</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+<span class="linenos">43</span>
+<span class="linenos">44</span><span class="w">    </span><span class="c1"># Our CI steps for this job.</span>
+<span class="linenos">45</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">46</span><span class="w">      </span><span class="c1"># Check out this repository code.</span>
+<span class="linenos">47</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check out repository code</span>
+<span class="linenos">48</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos">49</span>
+<span class="linenos">50</span><span class="w">      </span><span class="c1"># Install Python.</span>
+<span class="linenos">51</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python ${{ matrix.python-version }}</span>
+<span class="linenos">52</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v4</span>
+<span class="linenos">53</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">54</span><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.python-version }}</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="w">      </span><span class="c1"># Install my package.</span>
+<span class="linenos">57</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install mydescpackage.</span>
+<span class="linenos">58</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">59</span><span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="linenos">60</span><span class="w">          </span><span class="no">python -m pip install .[ci]</span>
+<span class="linenos">61</span><span class="w">          </span>
+<span class="linenos">62</span><span class="w">      </span><span class="c1"># Do some basic code linting using flake8. Check for syntax and indentation errors.</span>
+<span class="linenos">63</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 linting.</span>
+<span class="linenos">64</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 --count --select=E1,E9 --show-source --statistics ./src/mydescpackage/*.py</span>
+<span class="linenos">65</span>
+<span class="linenos">66</span><span class="w">      </span><span class="c1"># Perform the unit tests and output a coverage report.</span>
+<span class="linenos">67</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test with pytest</span>
+<span class="linenos">68</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest --cov=mydescpackage --cov-report xml ./tests</span>
+<span class="linenos">69</span><span class="w">          </span>
+<span class="linenos">70</span><span class="w">      </span><span class="c1"># Upload the code coverage results to codecov.io.</span>
+<span class="linenos">71</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload coverage to Codecov</span>
+<span class="linenos">72</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">codecov/codecov-action@v2</span>
+</pre></div>
+</div>
+</details><details class="summary-click-to-see-example-3-in-full">
+<summary>Click to see Example 3 in full</summary><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Author - Stuart McAlpine - stuart.mcalpine@fysik.su.se - Jan 2023</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DESC Example 3</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How does the workflow get triggered?</span>
+<span class="linenos"> 6</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="c1"># Automatically run every Friday at midnight.</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">4&#39;</span>
+<span class="linenos">10</span><span class="w">  </span><span class="c1"># Have option to manually trigger workflow.</span>
+<span class="linenos">11</span><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="c1"># List of jobs for this workflow.</span>
+<span class="linenos">14</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">  </span><span class="c1"># Our pytest job.</span>
+<span class="linenos">17</span><span class="w">  </span><span class="nt">ci-with-pytest</span><span class="p">:</span>
+<span class="linenos">18</span><span class="w">    </span>
+<span class="linenos">19</span><span class="w">    </span><span class="c1"># Our strategy lists the OS and Python versions containers to run within.</span>
+<span class="linenos">20</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="w">      </span><span class="c1"># Don&#39;t quit all jobs if only one job fails.</span>
+<span class="linenos">23</span><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="linenos">24</span><span class="w">      </span>
+<span class="linenos">25</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">26</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;ubuntu-20.04&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ubuntu-22.04&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">27</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;py38&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;py39&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">28</span>
+<span class="linenos">29</span><span class="w">    </span><span class="c1"># What operating system is this job running on?</span>
+<span class="linenos">30</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span><span class="w">    </span><span class="c1"># Specify the lsstdesc container to pull from DockerHub and operate within.</span>
+<span class="linenos">33</span><span class="w">    </span><span class="nt">container</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lsstdesc/desc-python-${{ matrix.os }}-${{ matrix.python-version }}:ci-dev</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span><span class="w">    </span><span class="c1"># Our CI steps for this job.</span>
+<span class="linenos">36</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">37</span><span class="w">     </span>
+<span class="linenos">38</span><span class="w">      </span><span class="c1"># Check out this repository code.</span>
+<span class="linenos">39</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check out repository code</span>
+<span class="linenos">40</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos">41</span>
+<span class="linenos">42</span><span class="w">      </span><span class="c1"># Install dependencies.</span>
+<span class="linenos">43</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install mydescpackage.</span>
+<span class="linenos">44</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">45</span><span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="linenos">46</span><span class="w">          </span><span class="no">python -m pip install .[ci]</span>
+<span class="linenos">47</span>
+<span class="linenos">48</span><span class="w">      </span><span class="c1"># Do some basic code linting using flake8. Check for syntax and indentation errors.</span>
+<span class="linenos">49</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 linting.</span>
+<span class="linenos">50</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 --count --select=E1,E9 --show-source --statistics ./src/mydescpackage/*.py</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="w">      </span><span class="c1"># Perform the unit tests and output a report.</span>
+<span class="linenos">53</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test with pytest</span>
+<span class="linenos">54</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest --cov=mydescpackage --cov-report xml ./tests</span>
+<span class="linenos">55</span><span class="w">      </span>
+<span class="linenos">56</span><span class="w">      </span><span class="c1"># Upload the code coverage results to codecov.io.</span>
+<span class="linenos">57</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload coverage to Codecov</span>
+<span class="linenos">58</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">codecov/codecov-action@v2</span>
+</pre></div>
+</div>
+</details><details class="summary-click-to-see-example-4-in-full">
+<summary>Click to see Example 4 in full</summary><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Author - Stuart McAlpine - stuart.mcalpine@fysik.su.se - Jan 2023</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DESC Example 4</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How does the workflow get triggered?</span>
+<span class="linenos"> 6</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="c1"># Manually trigger workflow.</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="c1"># List of jobs for this workflow.</span>
+<span class="linenos">11</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">  </span><span class="c1"># Our pytest job.</span>
+<span class="linenos">14</span><span class="w">  </span><span class="nt">ci-with-pytest</span><span class="p">:</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">    </span><span class="c1"># Needed to activate miniconda environment.</span>
+<span class="linenos">17</span><span class="w">    </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="linenos">18</span><span class="w">      </span><span class="nt">run</span><span class="p">:</span>
+<span class="linenos">19</span><span class="w">        </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash -l {0}</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1"># Our strategy lists the OS and Python versions we want to test on.</span>
+<span class="linenos">22</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">      </span><span class="c1"># Don&#39;t quit all jobs if only one job fails.</span>
+<span class="linenos">25</span><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="linenos">26</span><span class="w">      </span>
+<span class="linenos">27</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">28</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.9&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">29</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ubuntu-latest</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">macos-latest</span><span class="p p-Indicator">]</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="w">    </span><span class="c1"># What operating system is this job running on?</span>
+<span class="linenos">32</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">    </span><span class="c1"># Our CI steps for this job.</span>
+<span class="linenos">35</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">36</span><span class="w">      </span><span class="c1"># Check out this repository.</span>
+<span class="linenos">37</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check out repository</span>
+<span class="linenos">38</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="w">      </span><span class="c1"># Checkout python-desc conda environment repository.</span>
+<span class="linenos">41</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout python-desc</span>
+<span class="linenos">42</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos">43</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">44</span><span class="w">          </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LSSTDESC/desc-python</span>
+<span class="linenos">45</span><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./desc-python&#39;</span>
+<span class="linenos">46</span>
+<span class="linenos">47</span><span class="w">      </span><span class="c1"># Install MiniConda.</span>
+<span class="linenos">48</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-incubator/setup-miniconda@v2</span>
+<span class="linenos">49</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">50</span><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.python-version }}</span>
+<span class="linenos">51</span><span class="w">          </span><span class="nt">auto-activate-base</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="linenos">52</span><span class="w">          </span>
+<span class="linenos">53</span><span class="w">      </span><span class="c1"># The gsl package does not work on macos.</span>
+<span class="linenos">54</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fix dependencies for MacOS</span>
+<span class="linenos">55</span><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os == &#39;macos-latest&#39; }}</span>
+<span class="linenos">56</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sed -i .bak &#39;/gsl==2.7=he838d99_0/d&#39; ./desc-python/conda/conda-pack.txt</span>
+<span class="linenos">57</span><span class="w">      </span>
+<span class="linenos">58</span><span class="w">      </span><span class="c1"># Install Python packages using python-desc environment files.</span>
+<span class="linenos">59</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">60</span><span class="w">          </span><span class="no">conda install -c conda-forge -y mamba</span>
+<span class="linenos">61</span><span class="w">          </span><span class="no">mamba install -c conda-forge -y --file ./desc-python/conda/conda-pack.txt</span>
+<span class="linenos">62</span><span class="w">          </span><span class="no">pip install --no-cache-dir -r ./desc-python/conda/pip-pack.txt</span>
+<span class="linenos">63</span><span class="w">      </span>
+<span class="linenos">64</span><span class="w">    </span><span class="c1"># Install dependencies.</span>
+<span class="linenos">65</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install mydescpackage.</span>
+<span class="linenos">66</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">67</span><span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="linenos">68</span><span class="w">          </span><span class="no">python -m pip install .[ci]</span>
+<span class="linenos">69</span>
+<span class="linenos">70</span><span class="w">      </span><span class="c1"># Do some basic code linting using flake8. Check for syntax and indentation errors.</span>
+<span class="linenos">71</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 linting.</span>
+<span class="linenos">72</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 --count --select=E1,E9 --show-source --statistics ./src/mydescpackage/*.py</span>
+<span class="linenos">73</span>
+<span class="linenos">74</span><span class="w">      </span><span class="c1"># Perform the unit tests and output a report.</span>
+<span class="linenos">75</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test with pytest</span>
+<span class="linenos">76</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest --cov=mydescpackage --cov-report xml ./tests</span>
+<span class="linenos">77</span><span class="w">          </span>
+<span class="linenos">78</span><span class="w">      </span><span class="c1"># Upload the code coverage reults to codecov.io.</span>
+<span class="linenos">79</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload coverage to Codecov</span>
+<span class="linenos">80</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">codecov/codecov-action@v2</span>
+</pre></div>
+</div>
+</details><div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="example-1-a-simple-ci-workflow">
+<h2>Example 1: A simple CI workflow<a class="headerlink" href="#example-1-a-simple-ci-workflow" title="Link to this heading"></a></h2>
+<p>Let’s start simple, with an example CI workflow that automatically initiates
+the repositories test suite when there is a push or pull request opened on the
+<code class="docutils literal notranslate"><span class="pre">main</span></code> branch.</p>
+<section id="triggering-the-workflow">
+<h3>Triggering the workflow<a class="headerlink" href="#triggering-the-workflow" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 3</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DESC Example 1</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How does the workflow get triggered?</span>
+<span class="linenos"> 6</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="c1"># Triggers when push/pull-request made to the main branch.</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">10</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">11</span><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="linenos">12</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">13</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</pre></div>
+</div>
+<p>First, <code class="docutils literal notranslate"><span class="pre">name:</span></code> provides a reference tag to this workflow, handy for keeping
+track of your workflows within the <em>GitHub Actions</em> API.</p>
+<p>Then, how and when we want our workflow to be triggered is listed under the
+<code class="docutils literal notranslate"><span class="pre">on:</span></code> parameter.  For this example, our workflow will be triggered whenever
+there is a push or pull request onto the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch. Connecting a CI
+workflow to at least the main branch is an excellent practice, ensuring that
+any proposed changes to the codebase of the primary branch cannot proceed until
+they go through the required battery of unit tests, increasing our codes
+stability.</p>
+<p>There are naturally many more options that can be selected for <code class="docutils literal notranslate"><span class="pre">on:</span></code>.  We can
+trigger a CI workflow for pull requests, push requests, forks etc, to one or
+many selected branches of the repository. One useful trigger is <code class="docutils literal notranslate"><span class="pre">on:</span>
+<span class="pre">workflow_dispatch</span></code>, which allows you to trigger the CI workflow manually
+through the <em>GitHub Actions</em> API, great for initially testing and debugging your
+workflows.  You can also schedule your CI workflow to automatically run at
+periodic intervals. For a complete list of conditions from which you can
+trigger your CI workflow see the documentation <a class="reference external" href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows">here</a>.</p>
+</section>
+<section id="testing-our-code-in-different-environments">
+<h3>Testing our code in different environments<a class="headerlink" href="#testing-our-code-in-different-environments" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">15</span><span class="c1"># List of jobs for this workflow.</span>
+<span class="linenos">16</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="c1"># Our pytest job.</span>
+<span class="linenos">19</span><span class="w">  </span><span class="nt">ci-with-pytest</span><span class="p">:</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1"># Our strategy lists the OS and Python versions we want to test on.</span>
+<span class="linenos">22</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">      </span><span class="c1"># Don&#39;t quit all jobs if only one job fails.</span>
+<span class="linenos">25</span><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="linenos">26</span><span class="w">      </span>
+<span class="linenos">27</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">28</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.8&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.9&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.11&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.12&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">29</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ubuntu-20.04</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ubuntu-latest</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">macos-latest</span><span class="p p-Indicator">]</span>
+<span class="linenos">30</span><span class="w">  </span>
+<span class="linenos">31</span><span class="w">    </span><span class="c1"># What operating system is this job running on?</span>
+<span class="linenos">32</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+</pre></div>
+</div>
+<p>Now we reach the main body of our workflow, marked <code class="docutils literal notranslate"><span class="pre">jobs:</span></code>.  Workflows are
+built from one or more jobs, with each job of a workflow defining its own
+working environment and a set of practical instructions to perform, e.g.,
+running the unit tests, constructing and deploying containers, statistics
+reporting, etc. Note that by default each job in the workflow will operate
+independently, allowing them to be run in parallel on different host machines.
+However you can link your jobs to be sequentially dependent to one another if
+desired. For our example there is only one job within the workflow, called
+<code class="docutils literal notranslate"><span class="pre">ci-with-pytest</span></code>.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">job:</span></code> starts with some global preferences (at the scope of only that job).
+At a minimum, we must at least declare the desired host machine architecture
+our job will run on, defined using the <code class="docutils literal notranslate"><span class="pre">runs-on:</span></code> parameter.  Luckily,
+<em>GitHub</em> hosts “runners” (virtual machines) with various versions of Ubuntu,
+MacOS and Windows that we can use to test on.  There is the capability to set
+up your own self-hosted runner (if your code operates only on a particularly
+unique architecture), but we do not cover that here.</p>
+<p>Rather than restricting ourselves to testing our code on a single operating
+system, or Python version, commonly we are going to want to test over a
+reasonable range of operating systems and Python versions to accommodate the
+eventualities of the widest possible userbase. In our example we want to test
+our code using four versions of Python3 on the two most recent releases of
+Ubuntu (denoted <code class="docutils literal notranslate"><span class="pre">ubuntu-20.04</span></code>, and <code class="docutils literal notranslate"><span class="pre">ubuntu-latest</span></code>) and the latest MacOS
+release (<code class="docutils literal notranslate"><span class="pre">macos-latest</span></code>) <a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. Whilst we could do this by declaring multiple
+(almost identical) <code class="docutils literal notranslate"><span class="pre">jobs:</span></code>, differing only in a few values (like
+<code class="docutils literal notranslate"><span class="pre">runs-on:</span></code>), it is much cleaner and simpler to use a <code class="docutils literal notranslate"><span class="pre">strategy:</span></code> matrix.</p>
+<p>A strategy matrix lets you use variables in a single job definition to
+automatically create multiple job runs based on the combinations of the
+variables. For example, our <code class="docutils literal notranslate"><span class="pre">matrix:</span></code>, which can be thought of like a Python
+dictionary, has two entries; <code class="docutils literal notranslate"><span class="pre">python-version</span></code> and <code class="docutils literal notranslate"><span class="pre">os</span></code>, which both contain
+a list of values.  This is telling <em>GitHub Actions</em> that we want to spawn an
+independent job for each <em>cross-referenced</em> value(s) within these lists, i.e.,
+twelve jobs, with each of those jobs having a unique combination of
+<code class="docutils literal notranslate"><span class="pre">python-version</span></code> and <code class="docutils literal notranslate"><span class="pre">os</span></code> stored within the globally accessible matrix.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The names in your matrix can be anything, <code class="docutils literal notranslate"><span class="pre">python-version</span></code>
+and <code class="docutils literal notranslate"><span class="pre">os</span></code> are not explicitly built-in variable names. The entries in the
+matrix can be accessed at any point in the workflow via syntax like <code class="docutils literal notranslate"><span class="pre">${{</span>
+<span class="pre">matrix.os</span> <span class="pre">}}</span></code>, the value of which will vary depending on the
+runner/spawned job.</p>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">fail-fast:</span> <span class="pre">false</span></code> option tells <em>GitHub Actions</em> not to fail all the
+spawned jobs of a workflow immediately if one job within the matrix fails
+(which is the default behaviour).</p>
+<p>Then, <code class="docutils literal notranslate"><span class="pre">runs-on:</span> <span class="pre">${{</span> <span class="pre">matrix.os</span> <span class="pre">}}</span></code> selects the <em>GitHub</em> hosted runner for this
+job: four on <code class="docutils literal notranslate"><span class="pre">ubuntu-20.04</span></code>, four on <code class="docutils literal notranslate"><span class="pre">ubuntu-latest</span></code> and four on
+<code class="docutils literal notranslate"><span class="pre">macos-latest</span></code> (for the four versions of Python we are testing).</p>
+</section>
+<section id="the-steps-of-a-job">
+<h3>The steps of a job<a class="headerlink" href="#the-steps-of-a-job" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">34</span><span class="w">    </span><span class="c1"># Our CI steps for this job.</span>
+<span class="linenos">35</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">36</span><span class="w">      </span><span class="c1"># Check out this repository code.</span>
+<span class="linenos">37</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check out repository code</span>
+<span class="linenos">38</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="w">      </span><span class="c1"># Install Python.</span>
+<span class="linenos">41</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python ${{ matrix.python-version }}</span>
+<span class="linenos">42</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v4</span>
+<span class="linenos">43</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">44</span><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.python-version }}</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span><span class="w">      </span><span class="c1"># Install our package.</span>
+<span class="linenos">47</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install mydescpackage</span>
+<span class="linenos">48</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">49</span><span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="linenos">50</span><span class="w">          </span><span class="no">python -m pip install .[ci]</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="w">      </span><span class="c1"># Perform unit tests.</span>
+<span class="linenos">53</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test with pytest</span>
+<span class="linenos">54</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest ./tests</span>
+</pre></div>
+</div>
+<p>Last but not least is the of step-by-step instructions for our
+<code class="docutils literal notranslate"><span class="pre">ci-with-pytest</span></code> job, listed as a series of individual <code class="docutils literal notranslate"><span class="pre">steps:</span></code>. A
+<code class="docutils literal notranslate"><span class="pre">uses:</span></code> step denotes an “<em>GitHub Action</em>”, a community constructed code
+snippet that performs a predefined task <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, whereas a <code class="docutils literal notranslate"><span class="pre">run:</span></code> step directly
+executes a command on the host machine. Steps are run in sequence.</p>
+<p>Our example job has four steps:</p>
+<ol class="arabic simple">
+<li><p>Checkout this repository to the host machine using the
+<code class="docutils literal notranslate"><span class="pre">actions/checkout&#64;v3</span></code> pre-built action. This will almost always be one of
+the first steps in your workflow. Note the <code class="docutils literal notranslate"><span class="pre">&#64;v3</span></code> tag directly requests the
+release version of the action we want to use.</p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">actions/setup-python&#64;v4</span></code> action to install the desired version of
+Python on the host machine. Note some actions accept arguments (<code class="docutils literal notranslate"><span class="pre">with:</span></code>),
+this action accepts the Python version you wish to install, for example,
+which we take from our strategy matrix.</p></li>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">mydescpackage</span></code> using <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p></li>
+<li><p>Finally, run our test suite using <code class="docutils literal notranslate"><span class="pre">pytest</span></code>.</p></li>
+</ol>
+<p>We can monitor the output from each of these steps individually through the
+<em>GitHub Actions</em> API. If a step in our job fails, the job will be aborted, and
+we must fix it before the codebase receives any changes</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can run multiple command line inputs within a single <code class="docutils literal notranslate"><span class="pre">run:</span></code> by
+preceding the commands with the pipe symbol (<code class="docutils literal notranslate"><span class="pre">|</span></code>).</p>
+</div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>See <a class="reference external" href="https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners">here</a> for a complete list of GitHub hosted runners.</p>
+</aside>
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Check out the <a class="reference external" href="https://github.com/marketplace?type=actions">GitHub marketplace</a> for a list of community actions.</p>
+</aside>
+</aside>
+</section>
+</section>
+<section id="example-2-going-beyond-just-testing">
+<h2>Example 2: Going beyond just testing<a class="headerlink" href="#example-2-going-beyond-just-testing" title="Link to this heading"></a></h2>
+<p>Here we show a second example, very similar to the first, but it demonstrates
+some additional features you may wish to take advantage of within your CI
+workflow.</p>
+<section id="future-proofing">
+<h3>Future proofing<a class="headerlink" href="#future-proofing" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">16</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="c1"># Our pytest job.</span>
+<span class="linenos">19</span><span class="w">  </span><span class="nt">ci-with-pytest</span><span class="p">:</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1"># Our strategy lists the OS and Python versions we want to test on.</span>
+<span class="linenos">22</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">      </span><span class="c1"># Don&#39;t quit all jobs if only one job fails.</span>
+<span class="linenos">25</span><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="linenos">26</span><span class="w">      </span>
+<span class="linenos">27</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">28</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.8&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.9&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.11&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.12&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">29</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ubuntu-20.04</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ubuntu-latest</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">macos-latest</span><span class="p p-Indicator">]</span>
+<span class="linenos">30</span><span class="w">        </span><span class="nt">experimental</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">false</span><span class="p p-Indicator">]</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span><span class="w">        </span><span class="c1"># Test on this, but don&#39;t mind if it fails.</span>
+<span class="linenos">33</span><span class="w">        </span><span class="nt">include</span><span class="p">:</span>
+<span class="linenos">34</span><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="linenos">35</span><span class="w">            </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.11&quot;</span>
+<span class="linenos">36</span><span class="w">            </span><span class="nt">experimental</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="w">    </span><span class="c1"># If True, do not fail the job, just warn me.</span>
+<span class="linenos">39</span><span class="w">    </span><span class="nt">continue-on-error</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.experimental }}</span>
+</pre></div>
+</div>
+<p>Say we want to consider a version of the operating system, or Python, that we
+are not yet willing to fully support, but we may migrate to it in the future.
+It could be useful to already test our codes within these more modern
+environments, with the caveat that we are not that worried if they fail the CI.
+Indeed, this is a useful way to preemptively capture any versioning or
+compatibility bugs that may arise in the future before we fully migrate.  The
+key is, however, that for the operating system or Python versions that we are
+not yet willing to fully support, we do not want those experimental CI jobs to
+fail our entire workflow.</p>
+<p>To do this, first we manually add a job of a particular setup to our strategy
+matrix using the <code class="docutils literal notranslate"><span class="pre">include:</span></code> parameter. Here we are experimenting on
+<code class="docutils literal notranslate"><span class="pre">ubuntu-latest</span></code> and only on <code class="docutils literal notranslate"><span class="pre">python==3.11</span></code>. To tell <em>GitHub Actions</em> not to
+worry if this particular job fails, but to remain worried if the other jobs in
+our matrix fail, we add an <code class="docutils literal notranslate"><span class="pre">experimental</span></code> value to our matrix, which, if
+true, means that the CI workflow will complete even if this job fails (which we
+tell <em>GitHub Actions</em> via <code class="docutils literal notranslate"><span class="pre">continue-on-error:</span> <span class="pre">${{</span> <span class="pre">matrix.experimental</span> <span class="pre">}}</span></code>).</p>
+</section>
+<section id="code-formatting-linting">
+<h3>Code formatting/linting<a class="headerlink" href="#code-formatting-linting" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">62</span><span class="w">      </span><span class="c1"># Do some basic code linting using flake8. Check for syntax and indentation errors.</span>
+<span class="linenos">63</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 linting.</span>
+<span class="linenos">64</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 --count --select=E1,E9 --show-source --statistics ./src/mydescpackage/*.py</span>
+</pre></div>
+</div>
+<p>Tidy and readable code is a healthy practice. When multiple developers are
+working on a single project, or when a codebase is being handed over to another
+team, clashes in programming styles can cause difficulties for maintaining and
+debugging. This is the reason why many programmers try to adhere to a coding
+style convention during development, most commonly the “PEP 8” style
+convention.</p>
+<p>We can keep on top of coding style practices within our CI through code
+“linting”. There are many fantastic tools that can lint our Python code and
+report any violations of the selected coding style. For our example we are
+using the <code class="docutils literal notranslate"><span class="pre">flake8</span></code> Python linting tool. You can enforce up to an arbitrary
+level of strictness depending on your needs, here we only demonstrate checking
+for indentation and syntax errors in the code files.  However you could be
+stricter, ensuring no trailing/leading whitespaces, line length limits, etc
+(see the Flake8 documentation for a full list of error and warning codes). In
+addition, <code class="docutils literal notranslate"><span class="pre">--count</span></code> prints the total number of errors found,
+<code class="docutils literal notranslate"><span class="pre">--show_source</span></code> will print the source code generating the error/warning in
+question, <code class="docutils literal notranslate"><span class="pre">--statistics</span></code> counts the number of occurrences of each
+error/warning code and prints a report, and <code class="docutils literal notranslate"><span class="pre">--select=</span></code> specifies the list of
+error codes we wish Flake8 to check.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to report how well your code meets the PEP 8 standards,
+but do not want it to fail your CI, include the <code class="docutils literal notranslate"><span class="pre">--exit-zero</span></code> parameter.
+You could run Flake8 an additional time, more strictly than before, but only
+report the findings rather than failing the workflow, for example.</p>
+</div>
+</section>
+<section id="code-coverage">
+<h3>Code coverage<a class="headerlink" href="#code-coverage" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">66</span><span class="w">      </span><span class="c1"># Perform the unit tests and output a coverage report.</span>
+<span class="linenos">67</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test with pytest</span>
+<span class="linenos">68</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest --cov=mydescpackage --cov-report xml ./tests</span>
+<span class="linenos">69</span><span class="w">          </span>
+<span class="linenos">70</span><span class="w">      </span><span class="c1"># Upload the code coverage results to codecov.io.</span>
+<span class="linenos">71</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload coverage to Codecov</span>
+<span class="linenos">72</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">codecov/codecov-action@v2</span>
+</pre></div>
+</div>
+<p>The goal of a test suite is to cover many plausible scenarios that our code may
+encounter during general use. However it can be challenging, particularly if
+the code is complex, to know how much of our codebase our unit tests touch, a
+metric referred to as “code coverage”. Ideally we want our test suite to cover
+as large a proportion of the codebase as possible, with the idea that a larger
+coverage aids towards increased stability. There are many tools in Python to
+automatically establish the coverage of the test suite, and whilst there are
+caveats to exactly what metric of coverage is the most useful to report, a
+basic code coverage statistic can be a very useful first step for
+establishing the scope of your test suite.</p>
+<p>Note that we need <code class="docutils literal notranslate"><span class="pre">pytest-cov</span></code> as a dependency (listed in our
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>), and have requested <code class="docutils literal notranslate"><span class="pre">pytest</span></code> to output a coverage report.
+In theory this is enough, we could check the coverage report for our test suite
+in the <em>GitHub Actions</em> API. However it can also be useful to upload the
+coverage report to a site like <em>codecov.io</em> to disseminate the report more
+thoroughly.  This also allows us to create a visible code coverage badge on the
+front page of the repository (see the <code class="docutils literal notranslate"><span class="pre">README.md</span></code> file for the syntax on how
+to add the badge).</p>
+</section>
+</section>
+<section id="ci-and-the-desc-python-environment">
+<h2>CI and the DESC Python environment<a class="headerlink" href="#ci-and-the-desc-python-environment" title="Link to this heading"></a></h2>
+<p>If your software is a dependency for other DESC packages, or it builds into a
+larger DESC pipeline, this can also be considered within the CI workflow. As
+part of the DESC release management strategy, there exist independent CI
+workflows designed to perform on complete DESC pipelines to ensure they remain
+stable through any changes to the individual dependent repositories (see
+<a class="reference internal" href="desc_working_examples_pipelines.html#ci-desc-pipelines"><span class="std std-ref">Example CI workflows from DESC pipelines</span></a>). However we can already assist for this at the
+individual repository level, by ensuring that our software operates as expected
+within the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code> <em>Conda</em> environment. This will mitigate, as much as
+possible, versioning and dependency conflicts between the DESC packages when
+they come together to form the pipeline.</p>
+<p>Setting up a CI workflow to operate within the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code> <em>Conda</em>
+environment only requires a few steps, and can be done in two ways: (1) working
+within a DESC <em>Docker</em> container which has the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code> <em>Conda</em>
+environment pre-installed (recommended), or (2) manually installing the
+<code class="docutils literal notranslate"><span class="pre">desc-python</span></code> <em>Conda</em> environment on the host machine by utilizing the YAML
+setup files within the <a class="reference external" href="https://github.com/LSSTDESC/desc-python">desc-python</a> repository.</p>
+<section id="example-3-testing-within-the-desc-conda-environment-docker-image">
+<h3>Example 3: Testing within the DESC <em>Conda</em> environment (docker image)<a class="headerlink" href="#example-3-testing-within-the-desc-conda-environment-docker-image" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>“<em>A container is a standard unit of software that packages up code and all
+its dependencies so the application runs quickly and reliably from one
+computing environment to another. A Docker container image is a
+lightweight, standalone, executable package of software that includes
+everything needed to run an application: code, runtime, system tools,
+system libraries and settings.</em>”</p>
+<p class="attribution">—<a class="reference external" href="https://www.docker.com/resources/what-container/">DockerHub</a></p>
+</div></blockquote>
+<p>Working within a DESC <em>Docker</em> container is the quickest and simplest way to
+test code within the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code> <em>Conda</em> environment. LSST-DESC has a large
+array of container images hosted by DockerHub (<a class="reference external" href="https://hub.docker.com/u/lsstdesc">full list here</a>) exactly for this purpose, and linking
+<em>GitHub Actions</em> to these container images is also seamless and
+straightforward.</p>
+<p>Example 3 performs very similarly to example 2, however we no longer need to
+install Python or any dependencies onto the host machine, but instead include
+the line</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">32</span><span class="w">    </span><span class="c1"># Specify the lsstdesc container to pull from DockerHub and operate within.</span>
+<span class="linenos">33</span><span class="w">    </span><span class="nt">container</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lsstdesc/desc-python-${{ matrix.os }}-${{ matrix.python-version }}:ci-dev</span>
+</pre></div>
+</div>
+<p>to tell <em>GitHub Actions</em> that we wish to download and operate the entirety of
+the <code class="docutils literal notranslate"><span class="pre">ci-with-pytest</span></code> job within this container.</p>
+<p>The naming convention for CI-based LSST-DESC container images includes both the
+operating system version and Python version, and has a <code class="docutils literal notranslate"><span class="pre">:ci-dev</span></code> tag which
+is necessary to include.</p>
+<p>Our matrix in the case of this example</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">25</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">26</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;ubuntu-20.04&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ubuntu-22.04&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">27</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;py38&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;py39&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>is used to specify which container image to work within, and not the of <em>GitHub
+actions</em> host runner, as was the case for the previous examples. We always
+select <code class="docutils literal notranslate"><span class="pre">ubuntu-latest</span></code> host machines to operate on (however this choice is
+largely arbitrary as we are operating within a container on the machine
+anyway).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only Ubuntu host machines support container images. To operate within
+the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code> <em>Conda</em> environment using a MacOS architecture you will
+need to install the environment manually (see next example).</p>
+</div>
+<p>The downside of operating within containers is the setup overhead (containers
+can be many gigabytes that have to be downloaded and extracted). To that end,
+we recommend two workflows for your Python packages, one that only installs the
+dependencies needed to get your code working (like the examples 1 &amp; 2), and a
+second workflow that operates within the DESC container, but on a schedule. For
+example, here we trigger our workflow every Friday at midnight,</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">7</span><span class="w">  </span><span class="c1"># Automatically run every Friday at midnight.</span>
+<span class="linenos">8</span><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
+<span class="linenos">9</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">4&#39;</span>
+</pre></div>
+</div>
+<p>(see <a class="reference external" href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule">here</a>
+for more details on scheduling your workflows).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have Python dependencies that are not part of the
+<code class="docutils literal notranslate"><span class="pre">desc-python</span></code> environment, you will have to install them yourself manually
+after. For example <code class="docutils literal notranslate"><span class="pre">pytest-cov</span></code> will be installed when we install
+<code class="docutils literal notranslate"><span class="pre">mydescpackage</span></code>. As this is a package needed only for the CI workflow
+there is no real need to add it to the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code> environment. However,
+if your software requires an additional package to operate you can request
+its inclusion by raising an issue at the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code> repository.</p>
+</div>
+</section>
+<section id="example-4-testing-within-the-desc-conda-environment-manual-install">
+<h3>Example 4: Testing within the DESC <em>Conda</em> environment (manual install)<a class="headerlink" href="#example-4-testing-within-the-desc-conda-environment-manual-install" title="Link to this heading"></a></h3>
+<p>If for some reason you cannot use the DESC containers, or you need to test your
+code on MacOS architecture, you can install the <code class="docutils literal notranslate"><span class="pre">python-desc</span></code> <em>Conda</em>
+environment on the host machine manually.</p>
+<p>The most up-to-date version of the <code class="docutils literal notranslate"><span class="pre">python-desc</span></code> <em>Conda</em> environment can be
+found in <a class="reference external" href="https://github.com/LSSTDESC/desc-python">this</a> DESC repository,
+which we can call upon during our CI workflow.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">40</span><span class="w">      </span><span class="c1"># Checkout python-desc conda environment repository.</span>
+<span class="linenos">41</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout python-desc</span>
+<span class="linenos">42</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos">43</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">44</span><span class="w">          </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LSSTDESC/desc-python</span>
+<span class="linenos">45</span><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./desc-python&#39;</span>
+</pre></div>
+</div>
+<p>First we checkout the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code> repository. Note we do this using the
+same <em>GitHub Action</em> as we have been using to checkout our own repository
+(which is the default behaviour), but now we are telling the Action to checkout
+a specified <em>GitHub</em> repository (<code class="docutils literal notranslate"><span class="pre">repository:</span></code>) into a specified directory on
+the host machine (<code class="docutils literal notranslate"><span class="pre">path:</span></code>).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">47</span><span class="w">      </span><span class="c1"># Install MiniConda.</span>
+<span class="linenos">48</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-incubator/setup-miniconda@v2</span>
+<span class="linenos">49</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">50</span><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.python-version }}</span>
+<span class="linenos">51</span><span class="w">          </span><span class="nt">auto-activate-base</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="linenos">52</span><span class="w">          </span>
+<span class="linenos">53</span><span class="w">      </span><span class="c1"># The gsl package does not work on macos.</span>
+<span class="linenos">54</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fix dependencies for MacOS</span>
+<span class="linenos">55</span><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os == &#39;macos-latest&#39; }}</span>
+<span class="linenos">56</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sed -i .bak &#39;/gsl==2.7=he838d99_0/d&#39; ./desc-python/conda/conda-pack.txt</span>
+<span class="linenos">57</span><span class="w">      </span>
+<span class="linenos">58</span><span class="w">      </span><span class="c1"># Install Python packages using python-desc environment files.</span>
+<span class="linenos">59</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">60</span><span class="w">          </span><span class="no">conda install -c conda-forge -y mamba</span>
+<span class="linenos">61</span><span class="w">          </span><span class="no">mamba install -c conda-forge -y --file ./desc-python/conda/conda-pack.txt</span>
+<span class="linenos">62</span><span class="w">          </span><span class="no">pip install --no-cache-dir -r ./desc-python/conda/pip-pack.txt</span>
+</pre></div>
+</div>
+<p>Next we use another <em>GitHub Action</em> to install <em>MiniConda</em> onto the host
+machine, specifying the Python version and that we wish to setup and to
+activate the <em>Conda</em> <code class="docutils literal notranslate"><span class="pre">base</span></code> environment. Then we install the <code class="docutils literal notranslate"><span class="pre">desc-python</span></code>
+environment packages from the YAML files to the base environment. We use
+<em>Mamba</em> to resolve the environment, which is generally much quicker for
+resolving complex environments.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos">15</span><span class="w">    </span><span class="c1"># Needed to activate miniconda environment.</span>
+<span class="linenos">16</span><span class="w">    </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="linenos">17</span><span class="w">      </span><span class="nt">run</span><span class="p">:</span>
+<span class="linenos">18</span><span class="w">        </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash -l {0}</span>
+</pre></div>
+</div>
+<p>One extra step is on line 18, where we have specified the
+<code class="docutils literal notranslate"><span class="pre">default:</span></code> <code class="docutils literal notranslate"><span class="pre">shell:</span> <span class="pre">bash</span> <span class="pre">-l</span> <span class="pre">{0}</span></code>, which is required for <em>MiniConda</em> to
+activate environments.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="what_is_ci.html" class="btn btn-neutral float-left" title="What is Continuous Integration (CI)?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ci_at_nersc.html" class="btn btn-neutral float-right" title="CI at NERSC using GitLab" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

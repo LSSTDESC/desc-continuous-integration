@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to DESC’s Python packaging and Continuous Integration guide! &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building a Python package" href="desc/build_package/building_a_package.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            DESC CI test
+              <img src="_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="desc/build_package/building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/build_package/publish.html">Publishing a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/build_package/document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to DESC’s Python packaging and Continuous Integration guide!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-desc-s-python-packaging-and-continuous-integration-guide">
+<h1>Welcome to DESC’s Python packaging and Continuous Integration guide!<a class="headerlink" href="#welcome-to-desc-s-python-packaging-and-continuous-integration-guide" title="Link to this heading"></a></h1>
+<p>This documentation is a quickstart guide for writing a Python package at DESC.
+It includes instructions on how to start a Python package from scratch, how to
+document that package, how to publish that package, and how to keep the package
+well tested and stable using Continuous Integration (CI) workflows and <em>GitHub
+Actions</em>.</p>
+<p>The guide comes with some accompanying demo code and example CI workflows,
+which can be found in the <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">desc-continuous-integration</a> repository.</p>
+<p>Those already familiar with <em>GitHub Actions</em>, and CI in general, that just want
+to see our recommended strategy for CI workflows at DESC can skip to <a class="reference internal" href="desc/ci/desc_checklist.html#desc-checklist"><span class="std std-ref">The DESC CI checklist</span></a>.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="desc/build_package/building_a_package.html">Building a Python package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="desc/build_package/building_a_package.html#the-directory-structure">The directory structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/build_package/building_a_package.html#the-pyproject-toml-file">The <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/build_package/building_a_package.html#automatic-versioning">Automatic versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/build_package/building_a_package.html#installing-your-package-from-source">Installing your package (from source)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="desc/build_package/publish.html">Publishing a Python package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="desc/build_package/publish.html#publishing-to-pypi">Publishing to PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/build_package/publish.html#publishing-to-anaconda">Publishing to Anaconda</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="desc/build_package/document.html">Documenting a Python package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="desc/build_package/document.html#writing-documentation">Writing documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/build_package/document.html#publishing-documentation">Publishing documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/what_is_ci.html">What is Continuous Integration (CI)?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/what_is_ci.html#starting-with-a-test-suite">Starting with a test suite</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/github_actions.html">GitHub Actions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/github_actions.html#example-1-a-simple-ci-workflow">Example 1: A simple CI workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/github_actions.html#example-2-going-beyond-just-testing">Example 2: Going beyond just testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/github_actions.html#ci-and-the-desc-python-environment">CI and the DESC Python environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/ci_at_nersc.html">CI at NERSC using GitLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/ci_at_nersc.html#getting-set-up">Getting set up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/ci_at_nersc.html#building-a-gitlab-ci-workflow-for-your-repository">Building a GitLab CI workflow for your repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/ci_at_nersc.html#things-to-think-about-with-ci-at-nersc">Things to think about with CI at <em>NERSC</em></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/desc_working_examples.html">Example CI workflows from DESC repositories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/desc_working_examples.html#the-core-cosmology-library">The Core Cosmology Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/desc_working_examples.html#imsim">imSim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/desc_working_examples.html#tables-io">tables_io</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc/ci/appendix.html#nersc-ci-files">NERSC CI files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/appendix.html#mirror-repository-files">Mirror repository files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="desc/ci/appendix.html#status-repository-files">Status repository files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="desc/build_package/building_a_package.html" class="btn btn-neutral float-right" title="Building a Python package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

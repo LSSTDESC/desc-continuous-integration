@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publishing a Python package &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Documenting a Python package" href="document.html" />
+    <link rel="prev" title="Building a Python package" href="building_a_package.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Publishing a Python package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#publishing-to-pypi">Publishing to PyPI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-your-package">Build your package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uploading-your-package">Uploading your package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#publishing-to-anaconda">Publishing to Anaconda</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-github-release">Create a GitHub release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-anaconda-recipe">Create the Anaconda recipe</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#check-the-recipe">Check the recipe</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Build your package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upload-your-package">Upload your package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ci/what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Publishing a Python package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/build_package/publish.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="publishing-a-python-package">
+<h1>Publishing a Python package<a class="headerlink" href="#publishing-a-python-package" title="Link to this heading"></a></h1>
+<p>Publishing your package to a public repository makes the installation process
+for the end user even simpler, and increases the visibility of your work.</p>
+<p>Where to publish your package, as always, depends on your needs. Two popular
+choices are the <em>Python Package Index</em> (PyPI) and Anaconda. Here’s a brief
+overview of each platform and when you might choose one over the other:</p>
+<p><strong>Python Package Index</strong></p>
+<ul class="simple">
+<li><p>If your package is a general-purpose Python library or application, and you
+want it to be easily installable using pip.</p></li>
+<li><p>PyPI is the default package repository for Python, and most Python developers
+are familiar with using pip to install packages from PyPI.</p></li>
+<li><p>Many Python tools and frameworks rely on PyPI for package distribution. By
+publishing on PyPI, your package becomes part of this ecosystem.</p></li>
+<li><p>PyPI provides a straightforward versioning system, allowing users to easily
+manage package versions.</p></li>
+</ul>
+<p><strong>Anaconda</strong></p>
+<ul class="simple">
+<li><p>If your package is specifically designed for data science, scientific
+computing, or machine learning, Anaconda might be best.</p></li>
+<li><p>Anaconda is popular in the data science community, and many data scientists
+prefer using conda for package management due to its ability to manage
+complex environments and handle non-Python dependencies.</p></li>
+<li><p>If your package has complex dependencies, or requires specific versions of
+libraries or Python.</p></li>
+<li><p>Anaconda allows the distribution of pre-compiled binary packages, making it
+easier for users to install packages without dealing with compilation issues.</p></li>
+</ul>
+<p>Nothing stops you from publishing to both platforms of course. However this
+approach requires some care and consideration of versioning and potential
+differences in dependency handling between the two platforms.</p>
+<section id="publishing-to-pypi">
+<h2>Publishing to PyPI<a class="headerlink" href="#publishing-to-pypi" title="Link to this heading"></a></h2>
+<p>The Python Package Index (PyPI) is a repository of software for the Python
+programming language. It helps you find software developed and shared by the
+Python community.</p>
+<p>First, you will need to <a class="reference external" href="https://pypi.org/account/register/">register a PyPI account</a>. Whilst you’re at it, you should also
+register an account on <a class="reference external" href="https://test.pypi.org/manage/projects/">TestPyPI</a>.
+TestPyPI is very useful. It allows you to try out all the steps of publishing a
+package to PyPI without any consequences, which is particularly useful during
+development, or if you have no previous experience.</p>
+<section id="build-your-package">
+<h3>Build your package<a class="headerlink" href="#build-your-package" title="Link to this heading"></a></h3>
+<p>Before uploading your package to PyPI, first you have to build it. You’ll do
+this using two tools, <code class="docutils literal notranslate"><span class="pre">build</span></code> and <code class="docutils literal notranslate"><span class="pre">twine</span></code>, which you can install via pip in
+the usual way.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>build<span class="w"> </span>twine
+</pre></div>
+</div>
+<p>We need to build our package because the software on PyPI isn’t distributed as
+plain source code. Instead, they’re wrapped into distribution packages,
+commonly as source archives and Python wheels. These are essentially compressed
+archives of your source code. Wheels are usually faster and more convenient for
+your end users, while source archives provide a flexible backup alternative.
+You should provide both.</p>
+<p>To create a source archive and a wheel for your package, you use <code class="docutils literal notranslate"><span class="pre">build</span></code> in
+your the root of your Python package directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>build
+</pre></div>
+</div>
+<p>which will create a source archive and a wheel in the <code class="docutils literal notranslate"><span class="pre">./dist/</span></code> directory.
+These are the files you’ll upload to PyPI.</p>
+<p>As a quick check, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>twine<span class="w"> </span>check<span class="w"> </span>dist/*
+</pre></div>
+</div>
+<p>to make sure there were no problems during the build.</p>
+</section>
+<section id="uploading-your-package">
+<h3>Uploading your package<a class="headerlink" href="#uploading-your-package" title="Link to this heading"></a></h3>
+<p>Initially, we want to upload our package to TestPyPI to make sure everything
+looks as it should.</p>
+<p>To do this, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>twine<span class="w"> </span>upload<span class="w"> </span>-r<span class="w"> </span>testpypi<span class="w"> </span>dist/*
+</pre></div>
+</div>
+<p>Twine will ask you for your username and password.</p>
+<p>Head over to your TestPyPI page and make sure all the information looks
+correct. Then, try installing your package from TestPyPI, e.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span>https://test.pypi.org/simple/<span class="w"> </span>mydescpackage
+</pre></div>
+</div>
+<p>If everything works, then you can go ahead and upload your package to PyPI using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>twine<span class="w"> </span>upload<span class="w"> </span>dist/*
+</pre></div>
+</div>
+<p>Then users can install your package through <code class="docutils literal notranslate"><span class="pre">pip</span></code>, e.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mydescpackage
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All of the information PyPI receives about your package comes from the
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file. At a minimum, you will need <code class="docutils literal notranslate"><span class="pre">name</span></code> and
+<code class="docutils literal notranslate"><span class="pre">version</span></code> included under the project metadata.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">name</span></code> value in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file will be the
+distributed name on PyPI, and has to be unique. Ideally, the installed
+package name (i.e., the name of the folder in <code class="docutils literal notranslate"><span class="pre">./src/</span></code>) should be the same
+as the PyPI distribution name, however they can be different if the package
+name has already been taken on PyPI.</p>
+<p>If you are installing your pacakge under a different name as the PyPI
+distributed name, be careful not to name your package with too generic a
+name.</p>
+</div>
+</section>
+</section>
+<section id="publishing-to-anaconda">
+<h2>Publishing to Anaconda<a class="headerlink" href="#publishing-to-anaconda" title="Link to this heading"></a></h2>
+<p>The primary difference for getting your package ready to distribute to PyPI
+versus Anaconda is the need for a “recipe”. A Conda recipe consists of a base
+YAML file listing a set of instructions, along with optional supplementary
+configuration files and build scripts, that define how the package will be
+built.</p>
+<p>For completeness, here we outline the key components of a Conda recipe.
+However if we are working with a simple pure Python package, such as
+<code class="docutils literal notranslate"><span class="pre">mydescpackage</span></code> from this tutorial, we do not have to worry about creating
+almost any of these components ourselves.</p>
+<ul class="simple">
+<li><p><strong>meta.yaml (required)</strong> : The central component of a Conda recipe is the
+<code class="docutils literal notranslate"><span class="pre">meta.yaml</span></code> file. This YAML file contains metadata about the package,
+including its name, version, description, and dependencies. It also specifies
+the source code location, build script, and other information necessary for
+building the package.</p></li>
+<li><p><strong>External build script (optional)</strong> : The build section in the <code class="docutils literal notranslate"><span class="pre">meta.yaml</span></code>
+file includes the commands that defines how the package should be built. If
+this is an involved procedure, it can be included as a standalone script,
+containing the commands to compile the source code, install dependencies,
+and create the final package.</p></li>
+<li><p><strong>External test script (optional)</strong> : The test section in the <code class="docutils literal notranslate"><span class="pre">meta.yaml</span></code>
+file specifies how the package should be tested after it is built. This helps
+ensure that the package functions correctly. Again if this procedure is more
+involved, it can be included as additional standalone scripts.</p></li>
+<li><p><strong>Other Files (optional)</strong> : A Conda recipe may include other files, such as
+<code class="docutils literal notranslate"><span class="pre">bld.bat</span></code> for Windows build instructions or <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> for Unix-like
+systems. These files can contain platform-specific build instructions.</p></li>
+</ul>
+<p>As stated above, constructing the <code class="docutils literal notranslate"><span class="pre">meta.yaml</span></code> file and build scripts manually
+is only necessary in the case of complex dependencies or platform-specific
+build instructions. For simple pure Python packages, we can automate the recipe
+using a package called <a class="reference external" href="https://pypi.org/project/grayskull/">grayskull</a>.</p>
+<p><strong>Steps for publishing to Anaconda</strong></p>
+<p>Here are the steps to publish a simple Python package hosted by GitHub to
+Anaconda:</p>
+<ol class="arabic simple">
+<li><p>Create a release on the GitHub repository</p></li>
+<li><p>Generate the Anaconda recipe automatically using <code class="docutils literal notranslate"><span class="pre">grayskull</span></code></p></li>
+<li><p>Build the package using <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">build</span></code></p></li>
+<li><p>Upload the package to Anaconda</p></li>
+</ol>
+<p>which we will go through one by one below (see also a similar tutorial <a class="reference external" href="https://conda.org/blog/2023-05-18-how-to-use-conda-build/">here</a>).</p>
+<section id="create-a-github-release">
+<h3>Create a GitHub release<a class="headerlink" href="#create-a-github-release" title="Link to this heading"></a></h3>
+<p>In the context of GitHub, a release is a distribution of a software project at
+a specific point in time. It’s a snapshot of a project’s source code, along
+with additional assets such as binary executables, documentation, and other
+resources that users might need. GitHub provides a specific feature called
+“releases” to facilitate the organization and distribution of these snapshots.</p>
+<p>It is a release of our code the we are going to publish to Anaconda, so we have
+to start by making one.</p>
+<p>To create a release on GitHub, go to the “Releases” tab of your repository and
+click on the “Draft a new release” button. Give your release a semantic version
+tag, e.g., “v0.0.1”, a title, and a description. Then, click “Publish release”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can also create the Conda recipe direcly from PyPi if you have a
+release of your package published there.</p>
+</div>
+</section>
+<section id="create-the-anaconda-recipe">
+<h3>Create the Anaconda recipe<a class="headerlink" href="#create-the-anaconda-recipe" title="Link to this heading"></a></h3>
+<blockquote class="epigraph">
+<div><p><em>Grayskull is an automatic conda recipe generator.  The main goal of this
+project is to generate concise recipes for conda-forge. The Grayskull
+project was created with the intention to eventually replace conda
+skeleton.</em></p>
+<p><em>Presently Grayskull can generate recipes for Python
+packages available on PyPI and also those not published on PyPI but
+available as GitHub repositories. Grayskull can also generate recipes for R
+packages published on CRAN. Future versions of Grayskull will support recipe
+generation for packages of other repositories such as Conan and CPAN etc..</em></p>
+<p class="attribution">—Grayskull documentation</p>
+</div></blockquote>
+<p>We are going to automatically generate an Anaconda recipe for our Python
+package using <code class="docutils literal notranslate"><span class="pre">grayskull</span></code>, which we will do from within a Conda environment
+(we are assuming you have Conda installed at this point).</p>
+<p>If you want to work within a fresh environment with <cite>grayskull</cite> and
+<cite>conda-build</cite> installed, create one via</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>packaging<span class="w"> </span>-y<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>grayskull<span class="w"> </span>conda-build
+conda<span class="w"> </span>activate<span class="w"> </span>packaging
+</pre></div>
+</div>
+<p>The advantage of <code class="docutils literal notranslate"><span class="pre">grayskull</span></code> is that it can generate our Conda recipe
+automatically using the information from our GitHub release (through the
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> and similar files).</p>
+<p>Make a fresh folder (not inside your base repository folder of your package)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>grayskull
+<span class="nb">cd</span><span class="w"> </span>grayskull
+</pre></div>
+</div>
+<p>Then run <code class="docutils literal notranslate"><span class="pre">grayskull</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grayskull<span class="w"> </span>pypi<span class="w"> </span>https://github.com/&lt;your-gh-username&gt;/&lt;your-repo&gt;
+</pre></div>
+</div>
+<p>or, if you are generating a recipe from a package already published on PyPi</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grayskull<span class="w"> </span>pypi<span class="w"> </span>&lt;pypi-package-name&gt;
+</pre></div>
+</div>
+<p>When its completed, you should see a <code class="docutils literal notranslate"><span class="pre">meta.yml</span></code> file in a folder named
+<code class="docutils literal notranslate"><span class="pre">&lt;your-repo&gt;</span></code>.</p>
+<section id="check-the-recipe">
+<h4>Check the recipe<a class="headerlink" href="#check-the-recipe" title="Link to this heading"></a></h4>
+<p>The recipe created will be a good template, but it may not be perfect. For
+example, here is what is generated for <cite>mydescpackage</cite>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="p p-Indicator">{</span><span class="err">%</span><span class="w"> </span><span class="nv">set name = &quot;desc-continuous-integration&quot; %</span><span class="p p-Indicator">}</span>
+<span class="linenos"> 2</span><span class="p p-Indicator">{</span><span class="err">%</span><span class="w"> </span><span class="nv">set version = &quot;0.0.1&quot; %</span><span class="p p-Indicator">}</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="nt">package</span><span class="p">:</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">name|lower</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">version</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="nt">source</span><span class="p">:</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/LSSTDESC/desc-continuous-integration/archive/v{{ version }}.tar.gz</span>
+<span class="linenos">10</span><span class="w">  </span><span class="nt">sha256</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">05f65ea46fa3da6e37a64a7943f1d0950cac1115df3944944d953dcbba00365a</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="nt">build</span><span class="p">:</span>
+<span class="linenos">13</span><span class="w">  </span><span class="nt">entry_points</span><span class="p">:</span>
+<span class="linenos">14</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">display-pi = mydescpackage.pi:display_pi</span>
+<span class="linenos">15</span><span class="w">  </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">PYTHON</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-m pip install . -vv --no-deps --no-build-isolation</span>
+<span class="linenos">16</span><span class="w">  </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="nt">requirements</span><span class="p">:</span>
+<span class="linenos">19</span><span class="w">  </span><span class="nt">host</span><span class="p">:</span>
+<span class="linenos">20</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python &gt;=3.7</span>
+<span class="linenos">21</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setuptools &gt;=61.0</span>
+<span class="linenos">22</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip</span>
+<span class="linenos">23</span><span class="w">  </span><span class="nt">run</span><span class="p">:</span>
+<span class="linenos">24</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python &gt;=3.7</span>
+<span class="linenos">25</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">numpy</span>
+<span class="linenos">26</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">importlib-metadata</span><span class="w">  </span><span class="c1"># [py&lt;38]</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="nt">test</span><span class="p">:</span>
+<span class="linenos">29</span><span class="w">  </span><span class="nt">imports</span><span class="p">:</span>
+<span class="linenos">30</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mydescpackage</span>
+<span class="linenos">31</span><span class="w">  </span><span class="nt">commands</span><span class="p">:</span>
+<span class="linenos">32</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip check</span>
+<span class="linenos">33</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">display-pi --help</span>
+<span class="linenos">34</span><span class="w">  </span><span class="nt">requires</span><span class="p">:</span>
+<span class="linenos">35</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip</span>
+<span class="linenos">36</span>
+<span class="linenos">37</span><span class="nt">about</span><span class="p">:</span>
+<span class="linenos">38</span><span class="w">  </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example DESC Python package, some simple mathmatical functions.</span>
+<span class="linenos">39</span><span class="w">  </span><span class="nt">license</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="linenos">40</span><span class="w">  </span><span class="nt">license_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PLEASE_ADD_LICENSE_FILE</span>
+<span class="linenos">41</span>
+<span class="linenos">42</span><span class="nt">extra</span><span class="p">:</span>
+<span class="linenos">43</span><span class="w">  </span><span class="nt">recipe-maintainers</span><span class="p">:</span>
+<span class="linenos">44</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">galbus</span>
+</pre></div>
+</div>
+<p>Here we see the name of the package will be installed as has defaulted to the
+repository name, so we want to change <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">set</span> <span class="pre">name</span> <span class="pre">=</span>
+<span class="pre">&quot;desc-continuous-integration&quot;</span> <span class="pre">%}</span></code> to <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">set</span> <span class="pre">name</span> <span class="pre">=</span> <span class="pre">&quot;mydescpackage&quot;</span> <span class="pre">%}</span></code>. The
+licence file hasn’t automatically been picked up, so we have to insert that. It
+has set up a test for our <code class="docutils literal notranslate"><span class="pre">display-pi</span></code> command, however we can remove the
+<code class="docutils literal notranslate"><span class="pre">--help</span></code> as that is not implemented for our entry point. We could also add
+our <code class="docutils literal notranslate"><span class="pre">pytest</span></code> tests to the test section to make sure all our unit tests pass
+at build time.</p>
+</section>
+</section>
+<section id="id1">
+<h3>Build your package<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>Now that we have the recipe, we need to build our package in preparation for
+publication to Anaconda.</p>
+<p>We do this using <code class="docutils literal notranslate"><span class="pre">conda-build</span></code> (which we installed above). Run it from the same
+folder you ran <code class="docutils literal notranslate"><span class="pre">grayskull</span></code> in</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>build<span class="w"> </span>&lt;your-repo&gt;
+</pre></div>
+</div>
+<p>If all goes well, an archive of your package should be created in
+<code class="docutils literal notranslate"><span class="pre">$CONDA_PREFIX/conda-bld/noarch/&lt;your-repo&gt;.tar.bz2</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can see where the package will be installed by running <code class="docutils literal notranslate"><span class="pre">conda</span>
+<span class="pre">build</span> <span class="pre">&lt;your-repo&gt;</span> <span class="pre">--output</span></code>. Or, if you want to install your packages to a
+custom location, set the <code class="docutils literal notranslate"><span class="pre">CONDA_BLD_PATH</span></code> environment variable to your
+desired location.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can specify what Python versions your package will be pre-built
+for (check the docs <a class="reference external" href="https://docs.conda.io/projects/conda-build/en/stable/resources/variants.html">here</a>).
+Also be aware of what architecture you are building your package on. It’s a
+good idea to make a <code class="docutils literal notranslate"><span class="pre">conda_build_config.yaml</span></code> with the multiple Python
+versions your package supports, so there is a prebuilt binary for each
+Python version.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can check everything has worked by installing the package from
+your local builds folder, i.e., <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">local</span>
+<span class="pre">&lt;your-package-name&gt;</span></code></p>
+</div>
+</section>
+<section id="upload-your-package">
+<h3>Upload your package<a class="headerlink" href="#upload-your-package" title="Link to this heading"></a></h3>
+<p>Now, final step, uploading your package to Anaconda, either to your private
+channel, or a community channel you have access to.</p>
+<ol class="arabic simple">
+<li><p>Make an account on <a class="reference external" href="www.anaconda.org">anaconda.org</a>.</p></li>
+<li><p>Install the Anaconda client if you haven’t already. You can do this via
+<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">anaconda-client</span></code>.</p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">anaconda</span> <span class="pre">login</span></code> command to log in to your Anaconda Cloud account.</p></li>
+<li><p>Upload your package using <code class="docutils literal notranslate"><span class="pre">anaconda</span> <span class="pre">upload</span> <span class="pre">&lt;path_to_your_package&gt;</span></code>,
+Replace <code class="docutils literal notranslate"><span class="pre">&lt;path_to_your_package&gt;</span></code> with the path to your built package file
+(<code class="docutils literal notranslate"><span class="pre">.tar.bz2</span></code> or <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> file).</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="building_a_package.html" class="btn btn-neutral float-left" title="Building a Python package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="document.html" class="btn btn-neutral float-right" title="Documenting a Python package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

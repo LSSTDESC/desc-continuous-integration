@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CI at NERSC using GitLab &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Example CI workflows from DESC repositories" href="desc_working_examples.html" />
+    <link rel="prev" title="GitHub Actions" href="github_actions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/publish.html">Publishing a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CI at NERSC using GitLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-set-up">Getting set up</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#personal-access-tokens">Personal Access tokens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trigger-tokens">Trigger tokens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#triggering-the-ci-workflow-pipeline-from-github">Triggering the CI workflow pipeline from GitHub</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-a-gitlab-ci-workflow-for-your-repository">Building a GitLab CI workflow for your repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#things-to-think-about-with-ci-at-nersc">Things to think about with CI at <em>NERSC</em></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CI at NERSC using GitLab</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/ci/ci_at_nersc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ci-at-nersc-using-gitlab">
+<h1>CI at NERSC using GitLab<a class="headerlink" href="#ci-at-nersc-using-gitlab" title="Link to this heading"></a></h1>
+<p>For the majority of cases the self-hosted runners provided by <em>GitHub</em> will be
+more than sufficient to test and maintain code stability for DESC repositories.</p>
+<p>However, there are some pieces of DESC software that would benefit greatly from
+having the ability to deploy a CI workflow directly to the <em>Cori</em> and
+<em>Perlmutter</em> machines at <a class="reference external" href="https://www.nersc.gov/">NERSC</a>. This allows the
+software to be tested more intensely within an HPC environment, gives access to
+specific development tools at <em>NERSC</em>, and gives the ability to test the code
+against the large datasets hosted at the facility.</p>
+<p>As there is no way to link CI workflows using <em>GitHub Actions</em> to the <em>NERSC</em>
+facilities directly, we require a bit of a workaround. Starting with our
+<code class="docutils literal notranslate"><span class="pre">source</span></code> repository on <em>GitHub</em>, we need to create three additional
+supporting repositories at the <a class="reference external" href="https://software.nersc.gov/">NERSC GitLab instance</a> (where we have direct access to the <em>Cori</em> and
+<em>Perlmutter</em> machines).</p>
+<ol class="arabic simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repository, which clones the contents of the <em>GitHub</em>
+<code class="docutils literal notranslate"><span class="pre">source</span></code> repository to a <code class="docutils literal notranslate"><span class="pre">target</span></code> repository at <em>GitLab</em>.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">target</span></code> repository, which performs the actual CI using <em>GitLab</em>’s
+builtin CI tools (similar to <em>GitHub Actions</em>).</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">status</span></code> repository, which reports the results of the CI workflow
+performed at the <code class="docutils literal notranslate"><span class="pre">target</span></code> repository back to the <em>GitHub</em> <code class="docutils literal notranslate"><span class="pre">source</span></code>
+repository.</p></li>
+</ol>
+<p>This means there is a bit of manual setup required in order to perform CI at
+<em>NERSC</em> when starting from a <em>GitHub</em> repository, however once set up, the
+process is fully automated.</p>
+<figure class="align-default" id="id1">
+<img alt="../../_images/workflow_diagram.png" src="../../_images/workflow_diagram.png" />
+<figcaption>
+<p><span class="caption-text">Figure 1: Schematic of the three stages of the process described above.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Here we go over the steps required to implement a CI workflow at <em>NERSC</em>
+starting from a <em>GitHub</em> repository. For our <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo repositories’</a> example workflow,
+the goal is the same as before, to trigger the repositories’ test suite when
+changes to the repositories’ codebase are made.  The difference now being that
+these tests will be performed directly on <em>Cori</em>, and not on a <em>GitHub
+Actions</em>-hosted runner.</p>
+<p>Much of this tutorial/example is templated from the <a class="reference external" href="https://docs.nersc.gov/services/gitlab/">CI at NERSC documentation</a> and the <a class="reference external" href="https://software.nersc.gov/ci-resources">CI at NERSC tutorial</a>, which we also recommend looking
+at.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You will need a <em>NERSC</em> account and access to the <a class="reference external" href="https://software.nersc.gov/">NERSC GitLab
+instance</a> before moving forward. See <a class="reference external" href="https://confluence.slac.stanford.edu/display/LSSTDESC/Getting+a+NERSC+Computing+Account">here</a>
+for details on how DESC members get an account at <em>NERSC</em>.</p>
+</div>
+<section id="getting-set-up">
+<h2>Getting set up<a class="headerlink" href="#getting-set-up" title="Link to this heading"></a></h2>
+<p>To start, you’ll need to create three repositories at your <em>NERSC</em> <em>GitLab</em>
+instance (replace <code class="docutils literal notranslate"><span class="pre">desc-continuous-integration</span></code> with the name of your
+repository below):</p>
+<ol class="arabic simple">
+<li><p>A blank (<em>“New Project -&gt; Create Blank Project”</em>) <code class="docutils literal notranslate"><span class="pre">target</span></code> repository
+with the same name as the <em>GitHub</em> <code class="docutils literal notranslate"><span class="pre">source</span></code> repository (e.g,
+<code class="docutils literal notranslate"><span class="pre">desc-continuous-integration</span></code>). This can be created in any
+namespace/group.  The eventual CI workflow is performed here, therefore
+those needing access to the CI logs should have this repository visible to
+them.</p></li>
+<li><p>An imported (<em>“New Project -&gt; Import Project -&gt; GitLab Export</em>”) <code class="docutils literal notranslate"><span class="pre">mirror</span></code>
+repository with the name <code class="docutils literal notranslate"><span class="pre">mirror-desc-continuous-integration</span></code>. This
+repository must be created in your private namespace. The <em>GitLab</em> export
+file to upload is in the <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo repository</a> under
+<code class="docutils literal notranslate"><span class="pre">./examples/nersc_gitlab/repo_templates/</span></code>.</p></li>
+<li><p>An imported (<em>“New Project -&gt; Import Project -&gt; GitLab Export</em>”) <code class="docutils literal notranslate"><span class="pre">status</span></code>
+repository with the name <code class="docutils literal notranslate"><span class="pre">status-desc-continuous-integration</span></code>. This
+repository must be created in your private namespace. The <em>GitLab</em> export
+file to upload is in the <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo repository</a> under
+<code class="docutils literal notranslate"><span class="pre">./examples/nersc_gitlab/repo_templates/</span></code>.</p></li>
+</ol>
+<figure class="align-default" id="id2">
+<img alt="../../_images/create_blank_repo.png" class="with-border" src="../../_images/create_blank_repo.png" />
+<figcaption>
+<p><span class="caption-text">Figure 2: Example of creating a blank repository on <em>GitLab</em>.</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id3">
+<img alt="../../_images/three_repos.png" class="with-border" src="../../_images/three_repos.png" />
+<figcaption>
+<p><span class="caption-text">Figure 3: At the end you should have three repositories on <em>GitLab</em>.</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>For those interested in the inner workings of the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> and <code class="docutils literal notranslate"><span class="pre">status</span></code>
+repositories, have a look at <a class="reference internal" href="appendix.html#nersc-ci-appendix"><span class="std std-ref">NERSC CI files</span></a> in the Appendix.</p>
+<section id="personal-access-tokens">
+<h3>Personal Access tokens<a class="headerlink" href="#personal-access-tokens" title="Link to this heading"></a></h3>
+<p>Personal access tokens (PATs) are an alternative to using passwords for
+authentication to <em>GitHub</em> or <em>GitLab</em> when using the API or the command line.
+We need to set up PATs between our repositories in order for them to
+communicate securely through our CI pipeline.</p>
+<ol class="arabic simple">
+<li><p>In the <em>GitHub</em> <code class="docutils literal notranslate"><span class="pre">source</span></code> repository, in your user profile, go to <em>Settings
+-&gt; Developer settings -&gt; Personal Access Tokens -&gt; Generate New Token</em>. Name
+the PAT “<em>NERSC</em> CI”, tick “workflow”, and generate the token.  Copy the
+generated PAT and add it as a CI/CD variable in the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repository
+called <code class="docutils literal notranslate"><span class="pre">MIRROR_SOURCE_PAT</span></code> (<em>Settings -&gt; CI/CD -&gt; Variables</em>). Now add the
+same PAT as a CI/CD variable to the <code class="docutils literal notranslate"><span class="pre">status</span></code> repository called
+<code class="docutils literal notranslate"><span class="pre">STATUS_TARGET_PAT</span></code> (make sure to tick “masked” when adding both
+variables).</p></li>
+<li><p>In the <em>GitLab</em> <code class="docutils literal notranslate"><span class="pre">target</span></code> repository, create a PAT by going to <em>Settings -&gt;
+Access Tokens</em>. Name the token “mirror-repo”, chose an expiration date,
+chose the role “Maintainer”, and tick all four checkboxes.  Generate the
+token, and add it as a CI/CD variable in the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repository named
+<code class="docutils literal notranslate"><span class="pre">MIRROR_TARGET_PAT</span></code>. Now add the same PAT as a CI/CD variable to the
+<code class="docutils literal notranslate"><span class="pre">status</span></code> repository called <code class="docutils literal notranslate"><span class="pre">STATUS_SOURCE_PAT</span></code> (again, make sure to tick
+masked for each).</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The reason the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> and <code class="docutils literal notranslate"><span class="pre">status</span></code> repositories should be
+created in your private namespace, so only you have access, is to protect
+the PATs stored within them. Do not share these tokens with anyone, this is
+the equivalent of password sharing.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Always mask PATs stored as CI/CD variables. This prevents them from
+being displayed within the CI workflow output.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>PATs can have an expiration date, you may have to periodically create
+new PATs.</p>
+</div>
+</section>
+<section id="trigger-tokens">
+<h3>Trigger tokens<a class="headerlink" href="#trigger-tokens" title="Link to this heading"></a></h3>
+<p>In order for our CI pipeline to work seamlessly behind the scenes, we want the
+various CI workflows for each intermediate repository to trigger automatically
+when the previous one completes.  This is done through “Trigger Tokens”, which
+allow us to remotely trigger CI workflows within our repositories from an
+external source.</p>
+<ol class="arabic simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repository, go to <em>Settings -&gt; CI/CD -&gt; Pipeline triggers</em>
+and create a trigger token with the description “trigger-from-github”.  Copy
+the created trigger token and add it as a <em>Secret</em> called
+<code class="docutils literal notranslate"><span class="pre">MIRROR_TRIGGER_TOKEN</span></code> in the <code class="docutils literal notranslate"><span class="pre">source</span></code> repository on GitHub (<em>Settings
+-&gt; Secrets -&gt; Actions</em>).</p></li>
+<li><p>Go to the <code class="docutils literal notranslate"><span class="pre">target</span></code> repository and create a trigger token called
+“trigger-from-mirror”. Add this one to the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repository as a CI/CD
+variable called <code class="docutils literal notranslate"><span class="pre">TARGET_TRIGGER_TOKEN</span></code>.</p></li>
+<li><p>Go to the <code class="docutils literal notranslate"><span class="pre">status</span></code> repository and create a trigger token called
+“trigger-from-target”. Add this one to the <code class="docutils literal notranslate"><span class="pre">target</span></code> repository as a CI/CD
+variable called <code class="docutils literal notranslate"><span class="pre">STATUS_TRIGGER_TOKEN</span></code>.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Trigger tokens do not expire, but be sure to keep the variables masked.</p>
+</div>
+</section>
+<section id="triggering-the-ci-workflow-pipeline-from-github">
+<h3>Triggering the CI workflow pipeline from GitHub<a class="headerlink" href="#triggering-the-ci-workflow-pipeline-from-github" title="Link to this heading"></a></h3>
+<p>The final file to create is a <em>GitHub Actions</em> CI workflow to initiate the
+pipeline in the <code class="docutils literal notranslate"><span class="pre">source</span></code> repository.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ci_nersc_template.yml</span></code> workflow in <code class="docutils literal notranslate"><span class="pre">.github/workflows/</span></code> from our our
+<a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo repository</a>
+gives a good example of how to do this. Note we need to pass all the
+environment variables we will work with in the subsequent CI workflows of the
+pipeline, which must be defined in the initial <em>GitHub Actions</em> workflow file.</p>
+<p>Essentially, all we are doing is kick-starting the pipeline (in this example
+manually) by initiating the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repositories CI workflow. You can
+trigger the pipeline however you wish, however remember the examples in this
+tutorial only work for a single chosen branch of the repository, <code class="docutils literal notranslate"><span class="pre">main</span></code> by
+default, and that each trigger will run a full CI job at <em>NERSC</em>.</p>
+<p>You must modify the repository URLs and <em>GitLab</em> project numbers (found under
+<em>Settings -&gt; General</em> in <em>GitLab</em>) in the template workflow to your own. You
+don’t have to modify anything below <code class="docutils literal notranslate"><span class="pre">jobs:</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">ci_nersc_template.yml</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NERSC template</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">workflow_dispatch</span><span class="p p-Indicator">]</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="nt">env</span><span class="p">:</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="c1"># URL to source repository on GitHub.</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="nt">GITHUB_SOURCE_REPO</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/LSSTDESC/&lt;source-repo&gt;.git</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="c1"># Branch to work with.</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="nt">GITHUB_SOURCE_BRANCH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">10</span><span class="w">  </span>
+<span class="linenos">11</span><span class="w">  </span><span class="c1"># URL to target repository on GitLab and its project number.</span>
+<span class="linenos">12</span><span class="w">  </span><span class="nt">GITLAB_TARGET_REPO</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://software.nersc.gov/&lt;namespace&gt;/&lt;target-repo&gt;.git</span>
+<span class="linenos">13</span><span class="w">  </span><span class="nt">GITLAB_TARGET_PROJECT_NUMBER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;target-repo-project-number&gt;</span>
+<span class="linenos">14</span><span class="w">  </span>
+<span class="linenos">15</span><span class="w">  </span><span class="c1"># URL to mirror repository on GitLab and its project number.</span>
+<span class="linenos">16</span><span class="w">  </span><span class="nt">GITLAB_MIRROR_REPO</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://software.nersc.gov/&lt;namespace&gt;/&lt;mirror-repo&gt;.git</span>
+<span class="linenos">17</span><span class="w">  </span><span class="nt">GITLAB_MIRROR_PROJECT_NUMBER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;mirror-repo-project-number&gt;</span>
+<span class="linenos">18</span><span class="w">  </span>
+<span class="linenos">19</span><span class="w">  </span><span class="c1"># URL to status repository on GitLab, its project number, and tag.</span>
+<span class="linenos">20</span><span class="w">  </span><span class="nt">GITLAB_STATUS_REPO</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://software.nersc.gov/&lt;namespace&gt;/&lt;status-repo&gt;.git</span>
+<span class="linenos">21</span><span class="w">  </span><span class="nt">GITLAB_STATUS_PROJECT_NUMBER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;status-repo-project-number&gt;</span>
+<span class="linenos">22</span><span class="w">  </span><span class="nt">GITLAB_STATUS_CONTEXT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NERSC</span>
+<span class="linenos">23</span><span class="w">  </span>
+<span class="linenos">24</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">25</span><span class="w">  </span><span class="nt">trigger-mirror-repo-ci</span><span class="p">:</span>
+<span class="linenos">26</span><span class="w">  </span>
+<span class="linenos">27</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="linenos">28</span><span class="w">    </span>
+<span class="linenos">29</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">30</span><span class="w">      </span><span class="c1"># Trigger mirror repository CI workflow, passing variables as we go.</span>
+<span class="linenos">31</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="linenos">32</span><span class="w">           </span><span class="no">curl -X POST --fail </span>
+<span class="linenos">33</span><span class="w">           </span><span class="no">--form &quot;variables[GITLAB_STATUS_REPO]=$GITLAB_STATUS_REPO&quot;</span>
+<span class="linenos">34</span><span class="w">           </span><span class="no">--form &quot;variables[GITLAB_TARGET_REPO]=$GITLAB_TARGET_REPO&quot;</span>
+<span class="linenos">35</span><span class="w">           </span><span class="no">--form &quot;variables[GITLAB_MIRROR_REPO]=$GITLAB_MIRROR_REPO&quot;</span>
+<span class="linenos">36</span><span class="w">           </span><span class="no">--form &quot;variables[GITHUB_SOURCE_REPO]=$GITHUB_SOURCE_REPO&quot;</span>
+<span class="linenos">37</span><span class="w">           </span><span class="no">--form &quot;variables[GITHUB_SOURCE_BRANCH]=$GITHUB_SOURCE_BRANCH&quot;</span>
+<span class="linenos">38</span><span class="w">           </span><span class="no">--form &quot;variables[GITLAB_TARGET_PROJECT_NUMBER]=$GITLAB_TARGET_PROJECT_NUMBER&quot;</span>
+<span class="linenos">39</span><span class="w">           </span><span class="no">--form &quot;variables[GITLAB_MIRROR_PROJECT_NUMBER]=$GITLAB_MIRROR_PROJECT_NUMBER&quot;</span>
+<span class="linenos">40</span><span class="w">           </span><span class="no">--form &quot;variables[GITLAB_STATUS_PROJECT_NUMBER]=$GITLAB_STATUS_PROJECT_NUMBER&quot;</span>
+<span class="linenos">41</span><span class="w">           </span><span class="no">--form &quot;variables[GITLAB_STATUS_CONTEXT]=$GITLAB_STATUS_CONTEXT&quot;</span>
+<span class="linenos">42</span><span class="w">           </span><span class="no">--form &quot;variables[GITHUB_SHA]=${{ github.sha }}&quot;</span>
+<span class="linenos">43</span><span class="w">           </span><span class="no">--form token=${{ secrets.MIRROR_TRIGGER_TOKEN }}</span>
+<span class="linenos">44</span><span class="w">           </span><span class="no">--form ref=main</span>
+<span class="linenos">45</span><span class="w">           </span><span class="no">https://software.nersc.gov/api/v4/projects/$GITLAB_MIRROR_PROJECT_NUMBER/trigger/pipeline</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="building-a-gitlab-ci-workflow-for-your-repository">
+<h2>Building a GitLab CI workflow for your repository<a class="headerlink" href="#building-a-gitlab-ci-workflow-for-your-repository" title="Link to this heading"></a></h2>
+<p>Now that we are set up, we can think about how to implement a CI workflow at
+<em>GitLab</em>. As mentioned previously, the CI workflows for GitLab are placed in a
+file called <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>, which is located in the root directory of your
+<code class="docutils literal notranslate"><span class="pre">source</span></code> repository.  Here we will cover how to build a basic CI workflow
+with GitLab, relating back to the GitHub Actions syntax we learned previously.
+A more in-depth look at <em>GitLab</em>’s CI syntax can be found in <a class="reference external" href="https://docs.gitlab.com/ee/ci/yaml/">The Complete
+GitLab CI Reference Guide</a>.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">.gitlab-ci.yml</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nt">variables</span><span class="p">:</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="c1"># Cori queue submission options.</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="nt">SCHEDULER_PARAMETERS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-C</span><span class="nv"> </span><span class="s">haswell</span><span class="nv"> </span><span class="s">-M</span><span class="nv"> </span><span class="s">escori</span><span class="nv"> </span><span class="s">-q</span><span class="nv"> </span><span class="s">xfer</span><span class="nv"> </span><span class="s">-N1</span><span class="nv"> </span><span class="s">-t</span><span class="nv"> </span><span class="s">01:00:00&quot;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How is this workflow triggered?</span>
+<span class="linenos"> 6</span><span class="nt">workflow</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="c1"># Can only be initiated via a trigger token.</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_PIPELINE_SOURCE == &quot;trigger&quot;</span>
+<span class="linenos">10</span><span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1"># The CI job.</span>
+<span class="linenos">13</span><span class="nt">example</span><span class="p">:</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">  </span><span class="c1"># Running on Cori.</span>
+<span class="linenos">16</span><span class="w">  </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cori</span><span class="p p-Indicator">]</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="linenos">19</span><span class="w">    </span><span class="c1"># Script loads desc-python Conda environment and runs tests.</span>
+<span class="linenos">20</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash examples/nersc_gitlab/example-test.bash</span><span class="w"> </span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="w">    </span><span class="c1"># Trigger the status repository CI workflow to report results.</span>
+<span class="linenos">23</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="linenos">24</span><span class="w">      </span><span class="no">curl -X POST --fail</span>
+<span class="linenos">25</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_STATUS_REPO]=$GITLAB_STATUS_REPO&quot;</span>
+<span class="linenos">26</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_TARGET_REPO]=$GITLAB_TARGET_REPO&quot;</span>
+<span class="linenos">27</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_MIRROR_REPO]=$GITLAB_MIRROR_REPO&quot;</span>
+<span class="linenos">28</span><span class="w">      </span><span class="no">--form &quot;variables[GITHUB_SOURCE_REPO]=$GITHUB_SOURCE_REPO&quot;</span>
+<span class="linenos">29</span><span class="w">      </span><span class="no">--form &quot;variables[GITHUB_SOURCE_BRANCH]=$GITHUB_SOURCE_BRANCH&quot;</span>
+<span class="linenos">30</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_TARGET_PROJECT_NUMBER]=$GITLAB_TARGET_PROJECT_NUMBER&quot;</span>
+<span class="linenos">31</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_MIRROR_PROJECT_NUMBER]=$GITLAB_MIRROR_PROJECT_NUMBER&quot;</span>
+<span class="linenos">32</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_STATUS_PROJECT_NUMBER]=$GITLAB_STATUS_PROJECT_NUMBER&quot;</span>
+<span class="linenos">33</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_STATUS_CONTEXT]=$GITLAB_STATUS_CONTEXT&quot;</span>
+<span class="linenos">34</span><span class="w">      </span><span class="no">--form &quot;variables[GITHUB_SHA]=$GITHUB_SHA&quot;</span>
+<span class="linenos">35</span><span class="w">      </span><span class="no">--form token=$STATUS_TRIGGER_TOKEN</span>
+<span class="linenos">36</span><span class="w">      </span><span class="no">--form ref=main</span>
+<span class="linenos">37</span><span class="w">      </span><span class="no">https://software.nersc.gov/api/v4/projects/$GITLAB_STATUS_PROJECT_NUMBER/trigger/pipeline</span>
+</pre></div>
+</div>
+</div>
+<p>This is the <em>GitLab</em> CI workflow for our example repository that will
+eventually get run by the <code class="docutils literal notranslate"><span class="pre">target</span></code> repository on the <em>NERSC</em> <em>GitLab</em>
+instance. There are many similarities with the <em>GitHub Actions</em> CI workflow
+syntax. We must tell the workflow how to be triggered (same as <code class="docutils literal notranslate"><span class="pre">on:</span></code> in
+<em>GitHub Actions</em>), which is under <code class="docutils literal notranslate"><span class="pre">workflow:</span></code> <code class="docutils literal notranslate"><span class="pre">rules:</span></code>. In this case we are
+saying we only want the workflow to run if it was triggered via a trigger token
+(see the reference guide linked above for a full list of workflow options). We
+can set environment variables for the job, under <code class="docutils literal notranslate"><span class="pre">variables:</span></code>. And then we
+list our jobs.</p>
+<p>As with <em>GitHub Actions</em>, we can have multiple jobs, each will run
+independently and in parallel unless you deliberately link them. This workflow
+only has one job, <code class="docutils literal notranslate"><span class="pre">example</span></code>. Within each job, <code class="docutils literal notranslate"><span class="pre">tags:</span></code> is the same as
+<code class="docutils literal notranslate"><span class="pre">runs-on:</span></code> from <em>GitHub Actions</em>. Here we want to run on <em>Cori</em>. And
+<code class="docutils literal notranslate"><span class="pre">script:</span></code> contains the sequence of commands to execute for the job, the same
+as <code class="docutils literal notranslate"><span class="pre">steps:</span></code> from <em>GitHub Actions</em>.</p>
+<p>When running at <em>NERSC</em> you have to set the <code class="docutils literal notranslate"><span class="pre">SCHEDULER_PARAMETERS</span></code> environment
+variable, which defines your queue preferences for the machine (which queue to
+submit to, which project to charge, etc). For more details about this, and
+other specifics of running CI at <em>NERSC</em>, see <a class="reference external" href="https://docs.nersc.gov/services/gitlab/">here</a>. Example repositories from <em>NERSC</em>
+for CI can also be found <a class="reference external" href="https://software.nersc.gov/ci-resources">here</a>.</p>
+<p>When everything has finished successfully, you should see the <em>NERSC</em> CI status
+beside the commit on the <em>GitHub</em> repository main page. Clicking its “details”
+will take you to the <em>GitLab</em> CI report for the job.</p>
+<figure class="align-default" id="id6">
+<img alt="../../_images/nersc_success.png" class="with-border" src="../../_images/nersc_success.png" />
+<figcaption>
+<p><span class="caption-text">Figure 4: The <em>NERSC</em> tag is the reported status from the <em>NERSC</em> CI job.</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SCHEDULER_PARAMETERS</span></code> in the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> and <code class="docutils literal notranslate"><span class="pre">status</span></code>
+repositories’ <cite>.gitlab-ci.yml</cite> files are set to <code class="docutils literal notranslate"><span class="pre">SCHEDULER_PARAMETERS:</span> <span class="pre">&quot;-C</span>
+<span class="pre">haswell</span> <span class="pre">-q</span> <span class="pre">debug</span> <span class="pre">-N1</span> <span class="pre">-t</span> <span class="pre">00:05:00&quot;</span></code>. These jobs are extremely lightweight,
+which is why they goto the <code class="docutils literal notranslate"><span class="pre">debug</span></code> queue, however you may have to change
+this for your needs, for example to charge against a specific <em>NERSC</em>
+project.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If your package uses submodules for some of its dependencies, you
+will have to add <code class="docutils literal notranslate"><span class="pre">GIT_SUBMODULE_STRATEGY:</span> <span class="pre">recursive</span></code> to the variables in
+the <code class="docutils literal notranslate"><span class="pre">target</span></code> repositories <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>.</p>
+</div>
+</section>
+<section id="things-to-think-about-with-ci-at-nersc">
+<h2>Things to think about with CI at <em>NERSC</em><a class="headerlink" href="#things-to-think-about-with-ci-at-nersc" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When deploying a CI workflow to <em>Cori</em> you are running code in the
+same environment, with the same permissions, as if you were working on a
+login node. Therefore things like <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> refer to your real home
+directory, and you need to be careful about what scope your give to your CI
+workflows at <em>NERSC</em>.  As the developer, you are responsible for the code that
+is run, and you need to fully understand what is happening in the workflow
+that you are implementing.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You should not automate the mirroring of code you do not own. If you
+must, only clone protected branches of repositories you do not own.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any code you mirror onto the <em>NERSC</em> GitLab instance must adhere to the
+broader <a class="reference external" href="https://www.nersc.gov/users/policies/">NERSC user policies</a>.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="github_actions.html" class="btn btn-neutral float-left" title="GitHub Actions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="desc_working_examples.html" class="btn btn-neutral float-right" title="Example CI workflows from DESC repositories" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

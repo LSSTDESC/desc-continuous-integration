@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documenting a Python package &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="What is Continuous Integration (CI)?" href="../ci/what_is_ci.html" />
+    <link rel="prev" title="Publishing a Python package" href="publish.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publish.html">Publishing a Python package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documenting a Python package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#writing-documentation">Writing documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#badges-in-readme-md">Badges in <code class="docutils literal notranslate"><span class="pre">README.md</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#publishing-documentation">Publishing documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#github-pages"><em>GitHub</em> pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#github-pages-with-sphinx"><em>GitHub</em> pages with Sphinx</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ci/what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Documenting a Python package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/build_package/document.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="documenting-a-python-package">
+<h1>Documenting a Python package<a class="headerlink" href="#documenting-a-python-package" title="Link to this heading"></a></h1>
+<blockquote>
+<div><p>“<em>Software documentation is a part of any software. Good documentation
+practices are important for the success of the software. Documentation must
+comprise an interactive User Experience, Information Architecture, and good
+understanding of your audience.</em></p>
+<p><em>It needs to serve the purpose of resolving the issues, when encountered by
+the developer, and the end user.</em>”</p>
+<p class="attribution">—<a class="reference external" href="https://document360.com/blog/software-documentation/">Taken from Document360.com</a></p>
+</div></blockquote>
+<p>Documenting software is a crucial, but all too often overlooked, practice.  At
+DESC, we strongly recommend a rigorous ritual of continually writing your
+documentation <strong>alongside</strong> the development of your packages, and not, which is
+often the case, left as an afterthought to the last minute. Software with a
+good documentation greatly increases usability, readability and maintainability
+of our software, and drastically reduces the need for continued support from
+the developers post release.</p>
+<p>Types of documentation come in many forms, some of the most common are:</p>
+<ul class="simple">
+<li><p><strong>README</strong>: Usually a simple markdown file, called <code class="docutils literal notranslate"><span class="pre">README.md</span></code>, placed in
+the root directory of the Python package. It should contain a high-level
+overview of the software, and often also includes dependency requirements,
+and installation instructions.</p></li>
+<li><p><strong>How-to guides / tutorials</strong>: These guide the user to complete a task or a
+predetermined goal, demonstrating how one would use the software in typical
+scenarios. <a class="reference external" href="https://jupyter.org/">Jupyter Notebooks</a> are a great
+interactive solution for this type of documentation.</p></li>
+<li><p><strong>Reference docs</strong>: Describes the technical detail of the software. For
+example, describing the inner workings of particular functions, physical or
+mathematical derivations used within the code, etc. This kind of
+documentation should be more extensive, and housed in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code>
+directory.</p></li>
+<li><p><strong>Release notes</strong>: Describes the latest version of the software, feature
+releases, and what bugs have been fixed from previous versions.</p></li>
+</ul>
+<p>As for the implementation, there are many documentation language formats and
+helper tools to choose from.</p>
+<section id="writing-documentation">
+<h2>Writing documentation<a class="headerlink" href="#writing-documentation" title="Link to this heading"></a></h2>
+<p>The simplest approach is to put all the documentation in the <code class="docutils literal notranslate"><span class="pre">README.md</span></code> file
+in the package’s root directory, which is written in the markdown language
+(here’s a <a class="reference external" href="https://www.markdownguide.org/getting-started/">getting started</a>
+guide for the markdown syntax).</p>
+<p>For smaller packages this approach is a fine one, however for larger packages
+we recommend reserving the content of <code class="docutils literal notranslate"><span class="pre">README.md</span></code> for a high-level overview
+of the software and author contact information (and potentially dependency
+requirements and installation instructions), and that you create a dedicated,
+more extensive, standalone documentation for the package to be housed in the
+<code class="docutils literal notranslate"><span class="pre">docs/</span></code> directory.</p>
+<p>This extensive documentation can again be in simple markdown, over one or many
+files. However there are many more powerful options, such as the <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a> Python documentation generator,
+which uses the <a class="reference external" href="https://docutils.sourceforge.io/rst.html">reStructuredText</a>
+markup language, and has access to the popular <a class="reference external" href="https://sphinx-rtd-theme.readthedocs.io/en/stable/">Read the Docs theme</a> (Sphinx is also what
+this guide is written in, see the Sphinx quickstart guide <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/quickstart.html">here</a>).</p>
+<p>If you also want to use Sphinx to document your software, feel free to use this
+guide’s code as a template, the <cite>.rst</cite> files are located under <code class="docutils literal notranslate"><span class="pre">docs/desc/</span></code>
+in the <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo repository</a>. For a full guide
+on writing documentation check out this beginners guide at <a class="reference external" href="https://www.writethedocs.org/guide/writing/beginners-guide-to-docs/">writethedocs.org</a>.</p>
+<section id="badges-in-readme-md">
+<h3>Badges in <code class="docutils literal notranslate"><span class="pre">README.md</span></code><a class="headerlink" href="#badges-in-readme-md" title="Link to this heading"></a></h3>
+<p>As a quick aside, you may have noticed visual badges located at the top of some
+<em>GitHub</em> repositories <code class="docutils literal notranslate"><span class="pre">README.md</span></code> files.</p>
+<p>These can visually be quite useful, as they can immediately inform the reader
+about compatibility, what software the code was written in, if it has passed
+its latest Continuous Integration build, code coverage statistics, keywords,
+versions, etc. They can also be dynamically linked to information about your
+package (such as the supported Python versions, release number, etc), if it is
+published on a site like <a class="reference external" href="https://pypi.org/">PyPi</a>.</p>
+<p>For example, as our Package is in Python, we could include a Python badge:</p>
+<p><a class="reference external" href="https://www.python.org/"><img alt="made-with-python" src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" /></a></p>
+<p>or display our LICENCE type</p>
+<p><a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/Naereen/StrapDown.js.svg" /></a></p>
+<p>Here are some sites that have a list of popular badges:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/Naereen/badges">https://github.com/Naereen/badges</a></p></li>
+<li><p><a class="reference external" href="https://shields.io/">https://shields.io/</a></p></li>
+<li><p><a class="reference external" href="https://github.com/alexandresanlim/Badges4-README.md-Profile">https://github.com/alexandresanlim/Badges4-README.md-Profile</a></p></li>
+</ul>
+</section>
+</section>
+<section id="publishing-documentation">
+<h2>Publishing documentation<a class="headerlink" href="#publishing-documentation" title="Link to this heading"></a></h2>
+<p>Once we have written our documentation, where do we put it?</p>
+<p>If everything is in <code class="docutils literal notranslate"><span class="pre">README.md</span></code>, then we don’t have to worry, it will be
+displayed automatically on the <em>GitHub</em> repositories’ landing page. If you have
+more extensive documentation, in <code class="docutils literal notranslate"><span class="pre">docs/</span></code>, you’ll need to chose where and how
+this documentation will get displayed. One popular option is <a class="reference external" href="https://readthedocs.org/">Read the Docs</a>, a vast repository for technical documentation.
+Read the Docs is free, it automatically builds your documentation, and
+automatically versions your documentation. It is also compatible with the
+Sphinx documentation format. Once your link <em>Read the Docs</em> to your repository,
+you can place the link to the extensive documentation in <code class="docutils literal notranslate"><span class="pre">README.md</span></code> so users
+know its location.</p>
+<section id="github-pages">
+<h3><em>GitHub</em> pages<a class="headerlink" href="#github-pages" title="Link to this heading"></a></h3>
+<p>Another option, similar to <em>Read the Docs</em>, and one we would recommend, is
+<a class="reference external" href="https://pages.github.com/">GitHub Pages</a>.</p>
+<p>How to set up <em>GitHub Pages</em> depends on the format of your documentation. If
+your documentation is written in simple markdown, make sure your <code class="docutils literal notranslate"><span class="pre">index.md</span></code>
+file is in the base <code class="docutils literal notranslate"><span class="pre">docs/</span></code> directory and follow these steps:</p>
+<ol class="arabic simple">
+<li><p>Navigate to the settings page for your repository on <em>GitHub</em>.</p></li>
+<li><p>Select <cite>Pages</cite> from the left sidebar.</p></li>
+<li><p>Select <cite>Source</cite> to be “Deploy from a branch”.</p></li>
+<li><p>Under branch, switch the selection from <cite>None</cite> to “main”, make sure to
+select the <cite>/docs</cite> folder, then press <cite>Save</cite>.</p></li>
+</ol>
+<p>This will then provide you with a link to your documentation (in the format
+<a class="reference external" href="http://lsstdesc.org/desc-continuous-integration/">http://lsstdesc.org/desc-continuous-integration/</a>). Now you can reference
+this link in your <code class="docutils literal notranslate"><span class="pre">README.md</span></code> file and your documentation is online and
+available for everyone to see.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may notice an additional workflow in your <em>GitHub Actions</em> tab
+after this step. This is an automatically generated workflow to build and
+publish your documentation. It will automatically get called whenever there
+is a change to your <code class="docutils literal notranslate"><span class="pre">main</span></code> branch (or whatever branch you selected in the
+<em>GitHub Pages</em> settings).</p>
+</div>
+</section>
+<section id="github-pages-with-sphinx">
+<h3><em>GitHub</em> pages with Sphinx<a class="headerlink" href="#github-pages-with-sphinx" title="Link to this heading"></a></h3>
+<p>If, like this guide, you are using Sphinx for your documentation, there are a
+few extra steps to get published on <em>GitHub Pages</em>. This is because
+reStructuredText languages must be compiled in order to produce the <cite>html</cite>
+output. One option would be to build the documentation ourselves locally, place
+the output in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> folder, and upload these into our repository. As long
+as there is an <code class="docutils literal notranslate"><span class="pre">index.html</span></code> in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> folder of the repository,
+<em>GitHub Pages</em> will find it and display the documentation (make sure to have
+<em>GitHub Pages</em> setup like we have shown in the previous section).</p>
+<p>However it is not very clean to store built files directly within our
+repository. It would be much better if our repository hosted the raw
+documentation, in the form of the <cite>.rst</cite> files, and automatically built the
+documentation for us.</p>
+<p>Luckily, we can do this with a Continuous Integration workflow (we have a whole
+section on CI later in this guide, <a class="reference internal" href="../ci/what_is_ci.html#desc-ci-intro"><span class="std std-ref">What is Continuous Integration (CI)?</span></a>).</p>
+<p>Here is the CI workflow that you need to put in your <code class="docutils literal notranslate"><span class="pre">.github/workflows/</span></code>
+directory.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Docs</span>
+<span class="linenos"> 2</span><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">workflow_dispatch</span><span class="p p-Indicator">]</span>
+<span class="linenos"> 3</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="nt">docs</span><span class="p">:</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v4</span>
+<span class="linenos"> 9</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="linenos">10</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">11</span><span class="w">          </span><span class="no">pip install sphinx sphinx_rtd_theme sphinx_toolbox</span>
+<span class="linenos">12</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Sphinx build</span>
+<span class="linenos">13</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">14</span><span class="w">          </span><span class="no">sphinx-build docs _build</span>
+<span class="linenos">15</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
+<span class="linenos">16</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">peaceiris/actions-gh-pages@v3</span>
+<span class="linenos">17</span><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event_name == &#39;push&#39; &amp;&amp; github.ref == &#39;refs/heads/main&#39; }}</span>
+<span class="linenos">18</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">19</span><span class="w">          </span><span class="nt">publish_branch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gh-pages</span>
+<span class="linenos">20</span><span class="w">          </span><span class="nt">github_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+<span class="linenos">21</span><span class="w">          </span><span class="nt">publish_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_build/</span>
+<span class="linenos">22</span><span class="w">          </span><span class="nt">force_orphan</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>The steps of the workflow is as follows:</p>
+<ol class="arabic simple">
+<li><p>Checkout the repository.</p></li>
+<li><p>Install the <cite>Sphinx</cite> package and the <em>Read the Docs</em> theme.</p></li>
+<li><p>Use <cite>Sphinx</cite> to build our documentation.</p></li>
+<li><p>Push the contents of the <code class="docutils literal notranslate"><span class="pre">_build</span></code> folder to a new branch called <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code>.</p></li>
+</ol>
+<p>Now, instead of pointing <em>GitHub Pages</em> to your <code class="docutils literal notranslate"><span class="pre">main</span></code> branch as we showed
+previously, point it to the <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> branch and the <code class="docutils literal notranslate"><span class="pre">/root</span></code> directory</p>
+<p>This workflow will automatically build your documentation whenever there is a
+push or pull request to the repositories main branch, or it can be triggered
+manually.  See our <a class="reference internal" href="../ci/what_is_ci.html#desc-ci-intro"><span class="std std-ref">What is Continuous Integration (CI)?</span></a> guide for more information about the
+structure of CI workflows.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="publish.html" class="btn btn-neutral float-left" title="Publishing a Python package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ci/what_is_ci.html" class="btn btn-neutral float-right" title="What is Continuous Integration (CI)?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

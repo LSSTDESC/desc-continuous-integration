@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What is Continuous Integration (CI)? &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="GitHub Actions" href="github_actions.html" />
+    <link rel="prev" title="Documenting a Python package" href="../build_package/document.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/publish.html">Publishing a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What is Continuous Integration (CI)?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#starting-with-a-test-suite">Starting with a test suite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pytest">pytest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">What is Continuous Integration (CI)?</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/ci/what_is_ci.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="what-is-continuous-integration-ci">
+<span id="desc-ci-intro"></span><h1>What is Continuous Integration (CI)?<a class="headerlink" href="#what-is-continuous-integration-ci" title="Link to this heading"></a></h1>
+<blockquote>
+<div><p>“<em>Continuous integration (CI) is a software practice that requires
+frequently committing code to a shared repository. Committing code more
+often detects errors sooner and reduces the amount of code a developer
+needs to debug when finding the source of an error. Frequent code updates
+also make it easier to merge changes from different members of a software
+development team. This is great for developers, who can spend more time
+writing code and less time debugging errors or resolving merge conflicts.</em></p>
+<p><em>When you commit code to your repository, you can continuously build and
+test the code to make sure that the commit doesn’t introduce errors. Your
+tests can include code linters (which check style formatting), security
+checks, code coverage, functional tests, and other custom checks.</em></p>
+<p><em>Building and testing your code requires a server. You can build and test
+updates locally before pushing code to a repository, or you can use a CI
+server that checks for new code commits in a repository.</em>”</p>
+<p class="attribution">—<a class="reference external" href="https://docs.github.com/en/actions/automating-builds-and-tests/about-continuous-integration">Taken from the GitHub website</a></p>
+</div></blockquote>
+<p>Essentially, CI is a philosophy to keep a repositories’ code live and
+up-to-date, by encouraging the developers to push their code changes as
+frequently as possible, whilst ensuring the codebase remains stable and bug
+free through the use of a test suite and a CI workflow.</p>
+<p>CI is a keenly encouraged practice when developing DESC software, as continuous
+testing is a key means of maintaining software quality. Running tests regularly
+can significantly reduce development time, as they can catch bugs as soon as
+they are introduced. In addition, comprehensive tests allow for aggressive
+refactoring, which is an important part of agile development for producing high
+quality code.</p>
+<section id="starting-with-a-test-suite">
+<h2>Starting with a test suite<a class="headerlink" href="#starting-with-a-test-suite" title="Link to this heading"></a></h2>
+<p>A good test suite is the cornerstone of a CI workflow. Testing can occur at
+several levels: system testing, integration testing, and unit testing, with
+unit tests being the most granular, operating at the function and class level.</p>
+<p>Here are some recommendations to think about when creating a test suite for
+your DESC software, taken directly from the <a class="reference external" href="https://lsstdesc.org/assets/pdf/docs/DESC_Coding_Guidelines_latest.pdf">LSST DESC Coding Guidelines</a>.
+It is also worth looking at the <a class="reference external" href="https://developer.lsst.io/coding/unit-test-policy.html">DM team’s unit test policy</a>.</p>
+<ul class="simple">
+<li><p><strong>Unit tests</strong> are good for testing small bits of code to check that each
+function does what it is supposed to do. Unit tests should ideally be
+comprehensive, but if not, they should at least cover the parts of the code
+where the cost of failure is highest.</p></li>
+<li><p><strong>Regression tests</strong> may be helpful to make sure existing functionality is
+preserved in the future through possible code refactoring.</p></li>
+<li><p><strong>User interface tests</strong> check that the code behaves sensibly if the user does
+something they shouldn’t do (e.g., gives bad inputs, forgets a parameter,
+etc).</p></li>
+<li><p><strong>Functional tests</strong> check that the code produces correct outputs for a variety of inputs.</p></li>
+<li><p><strong>Integration tests</strong> check that your class/function/etc. works correctly with
+other parts of the overall code base.</p></li>
+</ul>
+<p>Other things to think about:</p>
+<ul class="simple">
+<li><p>If you can test some fancy, efficient algorithm against a more obviously
+correct (but slower) algorithm, that’s a great test to include.</p></li>
+<li><p>If there are specific special cases where the answer can be known
+analytically or via some other means, these are good functional tests as
+well.</p></li>
+<li><p>Think about edge cases. What might cause your code to fail? You should add
+tests that these edge cases work correctly.</p></li>
+</ul>
+<section id="pytest">
+<h3>pytest<a class="headerlink" href="#pytest" title="Link to this heading"></a></h3>
+<p>There are many fantastic Python packages that can help you build a test suite
+framework for your software. One popular example is <code class="docutils literal notranslate"><span class="pre">pytest</span></code>.</p>
+<blockquote>
+<div><p>“<em>The pytest framework makes it easy to write small, readable tests, and
+can scale to support complex functional testing for applications and
+libraries.</em>” – <a class="reference external" href="https://docs.pytest.org/en/7.1.x/">pytest website</a></p>
+</div></blockquote>
+<p>We utilize <code class="docutils literal notranslate"><span class="pre">pytest</span></code> to build a simple test framework for the demo package in
+our <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">example repository</a>, which we have
+designed to scrutinize the mathematical functions in
+<code class="docutils literal notranslate"><span class="pre">./src/mydescpackage/*.py</span></code>, making sure they work as expected. The unit tests
+are located in the <code class="docutils literal notranslate"><span class="pre">./tests/test_*.py</span></code> files, which can be executed using
+<code class="docutils literal notranslate"><span class="pre">pytest</span></code> simply by running entering <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">./tests</span></code> into the command line.
+For those not familiar with <code class="docutils literal notranslate"><span class="pre">pytest</span></code>, their <a class="reference external" href="https://docs.pytest.org/en/7.1.x/getting-started.html">tutorial website</a> is a great place to
+get started.</p>
+<p>The goal of CI, then, is to automate our test suite using a workflow, which we
+will demonstrate using <em>GitHub Actions</em>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../build_package/document.html" class="btn btn-neutral float-left" title="Documenting a Python package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="github_actions.html" class="btn btn-neutral float-right" title="GitHub Actions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building a Python package &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Publishing a Python package" href="publish.html" />
+    <link rel="prev" title="Welcome to DESC’s Python packaging and Continuous Integration guide!" href="../../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building a Python package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-directory-structure">The directory structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-pyproject-toml-file">The <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-build-system">The build system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#project-metadata">Project metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optional-dependencies">Optional dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#script-entrypoints">Script entrypoints</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-versioning">Automatic versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-your-package-from-source">Installing your package (from source)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="publish.html">Publishing a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ci/what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ci/appendix.html#nersc-ci-files">NERSC CI files</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Building a Python package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/build_package/building_a_package.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="building-a-python-package">
+<h1>Building a Python package<a class="headerlink" href="#building-a-python-package" title="Link to this heading"></a></h1>
+<p>The “<em>standard</em>” way of building a Python package has gone through many changes
+in recent years, and if you have not been keeping track it can be difficult to
+know the best approach for creating a package that is easy to install, easy to
+maintain, and easy to publish.</p>
+<p>Here we go over the (relatively) new standard for Python packaging, the
+all-encompassing <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file. We strongly recommend developers at
+DESC consider migrating to this new packaging standard, if you haven’t already,
+particularly when starting a new software project from scratch. The intuitive,
+clean and maintainable format of <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> packages makes them both
+easy to develop and publish with a minimal amount of effort.</p>
+<p>This guide assumes some basic knowledge of putting together a piece of Python
+software, such as creating your own modules, etc. For those new to Python
+software, check out the <a class="reference external" href="https://docs.python.org/3/tutorial/modules.html#packages">official Python guide</a> to get started.
+Also note this is by no means an exhaustive tutorial on the subject of Python
+packaging. A great additional resource for that is the <a class="reference external" href="https://packaging.python.org/en/latest/tutorials/packaging-projects/#">Python Packaging Guide</a>
+itself, or the guide from <a class="reference external" href="https://realpython.com/pypi-publish-python-package/">RealPython</a>.</p>
+<p>Much of this guide is written under the assumption that the Python package you
+are creating will be hosted by the <a class="reference external" href="https://github.com/lsstDESC">DESC GitHub repository</a>, however the majority of the information will
+still apply even if this is not the case. If you are not yet familiar with
+<cite>Git</cite> or <cite>GitHub</cite>, or you need help getting setup on the <a class="reference external" href="https://github.com/lsstDESC">DESC GitHub
+repository</a>, checkout <a class="reference external" href="https://confluence.slac.stanford.edu/display/LSSTDESC/Getting+Started+with+Git+and+GitHub">this guide</a>
+on the DESC Confluence page, or this more general <a class="reference external" href="https://github.com/drphilmarshall/GettingStarted#top">getting started</a> guide for <em>Git</em>.</p>
+<p>The accompanying repository which hosts the demo Python package we will often
+refer to in this guide can be found <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">here</a>. The repositories
+package, named <code class="docutils literal notranslate"><span class="pre">mydescpackage</span></code>, is very simple, only consisting of a few
+callable mathematical functions. You are welcome to download/fork it and use it
+as a starting template for your Python project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For those wondering what a TOML file is, <a class="reference external" href="https://toml.io/en/">TOML</a> is a
+file format for configuration files, similar to YAML, it stands for “<em>Tom’s
+Obvious Minimal Language</em>”.</p>
+</div>
+<section id="the-directory-structure">
+<h2>The directory structure<a class="headerlink" href="#the-directory-structure" title="Link to this heading"></a></h2>
+<p>Let’s get started, first we go over the general directory structure your Python
+package should adhere to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/path/to/my/project/
+├── README.md
+├── pyproject.toml
+├── LICENCE
+├── .gitignore
+├── src/
+│   └── mydescpackage/
+│       ├── __init__.py
+│       ├── _version.py
+│       ├── file1.py
+│       └── file2.py
+├── tests/
+│   ├── test1.py
+│   └── test2.py
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+└── docs/
+</pre></div>
+</div>
+<p>Note that not all of these files and directories are strictly required. As a
+minimum you should have a <code class="docutils literal notranslate"><span class="pre">README.md</span></code> and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file in your
+base project directory, and the code for your software should populate the
+<code class="docutils literal notranslate"><span class="pre">src/mydescpackage/</span></code> directory (replacing “mydescpackage” with the name of
+your package).</p>
+<p>What are these files and directories…</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">README.md</span></code>: A simple markdown file, typically outlines the project, its
+requirements, installation instructions, authors, etc. The contents of this
+file will also be displayed on your <em>GitHub</em> projects’ landing page.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>: Where the build information, project dependencies,
+metadata, etc, of the Python package are stored (more in the next section).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LICENCE</span></code>: Contains the license of the package, outlining any restrictions
+of its use. It is good practice to use a well-known license rather than a
+self-created license, such as; <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU</a>, <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0">Apache licence</a>, <a class="reference external" href="https://opensource.org/licenses/MIT">MIT license</a> or <a class="reference external" href="https://creativecommons.org/choose/">creative commons license</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>: This file specifies intentionally untracked files that <em>Git</em>
+should ignore (see <a class="reference external" href="https://git-scm.com/docs/gitignore">here</a> for more
+details).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/mydescpackage/</span></code>: The code for your Python software goes here.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/mydescpackage/_version.py</span></code>: Stores the version number of our Python
+package (see <a class="reference internal" href="#automatic-versioning"><span class="std std-ref">Automatic versioning</span></a> for more details)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Any unit tests of your Package go in here (see also our guide on
+<a class="reference internal" href="../ci/what_is_ci.html#desc-ci-intro"><span class="std std-ref">Continuous Integration</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/</span></code>: Your <em>GitHub Actions</em> Continuous Integration
+workflows go in here (see our guide on <a class="reference internal" href="../ci/what_is_ci.html#desc-ci-intro"><span class="std std-ref">Continuous Integration</span></a> for more details on CI workflows).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docs/</span></code>: For any extensive documentation beyond the scope of <code class="docutils literal notranslate"><span class="pre">README.md</span></code>,
+<em>Read the Docs</em> files for example.</p></li>
+</ul>
+<p>Once the directory structure is setup, and it is populated with our software,
+we can move onto telling <code class="docutils literal notranslate"><span class="pre">pip</span></code> how to build and install our package.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Many people prefer placing the source code in a <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory,
+and not in the project’s root directory.  This is a preference, and not a
+requirement, you can have a “flat” directory structure where
+<code class="docutils literal notranslate"><span class="pre">mydescpackage/</span></code> resides in the root project folder.  However, having a
+<code class="docutils literal notranslate"><span class="pre">src/</span></code> directory requires the user to first install the software before it
+can run, breaking the habit of running the source code directly within the
+root project directory (don’t worry, you still only have to install the
+package once with an editable install, see more about this later on).</p>
+</div>
+</section>
+<section id="the-pyproject-toml-file">
+<h2>The <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file<a class="headerlink" href="#the-pyproject-toml-file" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> configuration file was introduced in <a class="reference external" href="https://peps.python.org/pep-0518/">PEP518</a> as a way of specifying the minimum build
+requirements when installing a Python package. This tells the system what
+packages are required during the building process itself (e.g., <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>,
+<code class="docutils literal notranslate"><span class="pre">wheel</span></code>), removing the onus of pre-installing any dependencies required to
+build your package away form the user. The build requirements specified in
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> are installed in an isolated environment, used to build the
+package, and later discarded, keeping your base environment clean and tidy.</p>
+<p>Below we go over the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file from our <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo package</a>.</p>
+<details class="summary-click-to-expand-pyproject-toml">
+<summary>Click to expand pyproject.toml</summary><div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">[build-system]</span>
+<span class="linenos"> 2</span><span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;setuptools &gt;= 61.0&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># PEP 621 compliant</span>
+<span class="linenos"> 3</span><span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;setuptools.build_meta&quot;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">[project]</span>
+<span class="linenos"> 6</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage&quot;</span>
+<span class="linenos"> 7</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Example DESC Python package, some simple mathmatical functions.&quot;</span>
+<span class="linenos"> 8</span><span class="n">readme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;README.md&quot;</span>
+<span class="linenos"> 9</span><span class="n">authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Stuart McAlpine&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;stuart.mcalpine@fysik.su.se&quot;</span><span class="w"> </span><span class="p">}]</span>
+<span class="linenos">10</span><span class="n">license</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;LICENCE&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">11</span><span class="n">classifiers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">12</span><span class="w">    </span><span class="s2">&quot;Programming Language :: Python :: 3&quot;</span><span class="p">,</span>
+<span class="linenos">13</span><span class="p">]</span>
+<span class="linenos">14</span><span class="n">keywords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">]</span>
+<span class="linenos">15</span><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">16</span><span class="w">    </span><span class="s1">&#39;numpy&#39;</span><span class="p">,</span>
+<span class="linenos">17</span><span class="p">]</span>
+<span class="linenos">18</span><span class="n">requires-python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.8&quot;</span>
+<span class="linenos">19</span><span class="n">dynamic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># Scrape the version dynamically from the package</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="k">[tool.setuptools.dynamic]</span>
+<span class="linenos">22</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">attr</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage._version.__version__&quot;</span><span class="p">}</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="k">[tool.setuptools.packages.find]</span>
+<span class="linenos">25</span><span class="n">where</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="k">[project.optional-dependencies]</span>
+<span class="linenos">28</span><span class="n">ci</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pytest&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;pytest-cov&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;flake8&quot;</span><span class="p">]</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="k">[project.scripts]</span>
+<span class="linenos">31</span><span class="n">display-pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage.pi:display_pi&quot;</span>
+</pre></div>
+</div>
+</details><div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="the-build-system">
+<h3>The build system<a class="headerlink" href="#the-build-system" title="Link to this heading"></a></h3>
+<p>To specify which build-backend to use for installing your package, and any
+requirements needed during the build process, include something like this at
+the top of your <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">[build-system]</span>
+<span class="linenos">2</span><span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;setuptools &gt;= 61.0&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># PEP 621 compliant</span>
+<span class="linenos">3</span><span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;setuptools.build_meta&quot;</span>
+</pre></div>
+</div>
+<p>Here we are saying we require the <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> package during the build, and
+we are going to use <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> to build the our Python package as our
+<code class="docutils literal notranslate"><span class="pre">build-backend</span></code>. Other common requirements during the build process are
+<code class="docutils literal notranslate"><span class="pre">wheel</span></code> and <code class="docutils literal notranslate"><span class="pre">cython</span></code>. Note we select a specific version of <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>
+to install, <code class="docutils literal notranslate"><span class="pre">setuptools&gt;=61.0</span></code>, as that is when <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> became PEP 621
+compliant (see project metadata later).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You do not have to use <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> as your <code class="docutils literal notranslate"><span class="pre">build-backend</span></code>, you
+can use alternate Python package managers such as <a class="reference external" href="https://python-poetry.org/">Poetry</a>, or <a class="reference external" href="https://flit.pypa.io/en/stable/">Flit</a>. You can even put your own custom
+<code class="docutils literal notranslate"><span class="pre">build-backend</span></code> here if you have very specific requirements for building
+your package. However if you are unsure, stick with <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>.</p>
+</div>
+<p>In theory this is the minimum we need. If you were to install your package via
+<em>pip</em> at this stage (i.e., <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code>) it would use the specified
+information from <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> for the build system, then continue to
+install your package with some generic default values (or by looking for more
+information in the legacy <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> and <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> files).</p>
+<p>But there is so much more information we can provide in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>
+about our package, such as any dependencies, and general metadata. If you have
+built Python packages in the past you may be more familiar with putting this
+kind of information in the traditional <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> and <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> files.
+However now everything can go in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, making it the only
+configuration file you need (note you can still keep the traditional
+<code class="docutils literal notranslate"><span class="pre">setup.*</span></code> files for legacy purposes, and backwards compatibility).</p>
+</section>
+<section id="project-metadata">
+<h3>Project metadata<a class="headerlink" href="#project-metadata" title="Link to this heading"></a></h3>
+<p>As of <a class="reference external" href="https://peps.python.org/pep-0621/">PEP621</a> there is a standard format
+for storing project metadata in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, which
+<code class="docutils literal notranslate"><span class="pre">setuptools&gt;=61.0.0</span></code> conforms to (see their tutorial on metadata <a class="reference external" href="https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html">here</a>).
+Below is the metadata for our <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo package</a>:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 5</span><span class="k">[project]</span>
+<span class="linenos"> 6</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage&quot;</span>
+<span class="linenos"> 7</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Example DESC Python package, some simple mathmatical functions.&quot;</span>
+<span class="linenos"> 8</span><span class="n">readme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;README.md&quot;</span>
+<span class="linenos"> 9</span><span class="n">authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Stuart McAlpine&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;stuart.mcalpine@fysik.su.se&quot;</span><span class="w"> </span><span class="p">}]</span>
+<span class="linenos">10</span><span class="n">license</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;LICENCE&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">11</span><span class="n">classifiers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">12</span><span class="w">    </span><span class="s2">&quot;Programming Language :: Python :: 3&quot;</span><span class="p">,</span>
+<span class="linenos">13</span><span class="p">]</span>
+<span class="linenos">14</span><span class="n">keywords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">]</span>
+<span class="linenos">15</span><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">16</span><span class="w">    </span><span class="s1">&#39;numpy&#39;</span><span class="p">,</span>
+<span class="linenos">17</span><span class="p">]</span>
+<span class="linenos">18</span><span class="n">requires-python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.8&quot;</span>
+<span class="linenos">19</span><span class="n">dynamic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># Scrape the version dynamically from the package</span>
+</pre></div>
+</div>
+<p>All metadata goes under the <code class="docutils literal notranslate"><span class="pre">[project]</span></code> section, including for example the
+name of your package, the minimum required Python version, and the package
+dependencies.</p>
+<p>For our configuration, the package will be installed as <code class="docutils literal notranslate"><span class="pre">mypackage</span></code>,
+it requires Python versions <code class="docutils literal notranslate"><span class="pre">&gt;=3.7</span></code> to run, and depends on the <code class="docutils literal notranslate"><span class="pre">numpy</span></code>
+package. Many of the metadata fields are optional, but it is useful to be as
+thorough as possible in detailing the package, especially if you publish the
+package to PyPi for example (for a list of all metadata options see <a class="reference external" href="https://packaging.python.org/en/latest/specifications/declaring-project-metadata/">here</a>).</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos">24</span><span class="k">[tool.setuptools.packages.find]</span>
+<span class="linenos">25</span><span class="n">where</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Because we are using the <code class="docutils literal notranslate"><span class="pre">src/</span></code> directory layout for our package, we need to
+tell <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> this is where our Package’s source code is (the default is
+<code class="docutils literal notranslate"><span class="pre">.</span></code>). Any sub-directories of <code class="docutils literal notranslate"><span class="pre">src/</span></code> with an <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file will
+automatically be discovered by <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>.</p>
+</section>
+<section id="optional-dependencies">
+<h3>Optional dependencies<a class="headerlink" href="#optional-dependencies" title="Link to this heading"></a></h3>
+<p>The packages you list under <code class="docutils literal notranslate"><span class="pre">[project]</span> <span class="pre">dependencies</span></code> should be the minimum
+required for the Python software to operate under general use. Yet optional
+dependencies, for alternate use scenarios, can also be included.</p>
+<p>For example, in our <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo package</a> we need the
+<code class="docutils literal notranslate"><span class="pre">pytest</span></code>, <code class="docutils literal notranslate"><span class="pre">pytest-cov</span></code> and <code class="docutils literal notranslate"><span class="pre">flake8</span></code> package’s when invoking the
+Continuous Integration workflows. As these package’s are only needed when
+performing CI, and not for the general running of the package, we include them
+as optional dependencies, which can be installed alongside the main
+dependencies by running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.[ci]</span></code>.</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos">27</span><span class="k">[project.optional-dependencies]</span>
+<span class="linenos">28</span><span class="n">ci</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pytest&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;pytest-cov&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;flake8&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Optional dependencies are also useful if you want to separate out serial and
+parallel (i.e., MPI) implementations of your package, packages required only
+during development, or installations where you wish to also compile package’s
+documentation, for example.</p>
+</section>
+<section id="script-entrypoints">
+<h3>Script entrypoints<a class="headerlink" href="#script-entrypoints" title="Link to this heading"></a></h3>
+<p>Another extremely useful thing to be aware of with Python packages is script
+entrypoints. Here you can declare commands to be run from the terminal which
+will directly execute functions within your package. For example, in our <a class="reference external" href="https://github.com/LSSTDESC/desc-continuous-integration">demo
+package</a> we have a
+function that computes the numerical value of <em>pi</em>. As we keep forgetting the
+value of <em>pi</em>, and need to be reminded, we register the <code class="docutils literal notranslate"><span class="pre">display-pi</span></code> command
+to help us, which directly calls the <code class="docutils literal notranslate"><span class="pre">mydescpackage.pi.display_pi</span></code> function
+(which prints the computed value of <em>pi</em> to the terminal).</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos">30</span><span class="k">[project.scripts]</span>
+<span class="linenos">31</span><span class="n">display-pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage.pi:display_pi&quot;</span>
+</pre></div>
+</div>
+<p>Script entrypoints are great for creating front-ends to your package.</p>
+</section>
+</section>
+<section id="automatic-versioning">
+<span id="id1"></span><h2>Automatic versioning<a class="headerlink" href="#automatic-versioning" title="Link to this heading"></a></h2>
+<p>An extremely important attribute of your Python package is its version number,
+for which it is good practice to use the <a class="reference external" href="https://semver.org/">Semantic Versioning</a> format (i.e., MAJOR.MINOR.PATCH). The pseudo-standard
+for Python packages is to store the version number as a string variable called
+<code class="docutils literal notranslate"><span class="pre">__version__</span></code> in the root of the package, e.g.,
+<code class="docutils literal notranslate"><span class="pre">mydescpackage.__version__</span></code>.</p>
+<p>We are going to have to manually declare our chosen version number somewhere
+within our project, however we certainly want to avoid manual declarations in
+multiple places, some of which we may forget to update (e.g., between the
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file and within the source code). There are <a class="reference external" href="https://packaging.python.org/en/latest/guides/single-sourcing-package-version/">many
+options</a>
+that allow you to only declare the version number once, yet there is no current
+standard for which practice is best.</p>
+<p>We would recommend declaring the package version number in a <code class="docutils literal notranslate"><span class="pre">_version.py</span></code>
+file in the package source code directory (i.e., <code class="docutils literal notranslate"><span class="pre">src/mydescpackage/</span></code>). This
+option has the advantage that <code class="docutils literal notranslate"><span class="pre">mydescpackage.__version__</span></code> can be called both
+in the scenario where the package has been installed via <cite>pip</cite>, or if the
+source code is being called upon manually straight from the cloned repository.</p>
+<p>To do this, create a file called <code class="docutils literal notranslate"><span class="pre">_version.py</span></code> in the <code class="docutils literal notranslate"><span class="pre">src/mydescpackage/</span></code>
+directory with the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.0&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We put the <code class="docutils literal notranslate"><span class="pre">__version__</span></code> variable in a file called <code class="docutils literal notranslate"><span class="pre">_version.py</span></code> instead
+of <code class="docutils literal notranslate"><span class="pre">version.py</span></code> so that <code class="docutils literal notranslate"><span class="pre">pip</span></code> does not install <code class="docutils literal notranslate"><span class="pre">mydescpackage.version</span></code>
+as a callable method.</p>
+</div>
+<p>Then, include this line in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file in the <code class="docutils literal notranslate"><span class="pre">src/mydescpackage/</span></code>
+directory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">._version</span> <span class="kn">import</span> <span class="n">__version__</span>
+</pre></div>
+</div>
+<p>Finally, we can tell <cite>pip</cite> to use this as the package version number by
+updating our <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file with the following:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[project]</span>
+<span class="p">...</span>
+<span class="n">dynamic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span>
+
+<span class="k">[tool.setuptools.dynamic]</span>
+<span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">attr</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage._version.__version__&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="installing-your-package-from-source">
+<h2>Installing your package (from source)<a class="headerlink" href="#installing-your-package-from-source" title="Link to this heading"></a></h2>
+<p>Finally, once the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file is built, we can install the package
+locally from source using <code class="docutils literal notranslate"><span class="pre">pip</span></code> just like we have always traditionally done.
+Within the project directory type:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Note the <code class="docutils literal notranslate"><span class="pre">-e</span></code> flag means an “editable install”, which is extremely useful,
+particularly during the development stage of your software. An editable
+installation works very similarly to a regular install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code>,
+except that it only installs your package dependencies, metadata and wrappers
+for console and GUI scripts, but your system will point to the code directly in
+your project folder using a special link. This means that any changes in the
+Python source code can immediately take place without requiring a new
+installation.</p>
+<p>As it stands, users wishing to install our package first have to clone the
+<em>GitHub</em> repository and install from source as shown above (which is fine). To
+make the installation slightly for users, we can place our package on a public
+software repository, such a <code class="docutils literal notranslate"><span class="pre">PyPy</span></code> or <code class="docutils literal notranslate"><span class="pre">Conda</span></code>, which we cover next.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../index.html" class="btn btn-neutral float-left" title="Welcome to DESC’s Python packaging and Continuous Integration guide!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="publish.html" class="btn btn-neutral float-right" title="Publishing a Python package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

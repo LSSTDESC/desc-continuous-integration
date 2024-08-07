@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick-example pyproject.toml &mdash; DESC CI test  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="The DESC CI checklist" href="desc_checklist.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DESC CI test
+              <img src="../../_static/desc_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Python packaging at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/building_a_package.html">Building a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/publish.html">Publishing a Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_package/document.html">Documenting a Python package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Continuous Integration at DESC</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="what_is_ci.html">What is Continuous Integration (CI)?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci_at_nersc.html">CI at NERSC using GitLab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples.html">Example CI workflows from DESC repositories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_working_examples_pipelines.html">Example CI workflows from DESC pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="desc_checklist.html">The DESC CI checklist</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#quick-example-ci-workflow-yml">Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#nersc-ci-files">NERSC CI files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mirror-repository-files">Mirror repository files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#status-repository-files">Status repository files</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DESC CI test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/desc/ci/appendix.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-example-pyproject-toml">
+<span id="quick-example-pyproject"></span><h1>Quick-example <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code><a class="headerlink" href="#quick-example-pyproject-toml" title="Link to this heading"></a></h1>
+<p>An example <code class="docutils literal notranslate"><span class="pre">pyprojet.toml</span></code> configuration file, used for the demo code in the
+<code class="docutils literal notranslate"><span class="pre">desc-continuous-integraion</span></code> repository.</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">[build-system]</span>
+<span class="linenos"> 2</span><span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;setuptools &gt;= 61.0&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># PEP 621 compliant</span>
+<span class="linenos"> 3</span><span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;setuptools.build_meta&quot;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">[project]</span>
+<span class="linenos"> 6</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage&quot;</span>
+<span class="linenos"> 7</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Example DESC Python package, some simple mathmatical functions.&quot;</span>
+<span class="linenos"> 8</span><span class="n">readme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;README.md&quot;</span>
+<span class="linenos"> 9</span><span class="n">authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;Stuart McAlpine&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;stuart.mcalpine@fysik.su.se&quot;</span><span class="w"> </span><span class="p">}]</span>
+<span class="linenos">10</span><span class="n">license</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;LICENCE&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">11</span><span class="n">classifiers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">12</span><span class="w">    </span><span class="s2">&quot;Programming Language :: Python :: 3&quot;</span><span class="p">,</span>
+<span class="linenos">13</span><span class="p">]</span>
+<span class="linenos">14</span><span class="n">keywords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">]</span>
+<span class="linenos">15</span><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">16</span><span class="w">    </span><span class="s1">&#39;numpy&#39;</span><span class="p">,</span>
+<span class="linenos">17</span><span class="p">]</span>
+<span class="linenos">18</span><span class="n">requires-python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.8&quot;</span>
+<span class="linenos">19</span><span class="n">dynamic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># Scrape the version dynamically from the package</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="k">[tool.setuptools.dynamic]</span>
+<span class="linenos">22</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">attr</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage._version.__version__&quot;</span><span class="p">}</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="k">[tool.setuptools.packages.find]</span>
+<span class="linenos">25</span><span class="n">where</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="k">[project.optional-dependencies]</span>
+<span class="linenos">28</span><span class="n">ci</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pytest&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;pytest-cov&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;flake8&quot;</span><span class="p">]</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="k">[project.scripts]</span>
+<span class="linenos">31</span><span class="n">display-pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mydescpackage.pi:display_pi&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="quick-example-ci-workflow-yml">
+<h1>Quick-example <code class="docutils literal notranslate"><span class="pre">ci_workflow.yml</span></code><a class="headerlink" href="#quick-example-ci-workflow-yml" title="Link to this heading"></a></h1>
+<p>An example Continuous Integration YAML workflow
+(<code class="docutils literal notranslate"><span class="pre">.github/workflows/ci_example_2.yml</span></code> in the <code class="docutils literal notranslate"><span class="pre">desc-continuous-integraion</span></code>
+repository). More details in <a class="reference internal" href="github_actions.html#ci-using-github-actions"><span class="std std-ref">GitHub Actions</span></a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Author - Stuart McAlpine - stuart.mcalpine@fysik.su.se - Jan 2023</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DESC Example 2</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How does the workflow get triggered?</span>
+<span class="linenos"> 6</span><span class="nt">on</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="c1"># Triggers when push/pull-request made to the main branch.</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">10</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">11</span><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="linenos">12</span><span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="linenos">13</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="c1"># List of jobs for this workflow.</span>
+<span class="linenos">16</span><span class="nt">jobs</span><span class="p">:</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="c1"># Our pytest job.</span>
+<span class="linenos">19</span><span class="w">  </span><span class="nt">ci-with-pytest</span><span class="p">:</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1"># Our strategy lists the OS and Python versions we want to test on.</span>
+<span class="linenos">22</span><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">      </span><span class="c1"># Don&#39;t quit all jobs if only one job fails.</span>
+<span class="linenos">25</span><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="linenos">26</span><span class="w">      </span>
+<span class="linenos">27</span><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="linenos">28</span><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.8&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.9&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.11&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;3.12&quot;</span><span class="p p-Indicator">]</span>
+<span class="linenos">29</span><span class="w">        </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ubuntu-20.04</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ubuntu-latest</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">macos-latest</span><span class="p p-Indicator">]</span>
+<span class="linenos">30</span><span class="w">        </span><span class="nt">experimental</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">false</span><span class="p p-Indicator">]</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span><span class="w">        </span><span class="c1"># Test on this, but don&#39;t mind if it fails.</span>
+<span class="linenos">33</span><span class="w">        </span><span class="nt">include</span><span class="p">:</span>
+<span class="linenos">34</span><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="linenos">35</span><span class="w">            </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.11&quot;</span>
+<span class="linenos">36</span><span class="w">            </span><span class="nt">experimental</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="w">    </span><span class="c1"># If True, do not fail the job, just warn me.</span>
+<span class="linenos">39</span><span class="w">    </span><span class="nt">continue-on-error</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.experimental }}</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">    </span><span class="c1"># What operating system is this job running on?</span>
+<span class="linenos">42</span><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.os }}</span>
+<span class="linenos">43</span>
+<span class="linenos">44</span><span class="w">    </span><span class="c1"># Our CI steps for this job.</span>
+<span class="linenos">45</span><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="linenos">46</span><span class="w">      </span><span class="c1"># Check out this repository code.</span>
+<span class="linenos">47</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check out repository code</span>
+<span class="linenos">48</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="linenos">49</span>
+<span class="linenos">50</span><span class="w">      </span><span class="c1"># Install Python.</span>
+<span class="linenos">51</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python ${{ matrix.python-version }}</span>
+<span class="linenos">52</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v4</span>
+<span class="linenos">53</span><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="linenos">54</span><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.python-version }}</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="w">      </span><span class="c1"># Install my package.</span>
+<span class="linenos">57</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install mydescpackage.</span>
+<span class="linenos">58</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="linenos">59</span><span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="linenos">60</span><span class="w">          </span><span class="no">python -m pip install .[ci]</span>
+<span class="linenos">61</span><span class="w">          </span>
+<span class="linenos">62</span><span class="w">      </span><span class="c1"># Do some basic code linting using flake8. Check for syntax and indentation errors.</span>
+<span class="linenos">63</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 linting.</span>
+<span class="linenos">64</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 --count --select=E1,E9 --show-source --statistics ./src/mydescpackage/*.py</span>
+<span class="linenos">65</span>
+<span class="linenos">66</span><span class="w">      </span><span class="c1"># Perform the unit tests and output a coverage report.</span>
+<span class="linenos">67</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test with pytest</span>
+<span class="linenos">68</span><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest --cov=mydescpackage --cov-report xml ./tests</span>
+<span class="linenos">69</span><span class="w">          </span>
+<span class="linenos">70</span><span class="w">      </span><span class="c1"># Upload the code coverage results to codecov.io.</span>
+<span class="linenos">71</span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload coverage to Codecov</span>
+<span class="linenos">72</span><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">codecov/codecov-action@v2</span>
+</pre></div>
+</div>
+</section>
+<section id="nersc-ci-files">
+<span id="nersc-ci-appendix"></span><h1>NERSC CI files<a class="headerlink" href="#nersc-ci-files" title="Link to this heading"></a></h1>
+<p>Below are some details of the workings of the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code>
+repositories’ CI workflows.</p>
+<section id="mirror-repository-files">
+<h2>Mirror repository files<a class="headerlink" href="#mirror-repository-files" title="Link to this heading"></a></h2>
+<p>The purpose of the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repository is to clone the contents of the
+<code class="docutils literal notranslate"><span class="pre">source</span></code> repository at GitHub to the <code class="docutils literal notranslate"><span class="pre">target</span></code> repository at the NERSC
+GitLab instance. This is done through a simple CI workflow (<code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>)
+which runs a simple Bash script (<code class="docutils literal notranslate"><span class="pre">mirror.bash</span></code>), and is automatically
+triggered from the CI workflow at the GitHub <code class="docutils literal notranslate"><span class="pre">source</span></code> repository.</p>
+<p>The two files that make up the CI workflow for the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repository are
+detailed below.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">./gitlab/mirror_repo_files/mirror.bash</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># ----------------------------------------------------------------------------#</span>
+<span class="linenos"> 2</span><span class="c1"># Script to clone a DESC repository from GitHub to the NERSC GitLab instance. #</span>
+<span class="linenos"> 3</span><span class="c1">#                                                                             #</span>
+<span class="linenos"> 4</span><span class="c1"># This script goes in your &quot;mirror&quot; repository on GitLab.                     #</span>
+<span class="linenos"> 5</span><span class="c1">#                                                                             #</span>
+<span class="linenos"> 6</span><span class="c1"># Script adapted from the CI Resources &quot;mirroring&quot; example                    #</span>
+<span class="linenos"> 7</span><span class="c1"># (https://software.nersc.gov/ci-resources/mirroring)                         #</span>
+<span class="linenos"> 8</span><span class="c1">#                                                                             #</span>
+<span class="linenos"> 9</span><span class="c1"># You need to set these in Settings-&gt;CI/CD-&gt;Variables:                        #</span>
+<span class="linenos">10</span><span class="c1">#   - MIRROR_SOURCE_PAT : PAT of the source repository from GitHub.           #</span>
+<span class="linenos">11</span><span class="c1">#   - MIRROR_TARGET_PAT : PAT of the target repository on GitLab.             #</span>
+<span class="linenos">12</span><span class="c1">#                                                                             #</span>
+<span class="linenos">13</span><span class="c1"># Other variables are passed along with the trigger token from GitHub.        #</span>
+<span class="linenos">14</span><span class="c1">#                                                                             #</span>
+<span class="linenos">15</span><span class="c1"># Authors:                                                                    #</span>
+<span class="linenos">16</span><span class="c1">#   Stuart McAlpine (@stuartmcalpine)                                         #</span>
+<span class="linenos">17</span><span class="c1">#   Heather Kelly (@heather999)                                               #</span>
+<span class="linenos">18</span><span class="c1"># ----------------------------------------------------------------------------#</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="c1">#!/bin/bash</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="nb">set</span><span class="w"> </span>-e
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="c1"># Working directory.</span>
+<span class="linenos">25</span><span class="nv">wd</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="c1"># Always want to remove authentication file on exit (file even if workflow fails).</span>
+<span class="linenos">28</span><span class="k">function</span><span class="w"> </span>cleanup<span class="o">()</span>
+<span class="linenos">29</span><span class="o">{</span>
+<span class="linenos">30</span><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Cleanup: Removing </span><span class="si">${</span><span class="nv">wd</span><span class="si">}</span><span class="s2">/askpass&quot;</span>
+<span class="linenos">31</span><span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="si">${</span><span class="nv">wd</span><span class="si">}</span>/askpass
+<span class="linenos">32</span><span class="o">}</span>
+<span class="linenos">33</span><span class="nb">trap</span><span class="w"> </span>cleanup<span class="w"> </span>EXIT
+<span class="linenos">34</span>
+<span class="linenos">35</span><span class="c1"># Set GIT_ASKPASS for git authentication.</span>
+<span class="linenos">36</span><span class="k">function</span><span class="w"> </span>set_askpass<span class="o">()</span>
+<span class="linenos">37</span><span class="o">{</span>
+<span class="linenos">38</span><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#!/bin/bash&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">wd</span><span class="si">}</span>/askpass
+<span class="linenos">39</span><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;echo </span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="si">${</span><span class="nv">wd</span><span class="si">}</span>/askpass
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">    </span>chmod<span class="w"> </span>+x<span class="w"> </span><span class="si">${</span><span class="nv">wd</span><span class="si">}</span>/askpass
+<span class="linenos">42</span><span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">GIT_ASKPASS</span><span class="o">=</span><span class="si">${</span><span class="nv">wd</span><span class="si">}</span>/askpass
+<span class="linenos">43</span><span class="o">}</span>
+<span class="linenos">44</span>
+<span class="linenos">45</span><span class="c1"># Step 1) Fetch information from source repository.</span>
+<span class="linenos">46</span>set_askpass<span class="w"> </span><span class="si">${</span><span class="nv">MIRROR_SOURCE_PAT</span><span class="si">}</span>
+<span class="linenos">47</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Cloning from </span><span class="si">${</span><span class="nv">GIBHUB_SOURCE_REPO</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="nb">source</span>
+<span class="linenos">50</span>git<span class="w"> </span>init<span class="w"> </span>--bare<span class="w"> </span><span class="nb">source</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="nb">cd</span><span class="w"> </span><span class="nb">source</span>
+<span class="linenos">53</span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span><span class="si">${</span><span class="nv">GITHUB_SOURCE_REPO</span><span class="si">}</span>
+<span class="linenos">54</span>git<span class="w"> </span>config<span class="w"> </span>remote.origin.mirror<span class="w"> </span><span class="nb">true</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span>--prune
+<span class="linenos">57</span>
+<span class="linenos">58</span><span class="c1"># Step 2) Clone source repository contents to target repository.</span>
+<span class="linenos">59</span>set_askpass<span class="w"> </span><span class="si">${</span><span class="nv">MIRROR_TARGET_PAT</span><span class="si">}</span>
+<span class="linenos">60</span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>target<span class="w"> </span><span class="si">${</span><span class="nv">GITLAB_TARGET_REPO</span><span class="si">}</span>
+<span class="linenos">61</span>
+<span class="linenos">62</span><span class="c1"># Only pushes the MIRROR_SOURCE_BRANCH repository (and its tags).</span>
+<span class="linenos">63</span><span class="c1"># Protected branches do not translate across gitlab, github, bitbucket etc.</span>
+<span class="linenos">64</span>git<span class="w"> </span>push<span class="w"> </span>target<span class="w"> </span>--prune<span class="w"> </span>+refs/remotes/origin/<span class="nv">$GITHUB_SOURCE_BRANCH</span>:refs/heads/<span class="nv">$GITHUB_SOURCE_BRANCH</span><span class="w"> </span>+refs/tags/*:refs/tags/*
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">target</span> <span class="pre">--prune</span></code> means we are only pushing the
+<code class="docutils literal notranslate"><span class="pre">$GITHUB_SOURCE_BRANCH</span></code> branch (and tags) of the <code class="docutils literal notranslate"><span class="pre">source</span></code> repository (which
+will likely be your <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">master</span></code> branch).  It is possible to target
+multiple branches through this mechanism, however it not recommended to mirror
+all branches by default.</p>
+<p>Additionally, we also use the environment variable <code class="docutils literal notranslate"><span class="pre">GIT_ASKPASS</span></code> to provide
+authentication tokens to git.  This ensures that the tokens are not visible in
+the CLI which is an important requirement in multi-tenant hosts e.g. <em>Cori</em>
+nodes.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">./gitlab/mirror_repo_files/.gitlab-ci.yml</span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nt">variables</span><span class="p">:</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="c1"># Cori queue submission options.</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="nt">SCHEDULER_PARAMETERS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-C</span><span class="nv"> </span><span class="s">haswell</span><span class="nv"> </span><span class="s">-q</span><span class="nv"> </span><span class="s">debug</span><span class="nv"> </span><span class="s">-N1</span><span class="nv"> </span><span class="s">-t</span><span class="nv"> </span><span class="s">00:05:00&quot;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How is the workflow triggered?</span>
+<span class="linenos"> 6</span><span class="nt">workflow</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="c1"># Can only be initiated via a trigger token.</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_PIPELINE_SOURCE == &quot;trigger&quot;</span>
+<span class="linenos">10</span><span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1"># The CI Job.</span>
+<span class="linenos">13</span><span class="nt">mirror-repo</span><span class="p">:</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">  </span><span class="c1"># Running on Cori.</span>
+<span class="linenos">16</span><span class="w">  </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cori</span><span class="p p-Indicator">]</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="linenos">19</span><span class="w">    </span><span class="c1"># Script to mirror the GitHub repository.</span>
+<span class="linenos">20</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash mirror.bash</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="w">    </span><span class="c1"># Trigger the GitLab CI workflow in the target repository on GitLab.</span>
+<span class="linenos">23</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="linenos">24</span><span class="w">      </span><span class="no">curl -X POST --fail</span>
+<span class="linenos">25</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_STATUS_REPO]=$GITLAB_STATUS_REPO&quot;</span>
+<span class="linenos">26</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_TARGET_REPO]=$GITLAB_TARGET_REPO&quot;</span>
+<span class="linenos">27</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_MIRROR_REPO]=$GITLAB_MIRROR_REPO&quot;</span>
+<span class="linenos">28</span><span class="w">      </span><span class="no">--form &quot;variables[GITHUB_SOURCE_REPO]=$GITHUB_SOURCE_REPO&quot;</span>
+<span class="linenos">29</span><span class="w">      </span><span class="no">--form &quot;variables[GITHUB_SOURCE_BRANCH]=$GITHUB_SOURCE_BRANCH&quot;</span>
+<span class="linenos">30</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_TARGET_PROJECT_NUMBER]=$GITLAB_TARGET_PROJECT_NUMBER&quot;</span>
+<span class="linenos">31</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_MIRROR_PROJECT_NUMBER]=$GITLAB_MIRROR_PROJECT_NUMBER&quot;</span>
+<span class="linenos">32</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_STATUS_PROJECT_NUMBER]=$GITLAB_STATUS_PROJECT_NUMBER&quot;</span>
+<span class="linenos">33</span><span class="w">      </span><span class="no">--form &quot;variables[GITLAB_STATUS_CONTEXT]=$GITLAB_STATUS_CONTEXT&quot;</span>
+<span class="linenos">34</span><span class="w">      </span><span class="no">--form &quot;variables[GITHUB_SHA]=$GITHUB_SHA&quot;</span>
+<span class="linenos">35</span><span class="w">      </span><span class="no">--form token=$TARGET_TRIGGER_TOKEN</span>
+<span class="linenos">36</span><span class="w">      </span><span class="no">--form ref=$GITHUB_SOURCE_BRANCH</span>
+<span class="linenos">37</span><span class="w">      </span><span class="no">https://software.nersc.gov/api/v4/projects/$GITLAB_TARGET_PROJECT_NUMBER/trigger/pipeline</span>
+</pre></div>
+</div>
+</div>
+<p>Similar to the workflows for GitHub Actions, GitLab workflows are defined in a
+file named <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>, which must reside in the root directory of your
+repository.</p>
+<p>This workflow…</p>
+<ul class="simple">
+<li><p>can only be triggered via a trigger token (which comes from the GitHub CI
+job).</p></li>
+<li><p>runs the <code class="docutils literal notranslate"><span class="pre">mirror.bash</span></code> script, which clones the <code class="docutils literal notranslate"><span class="pre">source</span></code> repository into
+the <code class="docutils literal notranslate"><span class="pre">target</span></code> repository.</p></li>
+<li><p>automatically triggers the CI workflow of the <code class="docutils literal notranslate"><span class="pre">target</span></code> repository, which
+continues the pipeline.</p></li>
+</ul>
+<p>When submitting a CI workflow to <em>Cori</em> you must include the queue submission
+parameters, passed as the environment variable <code class="docutils literal notranslate"><span class="pre">SCHEDULER_PARAMETERS</span></code>. The
+format is the same as if you were submitting a standard job at NERSC. Our job
+(cloning a repository) is very quick, so we are submitting to the <code class="docutils literal notranslate"><span class="pre">debug</span></code>
+queue. However if you need a longer job runtime, or want to charge the time to
+a particular project, you will need to modify these parameters accordingly.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The repo URLs (<code class="docutils literal notranslate"><span class="pre">GITLAB_TARGET_REPO</span></code> etc) and project numbers
+(<code class="docutils literal notranslate"><span class="pre">GITLAB_TARGET_PROJECT_NUMBER</span></code> etc) have been passed through along with
+the trigger token, originally defined in the <code class="docutils literal notranslate"><span class="pre">source</span></code> CI workflow.</p>
+</div>
+</section>
+<section id="status-repository-files">
+<h2>Status repository files<a class="headerlink" href="#status-repository-files" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">status-github.py</span></code> file, shown below, is a Python script that
+automatically appends the CI workflow result from the <code class="docutils literal notranslate"><span class="pre">target</span></code> repository on
+GitLab to the <code class="docutils literal notranslate"><span class="pre">source</span></code> repository on GitHub.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">./gitlab/status_repo_files/status-github.py</span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1"># ----------------------------------------------------------------------------#</span>
+<span class="linenos">  2</span><span class="c1"># Script to report the status of the CI workflow of the target repository on  #</span>
+<span class="linenos">  3</span><span class="c1"># GitLab to the source repository on GitHub.                                  #</span>
+<span class="linenos">  4</span><span class="c1">#                                                                             #</span>
+<span class="linenos">  5</span><span class="c1"># This script goes in your &quot;status&quot; repository on GitLab.                     #</span>
+<span class="linenos">  6</span><span class="c1">#                                                                             #</span>
+<span class="linenos">  7</span><span class="c1"># Script adapted from the CI Resources &quot;Report Status&quot; example                #</span>
+<span class="linenos">  8</span><span class="c1"># (https://software.nersc.gov/ci-resources/report-status)                     #</span>
+<span class="linenos">  9</span><span class="c1">#                                                                             #</span>
+<span class="linenos"> 10</span><span class="c1"># You need to set these in Settings-&gt;CI/CD-&gt;Variables:                        #</span>
+<span class="linenos"> 11</span><span class="c1">#   - STATUS_SOURCE_PAT : PAT of the target repository from GitLab.           #</span>
+<span class="linenos"> 12</span><span class="c1">#   - STATUS_TARGET_PAT : PAT of the source repository on GitHub.             #</span>
+<span class="linenos"> 13</span><span class="c1">#                                                                             #</span>
+<span class="linenos"> 14</span><span class="c1"># Other variables are passed along with the trigger token from GitHub.        #</span>
+<span class="linenos"> 15</span><span class="c1">#                                                                             #</span>
+<span class="linenos"> 16</span><span class="c1"># Authors:                                                                    #</span>
+<span class="linenos"> 17</span><span class="c1">#   Stuart McAlpine (@stuartmcalpine)                                         #</span>
+<span class="linenos"> 18</span><span class="c1">#   Heather Kelly (@heather999)                                               #</span>
+<span class="linenos"> 19</span><span class="c1"># ----------------------------------------------------------------------------#</span>
+<span class="linenos"> 20</span>
+<span class="linenos"> 21</span><span class="c1">#!/usr/bin/env python3</span>
+<span class="linenos"> 22</span><span class="kn">import</span> <span class="nn">os</span>
+<span class="linenos"> 23</span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="linenos"> 24</span><span class="kn">import</span> <span class="nn">json</span>
+<span class="linenos"> 25</span><span class="kn">import</span> <span class="nn">time</span>
+<span class="linenos"> 26</span>
+<span class="linenos"> 27</span><span class="c1"># Pull out environment variables.</span>
+<span class="linenos"> 28</span><span class="n">source_repo</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GITLAB_TARGET_REPO&quot;</span><span class="p">)</span>
+<span class="linenos"> 29</span><span class="n">source_branch</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GITHUB_SOURCE_BRANCH&quot;</span><span class="p">)</span>
+<span class="linenos"> 30</span><span class="n">target_repo</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GITHUB_SOURCE_REPO&quot;</span><span class="p">)</span>
+<span class="linenos"> 31</span><span class="n">source_pat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;STATUS_SOURCE_PAT&quot;</span><span class="p">)</span>
+<span class="linenos"> 32</span><span class="n">target_pat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;STATUS_TARGET_PAT&quot;</span><span class="p">)</span>
+<span class="linenos"> 33</span><span class="n">target_repo_context</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GITLAB_STATUS_CONTEXT&quot;</span><span class="p">)</span>
+<span class="linenos"> 34</span><span class="n">sha</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GITHUB_SHA&quot;</span><span class="p">)</span>
+<span class="linenos"> 35</span>
+<span class="linenos"> 36</span><span class="c1"># Get information from repos APIs.</span>
+<span class="linenos"> 37</span><span class="n">source_api</span> <span class="o">=</span> <span class="s2">&quot;https://software.nersc.gov/api/v4&quot;</span>
+<span class="linenos"> 38</span><span class="n">target_api</span> <span class="o">=</span> <span class="s2">&quot;https://api.github.com&quot;</span>
+<span class="linenos"> 39</span>
+<span class="linenos"> 40</span><span class="n">target_project</span> <span class="o">=</span> <span class="n">target_repo</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+<span class="linenos"> 41</span><span class="n">seperator</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span>
+<span class="linenos"> 42</span><span class="n">target_project</span> <span class="o">=</span> <span class="n">seperator</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_project</span><span class="p">)</span>
+<span class="linenos"> 43</span><span class="n">target_project</span> <span class="o">=</span> <span class="n">target_project</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos"> 44</span>
+<span class="linenos"> 45</span><span class="n">source_project</span> <span class="o">=</span> <span class="n">source_repo</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos"> 46</span><span class="n">search_repos</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+<span class="linenos"> 47</span>    <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/projects?search=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_api</span><span class="p">,</span> <span class="n">source_project</span><span class="p">),</span>
+<span class="linenos"> 48</span>    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;PRIVATE-TOKEN&quot;</span><span class="p">:</span> <span class="n">source_pat</span><span class="p">},</span>
+<span class="linenos"> 49</span><span class="p">)</span>
+<span class="linenos"> 50</span><span class="n">source_project_number</span> <span class="o">=</span> <span class="n">search_repos</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+<span class="linenos"> 51</span><span class="n">source_branch</span> <span class="o">=</span> <span class="n">source_branch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+<span class="linenos"> 52</span>
+<span class="linenos"> 53</span>
+<span class="linenos"> 54</span><span class="k">def</span> <span class="nf">check_status</span><span class="p">(</span><span class="n">source_api</span><span class="p">,</span> <span class="n">source_project_number</span><span class="p">,</span> <span class="n">source_pat</span><span class="p">,</span> <span class="n">source_branch</span><span class="p">,</span> <span class="n">sha</span><span class="p">):</span>
+<span class="linenos"> 55</span><span class="w">    </span><span class="sd">&quot;&quot;&quot; Get the workflow status of a CI job. &quot;&quot;&quot;</span>
+<span class="linenos"> 56</span>
+<span class="linenos"> 57</span>    <span class="n">ci_status</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="linenos"> 58</span>
+<span class="linenos"> 59</span>    <span class="c1"># Loop over each CI workflow at target repository and find the right commit.</span>
+<span class="linenos"> 60</span>    <span class="n">pipelines_all</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+<span class="linenos"> 61</span>        <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/projects/</span><span class="si">{}</span><span class="s2">/pipelines&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_api</span><span class="p">,</span> <span class="n">source_project_number</span><span class="p">),</span>
+<span class="linenos"> 62</span>        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;PRIVATE-TOKEN&quot;</span><span class="p">:</span> <span class="n">source_pat</span><span class="p">},</span>
+<span class="linenos"> 63</span>    <span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="linenos"> 64</span>
+<span class="linenos"> 65</span>    <span class="k">for</span> <span class="n">pipeline</span> <span class="ow">in</span> <span class="n">pipelines_all</span><span class="p">:</span>
+<span class="linenos"> 66</span>
+<span class="linenos"> 67</span>        <span class="k">if</span> <span class="n">pipeline</span><span class="p">[</span><span class="s2">&quot;sha&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">sha</span><span class="p">:</span>
+<span class="linenos"> 68</span>            <span class="k">assert</span> <span class="p">(</span>
+<span class="linenos"> 69</span>                <span class="n">pipeline</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">source_branch</span>
+<span class="linenos"> 70</span>            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Bad branch </span><span class="si">{</span><span class="n">pipeline</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="n">source_branch</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="linenos"> 71</span>            <span class="n">ci_status</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span>
+<span class="linenos"> 72</span>            <span class="n">ci_web_url</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">[</span><span class="s2">&quot;web_url&quot;</span><span class="p">]</span>
+<span class="linenos"> 73</span>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">sha</span><span class="si">}</span><span class="s2"> on branch </span><span class="si">{</span><span class="n">pipeline</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> with status &#39;</span><span class="si">{</span><span class="n">ci_status</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+<span class="linenos"> 74</span>            <span class="k">break</span>
+<span class="linenos"> 75</span>
+<span class="linenos"> 76</span>    <span class="k">assert</span> <span class="n">ci_status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Could not find workflow for this commit&quot;</span>
+<span class="linenos"> 77</span>
+<span class="linenos"> 78</span>    <span class="k">return</span> <span class="n">ci_status</span><span class="p">,</span> <span class="n">ci_web_url</span>
+<span class="linenos"> 79</span>
+<span class="linenos"> 80</span>
+<span class="linenos"> 81</span><span class="c1"># Get the status of the work flow at the target repo for this commit.</span>
+<span class="linenos"> 82</span><span class="n">ci_status</span><span class="p">,</span> <span class="n">ci_web_url</span> <span class="o">=</span> <span class="n">check_status</span><span class="p">(</span>
+<span class="linenos"> 83</span>    <span class="n">source_api</span><span class="p">,</span> <span class="n">source_project_number</span><span class="p">,</span> <span class="n">source_pat</span><span class="p">,</span> <span class="n">source_branch</span><span class="p">,</span> <span class="n">sha</span>
+<span class="linenos"> 84</span><span class="p">)</span>
+<span class="linenos"> 85</span>
+<span class="linenos"> 86</span><span class="c1"># Sometimes it takes a bit of time to update the status, this does a few checks.</span>
+<span class="linenos"> 87</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos"> 88</span><span class="k">while</span> <span class="n">ci_status</span> <span class="o">==</span> <span class="s2">&quot;running&quot;</span><span class="p">:</span>
+<span class="linenos"> 89</span>    <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+<span class="linenos"> 90</span>        <span class="k">break</span>
+<span class="linenos"> 91</span>
+<span class="linenos"> 92</span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="linenos"> 93</span>    <span class="n">ci_status</span><span class="p">,</span> <span class="n">ci_web_url</span> <span class="o">=</span> <span class="n">check_status</span><span class="p">(</span>
+<span class="linenos"> 94</span>        <span class="n">source_api</span><span class="p">,</span> <span class="n">source_project_number</span><span class="p">,</span> <span class="n">source_pat</span><span class="p">,</span> <span class="n">source_branch</span><span class="p">,</span> <span class="n">sha</span>
+<span class="linenos"> 95</span>    <span class="p">)</span>
+<span class="linenos"> 96</span>    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="linenos"> 97</span>
+<span class="linenos"> 98</span>
+<span class="linenos"> 99</span><span class="c1"># Convert to allowed GitHub Actions status tag.</span>
+<span class="linenos">100</span><span class="k">if</span> <span class="n">ci_status</span> <span class="o">==</span> <span class="s2">&quot;running&quot;</span><span class="p">:</span>
+<span class="linenos">101</span>    <span class="n">ci_status</span> <span class="o">=</span> <span class="s2">&quot;pending&quot;</span>
+<span class="linenos">102</span><span class="k">elif</span> <span class="n">ci_status</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+<span class="linenos">103</span>    <span class="n">ci_status</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
+<span class="linenos">104</span><span class="k">else</span><span class="p">:</span>
+<span class="linenos">105</span>    <span class="n">ci_status</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span>
+<span class="linenos">106</span>
+<span class="linenos">107</span><span class="c1"># Append workflow to GitHub.</span>
+<span class="linenos">108</span><span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">ci_status</span><span class="p">,</span> <span class="s2">&quot;target_url&quot;</span><span class="p">:</span> <span class="n">ci_web_url</span><span class="p">,</span> <span class="s2">&quot;context&quot;</span><span class="p">:</span> <span class="n">target_repo_context</span><span class="p">}</span>
+<span class="linenos">109</span><span class="n">post_status</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+<span class="linenos">110</span>    <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/repos/</span><span class="si">{}</span><span class="s2">/statuses/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_api</span><span class="p">,</span> <span class="n">target_project</span><span class="p">,</span> <span class="n">sha</span><span class="p">),</span>
+<span class="linenos">111</span>    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;token &quot;</span> <span class="o">+</span> <span class="n">target_pat</span><span class="p">},</span>
+<span class="linenos">112</span>    <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">status</span><span class="p">),</span>
+<span class="linenos">113</span><span class="p">)</span>
+<span class="linenos">114</span>
+<span class="linenos">115</span><span class="k">if</span> <span class="n">post_status</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">:</span>
+<span class="linenos">116</span>    <span class="nb">print</span><span class="p">(</span><span class="n">post_status</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="linenos">117</span>    <span class="n">exit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>The second file is the GitLab CI workflow.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">./gitlab/status_repo_files/.gitlab-ci.yml</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="nt">variables</span><span class="p">:</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="c1"># Cori queue submission options.</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="nt">SCHEDULER_PARAMETERS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-C</span><span class="nv"> </span><span class="s">haswell</span><span class="nv"> </span><span class="s">-q</span><span class="nv"> </span><span class="s">debug</span><span class="nv"> </span><span class="s">-N1</span><span class="nv"> </span><span class="s">-t</span><span class="nv"> </span><span class="s">00:05:00&quot;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># How is the workflow triggered?</span>
+<span class="linenos"> 6</span><span class="nt">workflow</span><span class="p">:</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="c1"># Can only be initiated via a trigger token.</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_PIPELINE_SOURCE == &quot;trigger&quot;</span>
+<span class="linenos">10</span><span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1"># The CI job.</span>
+<span class="linenos">13</span><span class="nt">status-repo</span><span class="p">:</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">  </span><span class="c1"># Running on Cori.</span>
+<span class="linenos">16</span><span class="w">  </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cori</span><span class="p p-Indicator">]</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="linenos">19</span><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python3 status-github.py</span>
+</pre></div>
+</div>
+</div>
+<p>This is very similar to the <code class="docutils literal notranslate"><span class="pre">mirror</span></code> repository workflow, see above for details.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="desc_checklist.html" class="btn btn-neutral float-left" title="The DESC CI checklist" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Stuart McAlpine.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
